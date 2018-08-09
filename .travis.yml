@@ -1,0 +1,28 @@
+sudo: required
+services:
+- docker
+
+before_install:
+- docker pull dpollet/texlive:pillar
+
+script: |
+  docker run --tty --rm --volume $PWD:/work dpollet/texlive:pillar bash -c "\
+    wget --quiet --output-document=- 'https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh' | bash \
+    && make spiralbook"
+
+deploy:
+- provider: bintray
+  file: .bintray.json
+  on:
+    repo: SquareBracketAssociates/TinyBlog-EN
+  skip_cleanup: true
+  user: ducasse
+  key:
+    secure: YO8CSmnmXvI6TE1rFo+hZLZsg3ZLExvx8FfWccwv8kCdu/ibvskBarkJzpS1o/aGLlIu/yNC4vBjITXeJIQu6E/+rlDpbbZGwpi99643RKCOi1zmvW20nBnQ6IkMxQB8krMR07ZWSRCwa8KVnge/Y3rIqrdqROqwQIcknSPXAEIVOqJ5NzuPuH7p3KKA+TMUsoLHFF46SPkHnIWnXlHs4RJiq7aVMv5NU4z8OMhB5DVqzrY98FQFMqymQMC+jSRpuRvNj377qTcTJHBP5oO7otOXIWjmb2++j/sG3ekpSH8n+omIgBKxCD96bsdZ0Spz+tlBhM7CRAOziYAwfD/FqBS6eBkAEC02PlKvUctE8md66AZedkeIkzv0+lMIjbfFfPgfijR0+GI5uP7kaJWwpb9NLjnrXq/heK3jDGzv7Oc4KBdGSg7hEWQgjZQEfOfes9eLBW5FW0aJ+JrJRrHqfZtfGbEnxcaRZyI4mLSWwuNY/En0lcmZogREZimrwy96FUh0lYvfkzXFne4rY4Mgm4f+oAwrW0hH2O3kp0O/sBzcPOopKCUcDpHvmnBWZIR2IPCesEPi/vNc09bVNj4R+8xmNfDEqa4yxpPrEAH//HC3hQfpVInUZ6ss7geS8iteMgnSyj3bjf1jE+scWaceY6gjBOB2KQpfMvpgPTy3SFU=
+- provider: releases
+  file: build/book.pdf
+  on:
+    tags: true
+  skip_cleanup: true
+  api_key:
+    secure: pRfu3fr35BzqQDi1ul0SubPSwO8zcyIidqLRZPz3XIrH4qoy1Zgnq785dmB7ziNQqH+VJyh7askSFY3JLxL0d4P0eUgj2ZDIOhJsUQQ/ihevOBWbxlMOoEPjQfzA11l8WrNCQ566KrcYiISRi7bCg698kPTWSRwOmmvqXOJe5zGkuUbVmMNUV2oxaNV4JC8kVyVWHYy0nNMLEX/hzRZRh1+8K34/ds+fZ7irLrbDWMbKGHCyuLCSqv+zJJdu99nWLTclrCxFzK4DEHaMlFiO7wkUpyQLwZ38EDnb3E7iv045jSqCx3XB+DMRG1Da2/9BIXl0mho5ELdEvfGVAbjI2no5FWd0H1cs4/banAePCFnM7ZscJBaPWgVajB7EzrcADJUoxpmU6+6n1aIC3CnjscfAHqSAKGv8CO/Jh+Uirc8ATRpSqa73f2Nnj9tRCqwCOnFOCEzu0w5l3Ppz2Qpif04P+QbebZehSVaBJ4W01R2i8Rac3IuZDhZVaek1X24HFxUOd/rvHpbhz8eeANdnsWCTkAm+0sD+iKsWKICRMxFZfCK/SPldAcjXZsOsEMTqfx7ZWyCc7GeesQWcmW+z3shziyQd9tdeArJWLwacly3hH3WeyuUD5JyPF9klvDBtHgTVajdU4yp+3oXsrtTmetnBz+RESxQGdLgZRlQBQog=

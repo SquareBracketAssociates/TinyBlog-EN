@@ -1,0 +1,260 @@
+!! L'application TinyBlog : présentation et modèle
+@cha:model
+% full code at: 9c87f4b8abb956469e145d2ba8afeba8b66159d2
+
+Dans ce premier chapitre, nous allons commencer à développer la partie modèle de l'application Tinyblog.
+Le modèle est particulièrement simple : il définit une liste de bulletin et un bulletin.
+
+!!!La classe TBPost
+
+Le modèle de TinyBlog est extrêmement simple. Nous commençons ici par la représentation d'un bulletin avec 
+la classe ==TBPost== définie ainsi:
+
+[[[
+Object subclass: #TBPost
+   instanceVariableNames: 'title text date category visible'
+   classVariableNames: ''
+   package: 'TinyBlog'
+]]]
+
+Nous utilisons cinq variables d'instance pour décrire un post sur le blog.
+
+|!Variable 		|!Signification |
+|title         |Titre du post                |
+|text          |Texte du post                |
+|date          |Date de redaction            |
+|category      |Rubrique contenant le post   |
+|visible       |Post visible ou pas ?        |
+
+
+Cette classe est également dotée de méthodes d'accès (aussi appelées accesseurs) à ces variables d'instances dans le protocole 'accessing'. Vous pouvez utiliser un refactoring pour créer automatiquement toutes les méthodes suivantes: 
+
+[[[
+TBPost >> title
+   ^ title
+]]]
+[[[
+TBPost >> title: aString
+   title := aString
+]]]
+[[[
+TBPost >> text
+   ^ text
+]]]
+[[[
+TBPost >> text: aString
+   text := aString
+]]]
+[[[
+TBPost >> date
+   ^ date
+]]]
+[[[
+TBPost >> date: aDate
+   date := aDate
+]]]
+[[[
+TBPost >> visible
+   ^ visible
+]]]
+[[[
+TBPost >> visible: aBoolean
+   visible := aBoolean
+]]]
+[[[
+TBPost >> category
+   ^ category
+]]]
+[[[
+TBPost >> category: anObject
+   category := anObject
+]]]
+
+
+
+!!!Gérer la visibilité d'un post
+
+Ajoutons dans le protocole 'action' des méthodes pour indiquer qu'un post est visible ou pas.
+
+[[[
+TBPost >> beVisible
+   self visible: true
+]]]
+[[[
+TBPost >> notVisible
+   self visible: false
+]]]
+
+
+!!!Initialisation
+
+La méthode ==initialize== (protocole 'initialization') fixe la date à celle du jour et la visibilité à faux. L'utilisateur devra par la suite activer la visibilité. Cela permet de rédiger des brouillons et de ne publier un post que lorsque celui-ci est terminé. Un post est également rangé par défaut dans la catégorie 'Unclassified' que l'on définit au niveau classe.  La méthode ==unclassifiedTag== renvoie une valeur indiquant que le post n'est pas rangé dans une catégorie.
+
+[[[
+TBPost class >> unclassifiedTag
+   ^ 'Unclassified'
+]]]
+
+Attention la méthode ==unclassifiedTag== est définie au niveau de la classe (cliquer le bouton 'Class' pour la définir). Les autres méthodes sont des méthodes d'instances c'est-à-dire qu'elles seront exécutées sur des instances de la classe ==TBPost==. 
+
+[[[
+TBPost >> initialize
+	super initialize.
+	self category: TBPost unclassifiedTag.
+	self date: Date today.
+	self notVisible
+]]]
+
+Dans la solution proposée ci-dessus pour la méthode ==initialize==, il serait préférable de ne pas faire une référence en dur à la classe ==TBPost==. Proposer une solution. La séquence 3 de la semaine 6 du MOOC peut vous aider à mieux comprendre pourquoi (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_67.html*) il faut éviter de référencer des classes directement et comment faire. 
+
+!!!Méthodes de création
+
+Coté classe, on définit des méthodes (dans la catégorie 'instance creation') pour faciliter la création de post appartenant ou pas à une catégorie.
+
+[[[
+TBPost class >> title: aTitle text: aText
+   ^ self new
+        title: aTitle;
+        text: aText;
+        yourself
+]]]
+
+[[[
+TBPost class >> title: aTitle text: aText category: aCategory
+   ^ (self title: aTitle text: aText)
+            category: aCategory;
+            yourself
+]]]
+
+!!! Ajout de quelques tests unitaires
+
+Bien que le modèle soit simple nous pouvons définir quelques tests. En mode Test Driven Developpement nous écrivons les tests
+en premier. Ici nous avons préféré vous laissez définir une petite classe pour vous familiariser avec l'IDE.
+Mais maintenant nous réparons ce manque. 
+
+[[[
+TestCase subclass: #TBPostTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	package: 'TinyBlog-Tests'
+]]]
+
+[[[
+TBPostTest >> testWithoutCategoryIsUnclassified
+
+	| post |
+	post := TBPost 
+		title: 'Welcome to TinyBlog' 
+		text: 'TinyBlog is a small blog engine made with Pharo.'.
+	self assert: post title equals: 'Welcome to TinyBlog' .
+	self assert: post isUnclassified.
+]]]
+
+
+[[[
+TBPostTest >> testPostIsCreatedCorrectly
+
+		| post |
+		post := TBPost 
+			title: 'Welcome to TinyBlog' 
+			text: 'TinyBlog is a small blog engine made with Pharo.' 
+			category: 'TinyBlog'.
+		self assert: post title equals: 'Welcome to TinyBlog' .
+		self assert: post text equals: 'TinyBlog is a small blog engine made with Pharo.' .
+]]]
+
+Vos tests doivent passer.
+
+!!!Création de posts
+
+Vous pouvez maintenant créer des posts. Ouvrez l'outil Playground et recopiez l'expression suivante :
+
+[[[
+TBPost 
+	title: 'Welcome in TinyBlog' 
+	text: 'TinyBlog is a small blog engine made with Pharo.' 
+	category: 'TinyBlog'
+]]]
+
+Si vous inspectez le code ci-dessus (clic droit sur l'expression et "Inspect it"), vous allez obtenir un inspecteur sur l'objet post nouvellement créé comme représenté sur la Figure *@inspectorOnTBPost*.
+
++Inspecteur sur une instance de TBPost.>figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
+
+!!! Interrogation d'un post
+
+Dans le protocole 'testing', définissez les deux méthodes suivantes qui permettent respectivement, de demander à un post s'il est visible, et s'il est classé dans une catégorie.
+
+[[[
+TBPost >> isVisible
+   ^ self visible
+]]]
+[[[
+TBPost >> isUnclassified
+   ^ self category = TBPost unclassifiedTag
+]]]
+
+De même il serait préférable de ne pas faire une référence en dur à la classe ==TBPost== dans le code d'une méthode. Proposer une solution.
+De plus, prenons le temps de mettre à jour notre test pour couvrir ce nouvel aspect.
+[[[
+TBPostTest >> testWithoutCategoryIsUnclassified
+
+	| post |
+	post := TBPost 
+		title: 'Welcome to TinyBlog' 
+		text: 'TinyBlog is a small blog engine made with Pharo.'.
+	self assert: post title equals: 'Welcome to TinyBlog' .
+	self assert: post isUnclassified.
+	self deny: post isVisible
+]]]
+
+
+
+!!! Sauvegarder votre code 
+
+Lorsque vous sauvez l'image Pharo (clic gauche sur le fond de Pharo pour accéder au menu world et sélectionner 'save'), celle-ci contient tous les objets du système et donc les classes elles-même.
+Cette solution est pratique mais peu pérenne.  
+Nous allons vous montrer comment les pharoers sauvent leur code sous forme de packages sur un serveur dédié à l'aide de Monticello: le gestionnaire de versions de Pharo.
+
+Notez que des videos sont disponibles dans le Mooc Pharo qui montrent la procédure pour sauver du code: *http://mooc.pharo.org* et en particulier la video de la semaine 1 qui montre comment développer et sauver le code d'une application compteur: *http://rmod-pharo-mooc.lille.inria.fr/MOOC/Videos/W1/C019-W1S-Videos-Redo-Counter-Traditional-FR-V3-HD_720p_4Mbs.m4v*.
+
+!!!!Créer un dépôt de code
+
+Il existent plusieurs serveurs en ligne permettant d'héberger vos dépôts de code gratuitement comme Smalltalkhub *http://smalltalkhub.com* ou SS3 *http://ss3.gemstone.com*. 
+
+- Créer un compte sur le site  *http://smalltalkhub.com/*.
+- Se connecter au site. 
+- Créer un projet nommé "TinyBlog" (si vous rencontrez des problèmes de connexion car le site est en version beta, essayez avec un autre navigateur ; si les problèmes persistent utilisez *http://ss3.gemstone.com*).
+
+!!!!Sauver votre package
+
+- Dans Pharo, ouvrez l'outil Monticello Browser via le menu principal (clic gauche sur le fond de Pharo).
+- Ajoutez un dépôt (repository) de type SmalltalkHub ou HTTP pour *http://ss3.gemstone.com*.
+- Sélectionnez ce dépôt et dans son menu contextuel (clic droit), sélectionnez l'item 'Add to package...' pour ajouter ce dépôt au package TinyBlog.
+- Sélectionnez maintenant votre package et pressez le bouton 'Save'. 
+- Indiquez une description pour votre commit et sauver. Votre code vient d'être envoyé sur le serveur.
+
+Le code de votre application TinyBlog est maintenant sauvegardé dans votre dépôt sur Smalltalkhub. Il est donc maintenant possible de charger votre code dans une nouvelle image Pharo. 
+Pour rappel, dans le cadre de ce tutoriel, nous vous suggérons de toujours utiliser l'image avec tous les packages web chargés que nous avons mentionné dans le premier chapitre. Cela vous permettra de pouvoir recharger votre package sans devoir vous soucier des dépendances sur d'autres packages. 
+
+
+!!!A propos de dépendances
+
+Les bonnes pratiques lors de développements en Pharo sont de spécifier clairement les dépendances sur les packages utilisés afin d'avoir une reproductibilité complète d'un projet. Une telle reproductibilité permet alors l'utilisation de serveur de construction tels que Travis ou Jenkins.
+Pour cela, une configuration (une classe spéciale) définit d'une part l'architecture du projet (dépendances et packages du projet) et les versions des packages versionnés. 
+
+Dans le cadre de ce projet, nous n'abordons pas ce point plus avancé. Un chapitre entier est consacré à l'expression de configurations dans le livre intitulé "Deep Into Pharo" (cf. *http://books.pharo.org*). 
+ 
+%!!!!! Optionel. 
+%Si vous voulez essayer de créer une configuration, vous pouvez utiliser Versionner. 
+%Dans votre image Pharo, ouvrez l'outil Versionner depuis le menu 'Tools':
+%%- Créez un nouveau projet nommé "TinyBlog",
+%- Indiquez que votre projet dépend de PharoWeb (dépendance entre projets),
+%- Dans Packages, ajoutez le paquet TinyBlog,
+%- Définissez le dépôt de votre projet: 'http://smalltalkhub.com/mc/XXX/TinyBlog/main'
+%- Cliquez sur le bouton "Save to development" (pour générer la nouvelle structure %d'architecture et dépendances), "Release" (pour créer une nouvelle vetsion) et Commit (pour sauver le code sur le serveur).
+
+
+!!! Conclusion
+
+Nous avons développé une première partie du modèle (la classe ==TBPost==) et défini quelques tests. Nous vous suggérons fortement 
+d'écrire d'autres tests unitaires pour vérifier que ce modèle fonctionne correctement même s'il est simple.

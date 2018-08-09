@@ -1,0 +1,35 @@
+
+[DONE] Fix PharoWeb on CI
+
+[DONE] 			CI automatically push PharoWeb-50.zip and PharoWeb-61.zip to OVH (scp)
+[cf. Marcus?]	but why isn't it immediate?
+					cf dates
+					http://files.pharo.org/mooc/image/PharoWeb-50.zip
+					accesible from the http://mooc.pharo.org page
+
+[DONE]  bash scripts in TinyBlogImages5 to load TinyBlog solutions
+		  Example :
+		  cd TinyBlogImages5
+		  ./loadAllSolutions.sh
+		  => produces 1 image per solution
+
+[DONE] bash scripts in TinyBlogImages6 creating TinyBlog solution images in PharoWeb6
+			thanks to Guille and Pablo to have fixed Iceberg hell
+ 		  cd TinyBlogImages6
+ 		  ./loadAllSolutions.sh
+ 		  => produces 1 image per solution
+
+[DONE] added  Mongo3 + docker install in Chap04
+			tested with Pharo + Voyage
+
+[DONE] Tester PharoCloud
+			Chapitre  deploiement révisé et testé avec PharoWeb5 et 6
+
+[DONE] Chap installation Pharo 61.
+
+[TOFINISH] changer le code de chargement des solutions 
+			week par chapter
+
+[TODO] revoir l'authentification pour stocker l'utilisateur courant en session
+
+[TODO] Postmark email 
