@@ -1,0 +1,54 @@
+!! About this book
+
+In this project, we will guide you to develop a mini project: a small web application, named TinyBlog, that manages a blog system (see its final state in Figure *@TinyBlogOnPharoCloud*)
+The idea is that a visitor of the web site can read the posts and that the post author could connect to the web site to admin the application and manage its posts (add, remove and modify existing ones). 
+
+TinyBlog is a small pedagogical application that will show you how to define and deploy a web application using Pharo / Seaside / Mongo and frameworks available in Pharo such as NeoJSON. 
+
+Our goal is that you will be able to reuse and adapt such an infrastructure to create your own web applications.
+
+
+!!! Structure
+In the first part called "Tutorial", you will develop and deploy, TinyBlog, an application and its administration using Pharo, the Seaside application web server framework as well as some other frameworks such as Voyage and Magritte. Deployment with Mongo DB is optional but it allows you to see that Voyage is an elegant facade to persist your data within Mongo. 
+
+In the second part, we will show you some optional aspects such as data export, use of Mustache or how to expose your application using a REST API. 
+
+Presented solutions are sometimes not the best to offer you a room for improvement.
+Our goal is not to be exhaustive. We present one way to develop TinyBlog nevertheless we invite the reader to read further references such as books or tutorials on Pharo to deepen his expertise and enhance his application.
+
+Finally, to help you to get over possible errors and avoid to get stuck, the last chapter describes how to load the code described in each chapter. 
+
++L'application TinyBlog application.>figures/TinyBlogOnPharoCloud.png|width=100|label=TinyBlogOnPharoCloudHere+
+
+
+!!!Installation de Pharo
+
+In this tutorial, we suppose that you are using Pharo 6.1 with an image in which many frameworks and web libraries have been loaded: Seaside (component-based web application server), Magritte (an automatic generation report system based on descriptions), Bootstrap (a library to visually tune web applications), Voyage (a framework to save your objects in document databases) and some others.
+
+To develop your application and follow this tutorial, we suggest to use the image available at the following URL: *http://mooc.pharo.org/image/PharoWeb-61.zip* since it contains all the mandatory packages.
+
+You can rebuild this web Pharo image in Pharo 6.1 (*http://pharo.org/download*) with the following script:
+
+[[[
+   Metacello new 
+      smalltalkhubUser: 'PharoExtras' project: 'PharoWeb'; 
+      configuration: 'PharoWeb';
+      version: #stable;
+      load 
+]]]
+
+!!! Naming rules
+
+In the following, we prefix all the class names ==TB== (for TinyBlog).
+You may:
+- either choose another prefix (by example ==TBM==) to be able to load the solution side by side to your own. This way you will be able to compare the two solutions,
+- either choose the same prefix to fusion the proposed solutions in your code. The merge tool will help you see the differences and learn from the changes. This solution may be more complex if you implement your own extra functionalities. 
+
+!!! Resources
+
+Pharo has many strong pedagogial resources as well as a super friendly community of users. Here is a list of resources: 
+
+- *http://books.pharo.org* proposes books around Pharo. Pharo by Example can help you to discove the language and its libraries. Entreprise Pharo: a Web Perspective presents other aspects useful for web development.
+- *http://book.seaside.st* is one of the books on Seaside. It is currently under migration as an open-source book *https://github.com/SquareBracketAssociates/DynamicWebDevelopmentWithSeaside*.
+- *http://mooc.pharo.org* proposes an excellent Mooc with more that 90 videos explaining syntactically points as well as object programming key concepts.  
+- *http://discord.gg/Sj2rhxn* is a discord channel where many Pharoers exchange information and help each other. 
