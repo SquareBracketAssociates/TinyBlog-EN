@@ -1,5 +1,5 @@
 !! About this book
-
+@chapIntro
 In this project, we will guide you to develop a mini project: a small web application, named TinyBlog, that manages a blog system (see its final state in Figure *@TinyBlogOnPharoCloud*)
 The idea is that a visitor of the web site can read the posts and that the post author could connect to the web site to admin the application and manage its posts (add, remove and modify existing ones). 
 
