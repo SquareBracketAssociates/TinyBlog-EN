@@ -18,7 +18,7 @@ Our goal is not to be exhaustive. We present one way to develop TinyBlog neverth
 
 Finally, to help you to get over possible errors and avoid to get stuck, the last chapter describes how to load the code described in each chapter. 
 
-+L'application TinyBlog application.>figures/TinyBlogOnPharoCloud.png|width=100|label=TinyBlogOnPharoCloudHere+
++The TinyBlog application.>figures/TinyBlogOnPharoCloud.png|width=100|label=TinyBlogOnPharoCloudHere+
 
 
 !!!Installation de Pharo

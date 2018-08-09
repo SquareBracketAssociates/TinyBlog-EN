@@ -2,7 +2,7 @@ ${inputFile:Chapters/Chap00-TinyBlog-Introduction-EN.pillar}$
 
 ! Tutorial 
 
-${inputFile:Chapters/Chap01-TinyBlog-Model-FR.pillar}$
+${inputFile:Chapters/Chap01-TinyBlog-Model-EN.pillar}$
 
 ${inputFile:Chapters/Chap02-TinyBlog-ModelExtensionTests-FR.pillar}$
 
@@ -31,3 +31,5 @@ ${inputFile:Chapters/Chap11-TinyBlog-Mustache-FR.pillar}$
 ${inputFile:Chapters/Chap12-TinyBlog-Export.pillar}$
 
 ${inputFile:Chapters/Chap14-TinyBlog-Loading-FR.pillar}$
+
+${inputFile:Chapters/Chap15-TinyBlog-SavingCode-EN.pillar}$

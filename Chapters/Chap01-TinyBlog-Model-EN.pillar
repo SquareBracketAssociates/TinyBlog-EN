@@ -1,14 +1,14 @@
-!! L'application TinyBlog : présentation et modèle
+!!  TinyBlog Application: Core model
 @cha:model
 % full code at: 9c87f4b8abb956469e145d2ba8afeba8b66159d2
 
-Dans ce premier chapitre, nous allons commencer à développer la partie modèle de l'application Tinyblog.
-Le modèle est particulièrement simple : il définit une liste de bulletin et un bulletin.
+In this chapter, we start to develop a part of the domain model of TinyBlog.
+The model is particularly simple: it starts with a post. 
 
-!!!La classe TBPost
 
-Le modèle de TinyBlog est extrêmement simple. Nous commençons ici par la représentation d'un bulletin avec 
-la classe ==TBPost== définie ainsi:
+!!! TBPost Class
+
+We start with the post representation. It is defined by the class ==TBPost==:
 
 [[[
 Object subclass: #TBPost
@@ -17,17 +17,17 @@ Object subclass: #TBPost
    package: 'TinyBlog'
 ]]]
 
-Nous utilisons cinq variables d'instance pour décrire un post sur le blog.
+A blog post is described by 5 instance variables.
 
-|!Variable 		|!Signification |
-|title         |Titre du post                |
-|text          |Texte du post                |
-|date          |Date de redaction            |
-|category      |Rubrique contenant le post   |
-|visible       |Post visible ou pas ?        |
+|!Variable         |!Signification                       |
+|==title==         |post title                           |
+|==text==          |post text                            |
+|==date==          |date of writing                      |
+|==category==      |name of the category of the post     |
+|==visible==       |is the post publicly visible or not? |
 
-
-Cette classe est également dotée de méthodes d'accès (aussi appelées accesseurs) à ces variables d'instances dans le protocole 'accessing'. Vous pouvez utiliser un refactoring pour créer automatiquement toutes les méthodes suivantes: 
+All of these variables have corresponding accessor methods in the 'accessing' protocol.
+You can use a refactoring to automatically create all the following methods:
 
 [[[
 TBPost >> title
@@ -72,9 +72,9 @@ TBPost >> category: anObject
 
 
 
-!!!Gérer la visibilité d'un post
+!!!Post Visibility
 
-Ajoutons dans le protocole 'action' des méthodes pour indiquer qu'un post est visible ou pas.
+We should add methods to make a post visible or not and also test if it is visible. Those methods are defined in the 'action' protocol.
 
 [[[
 TBPost >> beVisible
@@ -86,16 +86,20 @@ TBPost >> notVisible
 ]]]
 
 
-!!!Initialisation
+!!!Initialization
 
-La méthode ==initialize== (protocole 'initialization') fixe la date à celle du jour et la visibilité à faux. L'utilisateur devra par la suite activer la visibilité. Cela permet de rédiger des brouillons et de ne publier un post que lorsque celui-ci est terminé. Un post est également rangé par défaut dans la catégorie 'Unclassified' que l'on définit au niveau classe.  La méthode ==unclassifiedTag== renvoie une valeur indiquant que le post n'est pas rangé dans une catégorie.
+The ==initialize== method ('initialization' protocol) sets the date to the current day and the visibility to false: the user must explicitly make a post visible. 
+This allows him to write drafts and only publish when the post is finished.
+By default, a post belongs to the 'Unclassified' category that we define at the class level.
+This category name is defined on class-side by the ==unclassifiedTag== method.
 
 [[[
 TBPost class >> unclassifiedTag
    ^ 'Unclassified'
 ]]]
 
-Attention la méthode ==unclassifiedTag== est définie au niveau de la classe (cliquer le bouton 'Class' pour la définir). Les autres méthodes sont des méthodes d'instances c'est-à-dire qu'elles seront exécutées sur des instances de la classe ==TBPost==. 
+Pay attention the method ==unclassifiedTag== should be defined on the class-side of the class ==TBPost== (click on the ==class== button to define it). 
+The other methods are defined on the instance-side: it means that they will be applied to ==TBBlog== instances. 
 
 [[[
 TBPost >> initialize
@@ -105,11 +109,14 @@ TBPost >> initialize
 	self notVisible
 ]]]
 
-Dans la solution proposée ci-dessus pour la méthode ==initialize==, il serait préférable de ne pas faire une référence en dur à la classe ==TBPost==. Proposer une solution. La séquence 3 de la semaine 6 du MOOC peut vous aider à mieux comprendre pourquoi (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_67.html*) il faut éviter de référencer des classes directement et comment faire. 
+In the solution above, it would be better that the ==initialize== method does not hard code the reference to the ==TBPost== class. 
+Propose a solution.
+The sequence 3 of the week 6 of the Mooc can help you to understand why it is better to avoid hardcoding class references (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_67.html*).
 
-!!!Méthodes de création
 
-Coté classe, on définit des méthodes (dans la catégorie 'instance creation') pour faciliter la création de post appartenant ou pas à une catégorie.
+!!!Posts creation methods
+
+On class-side, we add methods to ease posts creation for blogs (in the protocol 'instance creation') that belong to a category or not.
 
 [[[
 TBPost class >> title: aTitle text: aText
@@ -126,11 +133,29 @@ TBPost class >> title: aTitle text: aText category: aCategory
             yourself
 ]]]
 
-!!! Ajout de quelques tests unitaires
+!!!Post  creation
 
-Bien que le modèle soit simple nous pouvons définir quelques tests. En mode Test Driven Developpement nous écrivons les tests
-en premier. Ici nous avons préféré vous laissez définir une petite classe pour vous familiariser avec l'IDE.
-Mais maintenant nous réparons ce manque. 
+You can now create posts. Using the Playground tools execute the following expression:
+
+[[[
+TBPost 
+	title: 'Welcome in TinyBlog' 
+	text: 'TinyBlog is a small blog engine made with Pharo.' 
+	category: 'TinyBlog'
+]]]
+
+When you inspect the code above (right click and "Inspect it"), you will obtain an inspector on the newly created object as shown in Figure *@inspectorOnTBPost*.
+
++Inspector on a TBPost instance.>figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
+
+!!! Adding some unit tests
+
+Even though the model is quite simple we can define some tests.
+In Test Driven Developpement mode we write test first. 
+Here we prefered to let you define a little class to familiarize with the IDE. 
+Let us fix this!
+
+We define the class ==TBPPostTest== (as subclass of the class ==TestCase==).
 
 [[[
 TestCase subclass: #TBPostTest
@@ -147,9 +172,8 @@ TBPostTest >> testWithoutCategoryIsUnclassified
 		title: 'Welcome to TinyBlog' 
 		text: 'TinyBlog is a small blog engine made with Pharo.'.
 	self assert: post title equals: 'Welcome to TinyBlog' .
-	self assert: post isUnclassified.
+	self assert: post category = TBPost unclassifiedTag.
 ]]]
-
 
 [[[
 TBPostTest >> testPostIsCreatedCorrectly
@@ -163,26 +187,13 @@ TBPostTest >> testPostIsCreatedCorrectly
 		self assert: post text equals: 'TinyBlog is a small blog engine made with Pharo.' .
 ]]]
 
-Vos tests doivent passer.
+Your tests should pass.
 
-!!!Création de posts
 
-Vous pouvez maintenant créer des posts. Ouvrez l'outil Playground et recopiez l'expression suivante :
 
-[[[
-TBPost 
-	title: 'Welcome in TinyBlog' 
-	text: 'TinyBlog is a small blog engine made with Pharo.' 
-	category: 'TinyBlog'
-]]]
+!!! Post queries
 
-Si vous inspectez le code ci-dessus (clic droit sur l'expression et "Inspect it"), vous allez obtenir un inspecteur sur l'objet post nouvellement créé comme représenté sur la Figure *@inspectorOnTBPost*.
-
-+Inspecteur sur une instance de TBPost.>figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
-
-!!! Interrogation d'un post
-
-Dans le protocole 'testing', définissez les deux méthodes suivantes qui permettent respectivement, de demander à un post s'il est visible, et s'il est classé dans une catégorie.
+In the protocol 'testing', define the following methods that checks whether a post is visible, and whether it is classified or not.
 
 [[[
 TBPost >> isVisible
@@ -193,8 +204,11 @@ TBPost >> isUnclassified
    ^ self category = TBPost unclassifiedTag
 ]]]
 
-De même il serait préférable de ne pas faire une référence en dur à la classe ==TBPost== dans le code d'une méthode. Proposer une solution.
-De plus, prenons le temps de mettre à jour notre test pour couvrir ce nouvel aspect.
+It is not really good to harcode a reference to the class ==TBPost== in a method body.
+Propose a solution.
+
+In addition, let us take the time to update our test for this new aspect.
+
 [[[
 TBPostTest >> testWithoutCategoryIsUnclassified
 
