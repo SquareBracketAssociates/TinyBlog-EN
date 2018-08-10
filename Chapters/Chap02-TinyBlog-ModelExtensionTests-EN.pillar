@@ -33,9 +33,15 @@ TBBlog >> initialize
 
 !!!Only one blog object
 
-Dans un premier temps nous supposons que nous allons gérer qu'un seul blog. Dans le futur, vous pourrez ajouter la possibilité de gérer plusieurs blogs comme un par utilisateur de notre application. Pour l'instant, nous utilisons donc un singleton pour la classe ==TBBlog==. Faites attention car le schéma de conception Singleton est rarement bien utilisé et peut rendre votre conception rapidement de mauvaise qualité. En effet, un singleton est souvent une sorte de variable globale et rend votre conception moins modulaire. Donc ne généralisez pas ce que nous faisons ici.
+In the rest of this project, we assume that we will manage only one blog. 
+Later, you may add the possibility to manage multiple blogs such as one per user of the TinyBlog application. 
+Currently, we use a Singleton design pattern on the ==TBBlog== class. 
+However pay attention since this pattern introduces a kind of global variable in your application and brings less modularity to your system. 
+Therefore avoid to make explicit references to the singleton. 
+Do not generalize what we are doing for this class.
 
-Comme la gestion du singleton est un comportement de classe, ces méthodes sont définies sur le coté class de la classe ==TBBlog==.
+
+Since all the management of a singleton is a class behavior, we define such methods at the class level of ==TBBlog==. 
 
 [[[
 TBBlog class
@@ -51,7 +57,8 @@ TBBlog class >> current
    ^ uniqueInstance ifNil: [ uniqueInstance := self new ]
 ]]]
 
-Quand la classe est chargée, le singleton est réinitialisé. 
+We redefine the class method ==initialize== so that when the class is loaded in memory
+the singleton got reset.
 
 [[[
 TBBlog class >> initialize
@@ -59,11 +66,12 @@ TBBlog class >> initialize
 ]]]
 
 
-!!!Tester les règles métiers
+!!!Testing the model
 
-Nous allons écrire des tests pour les règles métiers et ceci en mode TDD (Test Driven Development) c'est-à-dire en développant les tests en premier puis en définissant les fonctionnalités jusqu'à ce que les tests passent.
 
-Les tests unitaires sont regroupés dans une étiquette (tag) ==TinyBlog-Tests== qui contient la classe ==TBBlogTest== (voir menu item "Add Tag..."). Un tag est juste une étiquette qui permet de trier et grouper les classes à l'intérieur d'un package. Nous utilisons un tag ici pour ne pas avoir à gérer deux packages différents mais dans un projet réel vous définirions un package séparé pour les tests.
+We now adopt a Test Driven Development approach i.e., we will write a unit test first and then develop the business functionality until the test is green. We will repeat this process for each functionality of the model.
+
+We create unit tests in the ==TBBlogTest== class that belongs to the ==TinyBlog-Tests== tag. A tag is just a label to sort classes inside a package (See menu item 'Add Tag...'). We use a tag because using two packages will make this project more complex. However, while implementing a real application, it is recommended to have a separate package for the tests.
 
 [[[
 TestCase subclass: #TBBlogTest
@@ -72,9 +80,12 @@ TestCase subclass: #TBBlogTest
    package: 'TinyBlog-Tests'
 ]]]
 
-La méthode ==setUp== permet d'initialiser le contexte des tests.
-Elle est donc exécutée avant chaque test unitaire.
-Dans cet exemple, elle efface le contenu du blog, lui ajoute un post et en créé un autre qui n'est provisoirement pas enregistré.
+Before each test execution, the ==setUp== method initializes the context of tests.
+For example, it erases the blog content, adds one post and creates another temporary post that is not saved.
+
+Pay attention since we will have to modify such behavior in the future else each time we will run the test
+we will destroy our data. 
+This is an example of the kind of bad behavior that a singleton introduces.
 
 [[[
 TBBlogTest >> setUp
@@ -87,23 +98,22 @@ TBBlogTest >> setUp
    post := (TBPost title: 'Another title' text: 'Another text' category: 'Second Category') beVisible
 ]]]
 
-Afin de tester différentes configurations, les posts ==post== et ==first== n'appartiennent pas à la même catégorie, l'un est visible et l'autre pas.
-
-Définissons également la méthode ==tearDown== qui est exécutée après chaque test et remet le blog à zéro. 
+As you may notice, we test different configurations. 
+Posts do not belong to the same category, one is visible and the other is not visible.
+At the end of each test, the ==tearDown==  method is executed and resets the blog.
 
 [[[
 TBBlogTest >> tearDown
    TBBlog reset
 ]]]
 
-L'utilisation d'un Singleton montre ses limites puisque si vous déployez un blog puis exécutez les tests vous perdrez les posts que vous avez créés car nous les remettons à zéro.
+Here we see the limits of using a Singleton. Indeed, if you deploy a blog and then execute the tests, you will lose all posts that have been created because we reset the Blog singleton. We will address this problem in the future.
 
-Nous allons développer les tests d'abord puis les fonctionnalités testées.
-Les fonctionnalités métiers seront regroupées dans le protocole 'action' de la classe ==TBBlog==.
+We will now develop tests first and then implement all functionalities to make them green.
 
-!!!Un premier test
+!!!A first test
 
-Commençons par écrire un premier test qui ajoute un post et vérifie qu'il est effectivement ajouté au blog.
+The first test adds a post in the blog and verifies that this post is effectivly added.
 
 [[[
 TBBlogTest >> testAddBlogPost
@@ -111,7 +121,8 @@ TBBlogTest >> testAddBlogPost
    self assert: blog size equals: 2
 ]]]
 
-Ce test ne passe pas (n'est pas vert) car nous n'avons pas défini les méthodes: ==writeBlogPost:==,  ==removeAllPosts== et ==size==. Ajoutons-les.
+If you try to execute it, you will notice that this test is not green because we did not define the methods ==writeBlogPost:==, ==removeAllPosts== and ==size==.
+Let's add them:
 
 [[[
 TBBlog >> removeAllPosts
@@ -129,8 +140,10 @@ TBBlog >> size
    ^ posts size
 ]]]
 
-Le test précédent doit maintenant passer.
+The previous test should now pass (i.e. be green).
+We should also add tests to cover all functionalities that we introduced.
 
+!!!Increasing coverage
 Ecrivons d'autres tests pour couvrir les fonctionnalités que nous venons de développer. 
 
 [[[
@@ -145,7 +158,10 @@ TBBlogTest >> testRemoveAllBlogPosts
 ]]]
 
 
-!!!!Obtenir l'ensemble des posts (visibles et invisibles)
+
+!!! Other functionalities
+
+!!!! Obtenir l'ensemble des posts (visibles et invisibles)
 
 Ajoutons un nouveau test qui échoue:
 
