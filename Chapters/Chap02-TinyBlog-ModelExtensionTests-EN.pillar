@@ -1,17 +1,19 @@
-!! L'application TinyBlog : extension du modèle et tests unitaires
+!! TinyBlog: Extending and testing the model
 @chapModelExtensionAndUnitTests
 
 % full hash of full code 35785aaaf1284f1a472980f07522fc7d0d4743e6
 
-Dans ce chapitre nous étendons le modèle et ajoutons des tests. Notez qu'un bon développeur de méthodologies agiles tel que Test-Driven Development aurait commencé par écrire des tests. En plus, avec Pharo, nous aurions aussi codé dans le débuggeur pour être encore plus productif. Nous ne l'avons pas fait car le modèle est simpliste et expliquer comment coder dans le débuggeur demande plus de description textuelle. Vous pouvez voir cette pratique dans la vidéo du Mooc intitulée ''Coding a Counter in the Debugger'' (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_26.html*) et lire le livre ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
+In this chapter we extend the model and add more tests. Note that when you will get fluent in Pharo, you will tend to write
+first your tests and then execute tests to code in the debugger. We did not do it because coding in the debugger requires 
+more explanation. You can see such practice in the Mooc video entitled  ''Coding a Counter in the Debugger'' (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_26.html*) and read the book ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
 
-Avant de commencer, reprenez votre code ou reportez-vous au dernier chapitre du livre pour charger le code du chapitre précédent.
+Before starting, use back the code of the previous chapter or use the information of Chapter *@chaLoading*.
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!!La classe TBBlog
+!!! TBBlog class
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Nous allons développer la classe ==TBBlog== qui contient des posts, en écrivant des tests puis en les implémentant.
+We develop the class ==TBBlog==. It contains posts and its unit tests.
 
 [[[
 Object subclass: #TBBlog
@@ -20,14 +22,16 @@ Object subclass: #TBBlog
    package: 'TinyBlog'
 ]]]
 
-Nous initialisons la variable d'instance ==posts== avec une collection vide.
+We initialize the ==posts== instance variable to an empty collection.
+
 [[[
 TBBlog >> initialize
    super initialize.
-   posts := OrderedCollection new. 
+   posts := OrderedCollection new
 ]]]
 
-!!!Un seul blog
+
+!!!Only one blog object
 
 Dans un premier temps nous supposons que nous allons gérer qu'un seul blog. Dans le futur, vous pourrez ajouter la possibilité de gérer plusieurs blogs comme un par utilisateur de notre application. Pour l'instant, nous utilisons donc un singleton pour la classe ==TBBlog==. Faites attention car le schéma de conception Singleton est rarement bien utilisé et peut rendre votre conception rapidement de mauvaise qualité. En effet, un singleton est souvent une sorte de variable globale et rend votre conception moins modulaire. Donc ne généralisez pas ce que nous faisons ici.
 
