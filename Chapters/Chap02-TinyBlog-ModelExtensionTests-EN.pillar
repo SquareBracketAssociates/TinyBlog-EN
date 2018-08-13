@@ -161,7 +161,7 @@ TBBlogTest >> testRemoveAllBlogPosts
 
 !!! Other functionalities
 
-!!!! Obtenir l'ensemble des posts (visibles et invisibles)
+!!!!Getting all the blog posts
 
 Ajoutons un nouveau test qui échoue:
 
