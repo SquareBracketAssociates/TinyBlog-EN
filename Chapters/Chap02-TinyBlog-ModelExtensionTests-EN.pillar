@@ -13,7 +13,7 @@ Before starting, use back the code of the previous chapter or use the informatio
 !!! TBBlog class
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We develop the class ==TBBlog==. It contains posts and its unit tests.
+We develop the class ==TBBlog== that contains posts and its unit tests.
 
 [[[
 Object subclass: #TBBlog
@@ -141,10 +141,10 @@ TBBlog >> size
 ]]]
 
 The previous test should now pass (i.e. be green).
-We should also add tests to cover all functionalities that we introduced.
 
 !!!Increasing coverage
-Ecrivons d'autres tests pour couvrir les fonctionnalités que nous venons de développer. 
+
+We should also add tests to cover all functionalities that we introduced.
 
 [[[
 TBBlogTest >> testSize
@@ -157,13 +157,11 @@ TBBlogTest >> testRemoveAllBlogPosts
    self assert: blog size equals: 0
 ]]]
 
-
-
 !!! Other functionalities
 
-!!!!Getting all the blog posts
+!!!!Retrieve all posts (visible and invisible)
 
-Ajoutons un nouveau test qui échoue:
+Let's a test that fails:
 
 [[[
 TBBlogTest >> testAllBlogPosts
@@ -171,7 +169,7 @@ TBBlogTest >> testAllBlogPosts
    self assert: blog allBlogPosts size equals: 2
 ]]]
 
-Et le code métier qui permet de le faire passer:
+And the model code that makes it succeed:
 
 [[[
 TBBlog >> allBlogPosts
@@ -179,9 +177,9 @@ TBBlog >> allBlogPosts
 ]]]
 
 
-!!!!Obtenir tous les posts visibles
+!!!!Retrieve visible posts
 
-Test unitaire:
+Unit test:
 
 [[[
 TBBlogTest >> testAllVisibleBlogPosts
@@ -189,7 +187,7 @@ TBBlogTest >> testAllVisibleBlogPosts
    self assert: blog allVisibleBlogPosts size equals: 1
 ]]]
 
-Code métier ajouté:
+Model code added:
 
 [[[
 TBBlog >> allVisibleBlogPosts
@@ -197,7 +195,7 @@ TBBlog >> allVisibleBlogPosts
 ]]]
 
 
-!!!!Obtenir tous les posts d'une catégorie
+!!!!Retrieve all posts of one category
 
 [[[
 TBBlogTest >> testAllBlogPostsFromCategory
@@ -209,7 +207,7 @@ TBBlog >> allBlogPostsFromCategory: aCategory
    ^ posts select: [ :p | p category = aCategory ]
 ]]]
 
-!!!!Obtenir tous les posts visibles d'une catégorie
+!!!!Retrieve all visible posts of one category
 
 [[[
 TBBlogTest >> testAllVisibleBlogPostsFromCategory
@@ -224,14 +222,14 @@ TBBlog >> allVisibleBlogPostsFromCategory: aCategory
 									and: [ p isVisible ] ]
 ]]]
 
-!!!!Vérifier la gestion des posts non classés
+!!!!Check unclassified posts
 
 [[[
 TBBlogTest >> testUnclassifiedBlogPosts
    self assert: (blog allBlogPosts select: [ :p | p isUnclassified ]) size equals: 0
 ]]]
 
-!!!!Obtenir la liste des catégories
+!!!!Retrieve all categories
 
 [[[
 TBBlogTest >> testAllCategories
@@ -244,9 +242,9 @@ TBBlog >> allCategories
    ^ (self allBlogPosts collect: [ :p | p category ]) asSet
 ]]]
 
-!!!Données de test 
+!!!Testing data 
 
-Afin de nous aider à tester l'application nous définissons une méthode qui ajoute des posts au blog courant. 
+To help you testing the application, you can add the following method that creates multiple posts.
 
 [[[
 TBBlog class >> createDemoPosts
@@ -260,22 +258,18 @@ TBBlog class >> createDemoPosts
       writeBlogPost: ((TBPost title: 'Working with Pharo on the Raspberry Pi' text: 'Hardware is getting cheaper and many new small devices like the famous Raspberry Pi provide new computation power that was one once only available on regular desktop computers.' category: 'Pharo') visible: true)
 ]]]
 
-Vous pouvez inspecter le résultat de l'évaluation du code suivant :
+If you inspect the result of the following snippet, you will see that the current blog contains 5 posts:
 
 [[[
 	TBBlog createDemoPosts ; current
 ]]]
 
-Attention, si vous exécutez plus d'une fois la méthode ==createDemoPosts==, le blog contiendra plusieurs exemplaires de ces posts.
+Be aware that if you execute this ==createDemoPosts== method multiple times, your blog singleton object will contain multiple copies of these posts.
 
-!!! Futures évolutions
+!!!Possible extensions
 
-Plusieurs évolutions peuvent être apportées telles que: obtenir uniquement la liste des catégories contenant au moins un post visible, effacer une catégorie et les posts qu'elle contient, renommer une catégorie, déplacer un post d'une catégorie à une autre, rendre visible ou invisible une catégorie et son contenu, etc. Nous vous encourageons développer ces fonctionnalités ou de nouvelles que vous auriez imaginé.
-
+Many extensions can be made such as: retrieve the list of categories that contains at least one visible post, delete a category and all posts that it contains, rename a category, move a post from one category to another, make (in)visible one category and all its content, etc. We encourage you to develop some of them. 
 
 !!! Conclusion
 
-Vous devez avoir le modèle complet de TinyBlog ainsi que des tests unitaires associés. Vous êtes maintenant prêt pour des fonctionalités plus avancées comme le stockage ou un premier serveur HTTP. C'est aussi un bon moment pour sauver votre code dans votre dépôt en ligne.
-
-
-
+You now have the full model of TinyBlog as well as some unit tests. You are now ready to implement more advanced functionality such as the database storage or a first Web front-end. Do not forget to save your code. 
