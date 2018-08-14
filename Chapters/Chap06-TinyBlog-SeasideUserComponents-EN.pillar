@@ -1,0 +1,414 @@
+!!Web Components for TinyBlog
+
+In this chapter, we build the public view of TinyBlog that displays the posts of the blog. 
+
+Figure *@ApplicationArchitectureUserWithoutCategory* shows the components we will work on during this chapter.
+If you feel lost at any moment, please refer to it.
+
++Component Architecture of the Public View (opposed to the Administration View).>file://figures/ApplicationArchitectureUserWithoutCategory.pdf|width=75|label=ApplicationArchitectureUserWithoutCategory+
+
+Before starting, you can load the code of previous chapters as described in the last chapter of this book.
+
+!!! Visual Components
+
+Figure *@ComponentOverview* shows the visual components we will define in this chapter and where they will be displayed.
+
++Visual Components of TinyBlog.>file://figures/ComponentOverview-ListPosts.pdf|width=75|label=ComponentOverview+
+
+!!!!The TBScreenComponent component
+
+
+All components contained in ==TBApplicationRootComponent== will be subclasses of the abstract class ==TBScreenComponent==. This class allows us to factorize shared behaviors between all our components.
+
+[[[
+WAComponent subclass: #TBScreenComponent
+   instanceVariableNames: ''
+   classVariableNames: ''
+   package: 'TinyBlog-Components'
+]]]
+
+All components need to access the model of our application. Therefore, in the 'accessing' protocol, we add a ==blog== method that returns the current instance of ==TBBlog== (the singleton).
+In the future, if you want to manage multiple blogs, you will modify this method and return the blog object it has been configured with.
+
+[[[
+TBScreenComponent >> blog
+   "Return the current blog. In the future we will ask the
+   session to return the blog of the currently logged in user."
+   ^ TBBlog current
+]]]
+
+Inspect now the blog object returned  by ==TBBlog current== and verify that it contains some posts.  
+If it does not, execute: 
+
+[[[
+	TBBlog createDemoPosts
+]]]
+
+Let's define a method ==renderContentOn:== on this new component that temporarily displays a message.
+If you refresh your browser, nothing appears because this new component is not displayed at all yet.
+
+[[[
+TBScreenComponent >> renderContentOn: html
+   html text: 'Hello from TBScreenComponent'
+]]]
+
+!!!Using the TBScreenComponent component
+
+In the final architecture, ==TBScreenComponent== is an abstract component and should not be used directly.
+Nevertheless, we will do it temporarily while developing other components. 
+Let's add an instance variable ==main== in ==TBApplicationRootComponent== class. 
+
+[[[
+WAComponent subclass: #TBApplicationRootComponent
+	instanceVariableNames: 'main'
+	classVariableNames: ''
+	package: 'TinyBlog-Components'
+]]]
+
+
+We initialize this instance variable in the ==initialize== method with a new instance of ==TBScreenComponent==. 
+
+[[[
+TBApplicationRootComponent >> initialize
+   super initialize.
+   main := TBScreenComponent new
+]]]
+
+We make the ==TBApplicationRootComponent== to render this sub-component.
+
+[[[
+TBApplicationRootComponent >> renderContentOn: html
+   html render: main
+]]]
+
+We do not forget to declare that the object contained in ==main== instance variable is a sub-component of ==TBApplicationRootComponent== by redefining the ==children== method.
+
+[[[
+TBApplicationRootComponent >> children
+   ^ { main }
+]]]
+
++==ApplicationRootComponent== temporarily uses a ==ScreenComponent== that contains a ==HeaderComponent==.>file://figures/ComponentRelationship1.pdf|width=75|label=compt1+
+
+Figure *@compt1* shows the result that you should obtain in your browser.
+Currently, there is only the text: ==Hello from TBScreenComponent== displayed by the ==TBScreenComponent== sub-component.
+
+
+!!!Pattern of Component Definition
+
+We will often use the same following steps:
+- first, we define a class and the behavior of a new component;
+- then, we reference it from an existing component that uses it;
+- and we express the composite/sub-component relationship by redefining the ==children== method.
+
+
+!!!Definition of TBHeaderComponent
+
+Let's define a component named ==TBHeaderComponent== that renders the common header of all pages of TinyBlog.
+This component will be inserted on the top of all components such as ==TBPostsListComponent==.
+We use the pattern described above: define the class of the component, reference it from its enclosing component and redefine the ==children== method.
+
+Here the class definition:
+
+[[[
+WAComponent subclass: #TBHeaderComponent
+   instanceVariableNames: ''
+   classVariableNames: ''
+   package: 'TinyBlog-Components'
+]]]
+
+
+!!!Usage of TBHeaderComponent
+
+Remember that ==TBScreenComponent== is the (abstract) root of all components in our final architecture.
+Therefore, we will introduce our header into ==TBScreenComponent== so that all its subclasses will inherit it.
+Since, it is not desirable to instantiate the ==TBHeaderComponent== each time a component is called, we store the header in an instance variable named ==header==.
+
+[[[
+WAComponent subclass: #TBScreenComponent
+   instanceVariableNames: 'header'
+   classVariableNames: ''
+   package: 'TinyBlog-Components'
+]]]
+
+We initialize it in the ==initialize== method categorized in the 'initialization' protocol:
+
+[[[
+TBScreenComponent >> initialize
+   super initialize.
+   header := self createHeaderComponent
+]]]
+
+[[[
+TBScreenComponent >> createHeaderComponent
+   ^ TBHeaderComponent new
+]]]
+
+Note that we use a specific method named ==createHeaderComponent== to create the instantiate the header component.
+Redefining this method makes it possible to completely change the header component that is used. 
+We will use that to display a different header component for the administration view.
+
+!!!Composite-Component Relationship
+
+In Seaside, sub-components of a component must be returned by the composite when sending it the ==children== message.
+So, we must define that the ==TBHeaderComponent== instance is a children of the ==TBScreenComponent== component in the Seaside component hierarchy (and not in the Pharo classes hierarchy). 
+We do so by specializing the method ==children==.
+In this example, it returns a collection of one element which is the instance of ==TBHeaderComponent== referenced by the ==header== instance variable.
+
+[[[
+TBScreenComponent >> children
+   ^ { header }
+]]]
+
+!!!Render an header
+
+In the ==renderContentOn:== method ('rendering' protocol), we can now display the sub-component (the header):
+
+[[[
+TBScreenComponent >> renderContentOn: html
+   html render: header
+]]]
+
+If you refresh your browser, nothing appears because the ==TBHeaderComponent== has no rendering.
+Let's add a ==renderContentOn:== method on it that displays a Bootstrap navigation header:
+
+[[[
+TBHeaderComponent >> renderContentOn: html
+	html tbsNavbar beDefault; with: [  
+		 html tbsContainer: [ 
+			self renderBrandOn: html
+	]]
+]]]
+
+[[[
+TBHeaderComponent >> renderBrandOn: html
+   html tbsNavbarHeader: [ 
+      html tbsNavbarBrand
+         url: self application url;
+         with: 'TinyBlog' ]
+]]]
+
+Your browser should now display what is shown on Figure *@navBlog*.
+As usual in Bootstrap navigation bar, the link on the title of the application (==tbsNavbarBrand==) enable users to go back to home page of the application.
+
++TinyBlog with a Bootstrap header.>file://figures/navBlog.png|width=75|label=navBlog+
+
+
+!!!!Possible Enhancements
+
+@todo Luc Here
+
+Le nom du blog devrait être paramétrable à l'aide d'une variable d'instance dans la classe ==TBBlog== et l'en-tête pourrait afficher ce titre.
+
+!!!Liste des posts
+
+Créons un composant ==TBPostsListComponent== pour afficher la liste des bulletins (posts) - ce qui reste d'ailleurs le but d'un blog. Ce composant constitue la partie publique du blog offerte aux lecteurs du blog. 
+Pour cela, définissons une sous-classe de ==TBScreenComponent==:
+
+[[[
+TBScreenComponent subclass: #TBPostsListComponent
+   instanceVariableNames: ''
+   classVariableNames: ''
+   package: 'TinyBlog-Components'
+]]]
+
+
++Le composant ==ApplicationRootComponent== utilise le composant ==PostsListComponent==.>file://figures/ComponentRelationship2.pdf|width=75|label=compt2+
+
+Nous pouvons maintenant modifier le composant principal de l'application (==TBApplicationRootComponent==) pour qu'il affiche ce nouveau composant comme illustré dans la figure *@compt2*. Pour cela nous modifions sa méthode ==initialize== ainsi: 
+
+[[[
+TBApplicationRootComponent >> initialize
+   super initialize.
+   main := TBPostsListComponent new 
+]]]
+
+Ajoutons également une méthode setter (==main:==) qui nous permettra par la suite, de changer dynamiquement le sous-composant à afficher tout en gardant le composant actuel (instance de ==TBPostsListComponent==) par défaut. 
+
+[[[
+TBApplicationRootComponent >> main: aComponent
+   main := aComponent
+]]]
+
+
+Ajoutons une méthode ==renderContentOn:== (protocole rendering) provisoire pour tester l'avancement de notre application (voir figure *@elementary*). Notez que cette méthode fait un appel à la méthode ==renderContentOn:== de la super-classe qui va afficher le composant en-tête. 
+
+[[[
+TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   html text: 'Blog Posts here !!!'
+]]]
+
+
++TinyBlog avec une liste de bulletins plutot élémentaire.>file://figures/ElementaryListPost.png|width=65|label=elementary+
+
+Si vous rafraichissez la page de TinyBlog dans votre navigateur, vous devriez obtenir la même chose que sur la figure *@elementary*.
+
+
+!!!Le composant Post
+
+Nous allons maintenant définir le composant ==TBPostComponent== qui affiche le contenu d'un bulletin (post).
+
+Chaque bulletin du blog sera représenté visuellement par une instance de  ==TBPostComponent== qui affiche le titre, la date et le contenu d'un bulletin. Nous allons obtenir la situation décrite par la figure *@compt3*.
+
++Ajout du composant Post.>file://figures/ComponentRelationship3.pdf|width=75|label=compt3+
+
+[[[
+WAComponent subclass: #TBPostComponent
+   instanceVariableNames: 'post'
+   classVariableNames: ''
+   package: 'TinyBlog-Components'
+]]]
+
+[[[
+TBPostComponent >> initialize
+      super initialize.
+      post := TBPost new
+]]]
+
+[[[      
+TBPostComponent >> title
+   ^ post title
+]]]
+
+[[[
+TBPostComponent >> text
+   ^ post text
+]]]
+
+[[[
+TBPostComponent >> date
+   ^ post date
+]]]
+
+Ajoutons la méthode ==renderContentOn:== qui définit l'affichage du post.
+
+[[[
+TBPostComponent >> renderContentOn: html
+   html heading level: 2; with: self title.
+   html heading level: 6; with: self date.
+   html text: self text
+]]]
+
+
+!!!!A propos des formulaires
+
+Dans le chapitre sur l'interface d'administration, nous utiliserons Magritte et montrerons qu'il est rare de définir un composant de manière aussi manuelle comme ci-dessus. En effet, Magritte permet de décrire les données manipulées et offre ensuite la possibilité de générer automatiquement des composants Seaside. Le code équivalent à celui ci-dessus en Magritte serait comme suit: 
+
+[[[
+TBPostComponent >> renderContentOn: html
+   "DON'T WRITE THIS YET"
+   html render: post asComponent
+]]]
+
+
+!!!Afficher les bulletins (posts)
+
+Nous pouvons maintenant afficher les bulletins présents dans la base. Vérifiez que votre blog a quelques bulletins : 
+[[[
+TBBlog current allBlogPosts size
+]]]
+
+Si il n'en contient aucun, recréez-en : 
+[[[
+TBBlog createDemoPosts 
+]]]
+
+Il ne reste plus qu'à modifier la méthode ==renderContentOn:== de la classe ==TBPostsListComponent== pour afficher l'ensemble des bulletins visibles présents dans la base.
+
+[[[
+TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   self blog allVisibleBlogPosts do: [ :p |
+      html render: (TBPostComponent new post: p) ]
+]]]
+
+Rafraichissez la page de votre navigateur et vous devez obtenir une page d'erreur.
+
+!!!Débugger les erreurs
+
+Par défaut, lorsqu'une erreur se produit dans une application, Seaside retourne une page HTML contenant un message. Vous pouvez changer ce message, mais le plus pratique pendant le développement de l'application est de configurer Seaside pour qu'il ouvre un debugger dans Pharo. Pour cela, exécuter le code suivant :
+
+[[[
+(WAAdmin defaultDispatcher handlerAt: 'TinyBlog') 
+    exceptionHandler: WADebugErrorHandler
+]]] 
+
+Rafraîchissez la page de votre navigateur et vous devez obtenir un debugger côté Pharo.
+L'analyse de la pile d'appels montre qu'il manque la méthode suivante :
+
+[[[
+TBPostComponent >> post: aPost
+   post := aPost
+]]]
+
+Vous pouvez ajouter cette méthode dans le debugger avec le bouton ==Create==. Quand c'est fait, appuyez sur le bouton ==Proceed==. La page de votre navigateur doit maintenant montrer la même chose que la figure *@better*.
+
++TinyBlog avec une liste de posts.>file://figures/betterListPosts.png|width=65|label=better+
+
+
+!!!Affichage de la liste des posts avec Bootstrap
+
+Nous allons utiliser Bootstrap pour rendre la liste un peu plus jolie à l'aide d'un container en utilisant le message ==tbsContainer: == comme suit :
+
+[[[
+TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   html tbsContainer: [ 
+      self blog allVisibleBlogPosts do: [ :p |
+          html render: (TBPostComponent new post: p) ] ]
+]]]
+
+Rafraichissez la page et vous devez obtenir la figure *@ComponentOverview*.
+% +TinyBlog avec une liste de posts affichée avec Bootstrap.>file://figures/ContainerList.png|width=65|label=container+
+
+!!! Cas d'instanciation de composants dans renderContentOn:
+
+Nous avons dit que la méthode ==children== d'un composant devait retourner ses sous-composants.
+En effet, avant d'exécuter la méthode ==renderContentOn:== d'un composite, Seaside a besoin de retrouver tous les sous-composants de ce composite et notamment leurs états. 
+
+Toutefois, si des sous-composants sont instanciés systématiquement dans la méthode ==renderContentOn:== du composite,  comme c'est le cas dans la méthode ==renderContentOn:== de la classe ==TBPostsListComponent== ci-dessus, il n'est pas nécessaire qu'ils soient stockés et retournés par la méthode  ==children== du composite.
+Bien évidemment, instancier systématiquement des sous-composants dans la méthode ==renderContentOn:== n'est pas forcément une bonne pratique car cela allonge le délai de rendu d'une page Web.
+
+Si nous voulions stocker les sous-composants permettant d'afficher les bulletins, nous aurions ajouté et initialisé une variable d'instance ==postComponents==.
+
+[[[
+TBPostsListComponent >> initialize
+	super initialize.
+	postComponents := OrderedCollection new
+]]]
+
+Nous aurions ajouté la méthode ==postComponents== calculant les composants pour les bulletins. 
+
+[[[
+TBPostsListComponent >> postComponents 
+	postComponents := self readSelectedPosts
+			collect: [ :each | TBPostComponent new post: each ].
+	^ postComponents 
+]]]
+
+Et nous aurions finalement modifié la méthode ==children== et ==renderContentOn:== 
+[[[
+TBPostsListComponent >> children 
+	^ self postComponents, super children
+]]]
+
+[[[
+TBPostsListComponent >> renderContentOn: html
+	super renderContentOn: html.
+	html tbsContainer: [ 
+		self postComponents do: [ :p |
+				html render: p ] ]
+]]]
+
+Nous ne le faisons pas car cela complique le code et n'apporte pas grand chose puisque les sous-composants sont tout de même instanciés à chaque rendu du composant ==TBPostsListComponent==.
+
+
+!!! Conclusion
+
+Nous avons développé le rendu d'une liste de bulletins et dans le chapitre suivant nous allons ajouter la gestion des catégories. 
+
+Avec Seaside, le programmeur n'a pas à se soucier de gérer les requêtes web, ni l'état de l'application. Il définit des composants qui sont créés et sont proches des composants pour applications de bureau.
+
+Un composant Seaside est responsable d'assurer son rendu en spécialisant la méthode ==renderContentOn:==.
+De plus un composant doit retourner ses sous-composants en spécialisant la méthode ==children==.
