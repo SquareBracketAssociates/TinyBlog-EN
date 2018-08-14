@@ -162,9 +162,9 @@ You can discover more about the Voyage API by looking at:
 
 Those queries will be more relevant with more objects but they would be similar.
 
-!!!If we would save Posts [Optionnal]
+!!!If we would save Posts [Optional]
 
-This section should not be implemented. It is only described as an example. More information about Voyage can be found in the Entreprise Pharo book *http://books.pharo.org*. We want to illustrate that declaring a class as a Voyage root has an influence on how an instance of this class is saved and reloaded. 
+This section should not be implemented. It is only described as an example. More information about Voyage can be found in the Enterprise Pharo book *http://books.pharo.org*. We want to illustrate that declaring a class as a Voyage root has an influence on how an instance of this class is saved and reloaded. 
 
 So far, a post (an instance of ==TBPost==) is not declared as a Voyage root.
 Post objects are therefore saved as sub-parts into the blog object they belong to. 
@@ -212,7 +212,7 @@ TBBlog >> removeAllPosts
 
 In the ==removeAllPosts==  method, we first remove all posts, then update the collection and finally save the blog.
 
-!!!Configure an External Mongo Database [Optionnal]
+!!!Configure an External Mongo Database [Optional]
 
 By using Voyage, we can easily save our model objects into a Mongo database. 
 This section explains how to proceed and the few modifications to make into our code.
@@ -221,9 +221,7 @@ Even if you do it, we encourage you to continue to work with a memory database a
 
 !!!!Installing Mongo
 
-@todo Luc Here
-
-Regardless of your operating system (Linux, Mac OSX ou Windows), you can install a local Mongo server on your machine (cf. *https://www.mongodb.com*). 
+Regardless of your operating system (Linux, Mac OsX or Windows), you can install a local Mongo server on your machine (cf. *https://www.mongodb.com*). 
 This is useful to test your application without requiring an internet connection. 
 Instead directly installing Mongo, we suggest to install Docker (*https://www.docker.com*) on your machine and execute a Mongo container using the following command line:
 
@@ -275,7 +273,7 @@ TBBlog createDemoPosts
 
 !!!!In case of trouble
 
-If you need to re-initalize completely an external database, you can use the ==dropDatabase== method.
+If you need to re-initialize completely an external database, you can use the ==dropDatabase== method.
 
 [[[
 (VOMongoRepository
