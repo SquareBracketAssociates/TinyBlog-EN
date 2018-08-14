@@ -223,33 +223,34 @@ Even if you do it, we encourage you to continue to work with a memory database a
 
 @todo Luc Here
 
-Quel que soit votre système d'exploitation (Linux, Mac OSX ou Windows), vous pouvez installer un serveur Mongo localement sur votre machine. Cela est pratique pour tester votre application sans avoir besoin d'une connexion Internet. 
-Une solution consiste à installer directement un serveur Mongo sur votre système (cf. *https://www.mongodb.com*). 
-Toutefois, nous vous conseillons plutôt d'installer Docker (*https://www.docker.com*) sur votre machine et à lancer un conteneur  qui exécute un serveur Mongo grâce à la ligne de commande suivante:
+Regardless of your operating system (Linux, Mac OSX ou Windows), you can install a local Mongo server on your machine (cf. *https://www.mongodb.com*). 
+This is useful to test your application without requiring an internet connection. 
+Instead directly installing Mongo, we suggest to install Docker (*https://www.docker.com*) on your machine and execute a Mongo container using the following command line:
 
 [[[
 	docker run --name mongo -p 27017:27017 -d mongo
 ]]]
 
-@@note Le serveur Mongo ne doit pas utiliser d'authentification (ce n'est pas le cas avec une installation locale par défaut) car la nouvelle méthode de chiffrement SCRAM utilisée par MongoDB 3.0 n'est actuellement pas supportée par Voyage.
+@@note The running Mongo server must not use authentication (it is not the case with the default installation) because the new SCRAM authentication mechanism used by Mongo 3.0 is currently not supported by Voyage.
 
-Quelques commandes utiles pour la suite :
+Some useful Docker commands:
 
 [[[
-	# pour stoper votre conteneur
+	# to stop your Mongo docker container
 	docker stop mongo
 	
-	# pour re-démarrer votre conteneur
+	# to re-start your container
 	docker start mongo
 	
-	# pour détruire votre conteneur. Ce dernier doit être stoppé avant.
+	# to delete your container (it must be stopped before)
 	docker rm mongo
 ]]]
 
 
 !!!!Connecting a Local Mongo Server
 
-Nous définissions les méthodes ==initializeLocalhostMongoDB== pour établir la connexion vers la base de données.
+Once installed, you can connect to a Mongo server directly from Pharo.
+We define the method named ==initializeLocalhostMongoDB== to establish the connection to the local Mongo server (localhost, default port) and access the database named 'tinyblog'.
 
 [[[
 TBBlog class >> initializeLocalhostMongoDB
@@ -258,14 +259,14 @@ TBBlog class >> initializeLocalhostMongoDB
    repository enableSingleton.
 ]]]
 
-Il faut aussi s'assurer de la ré-initialisation de la connexion à la base lors du reset de la classe.
+Reset the class to set a new connection to the database.
 
 [[[
 TBBlog class >> reset
    self initializeLocalhostMongoDB
 ]]]
 
-Vous pouvez maintenant re-créer vos posts de démo, et ils seront automatiquement sauvegardés dans votre base Mongo:
+Now, if you recreate demo posts, they are automatically saved into your local Mongo database:
 
 [[[
 TBBlog reset.
@@ -274,7 +275,7 @@ TBBlog createDemoPosts
 
 !!!!In case of trouble
 
-Notez que si vous avez besoin de réinitialiser la base extérieure complètement, vous pouvez utiliser la méthode ==dropDatabase==.
+If you need to re-initalize completely an external database, you can use the ==dropDatabase== method.
 
 [[[
 (VOMongoRepository
@@ -282,13 +283,13 @@ Notez que si vous avez besoin de réinitialiser la base extérieure complètemen
    database: 'tinyblog') dropDatabase
 ]]]
 
-Si vous ne pouvez pas le faire depuis Pharo, vous pouvez le faire lorsque ==mongod== est en cours d'exécution avec l'expression suivante : 
+You can also do it in command line when ==mongod== is running with: 
 
 [[[
 mongo tinyblog --eval "db.dropDatabase()"
 ]]]
 
-ou dans le conteneur docker :
+or by connecting to the docker container it is running in:
 
 [[[
 docker exec -it mongo bash -c 'mongo tinyblog --eval "db.dropDatabase()"'
@@ -296,13 +297,13 @@ docker exec -it mongo bash -c 'mongo tinyblog --eval "db.dropDatabase()"'
 
 !!!!Points of Attention: Changing TBBlog Definition
 
-Si vous utilisez une base locale plutôt qu'une base en mémoire, à chaque fois que vous déclarez une nouvelle racine d'objets ou modifiez la définition d'une classe racine (ajout, retrait, modification d'attribut) il est capital de ré-initialiser le cache maintenu par Voyage.  La ré-initialisation se fait comme suit:
+When you use an external Mongo database instead of a memory one, each time you add new root objects or modify the definition of some root objects, it is important to reset the cache maintained by Voyage. It can be done using:
 
 [[[
 VORepository current reset
 ]]]
 
-
 !!!Conclusion
 
-Voyage propose une API sympathique pour gérer de manière transparente la sauvegarde d'objets soit en mémoire soit dans une base de données document. Votre application peut maintenant être sauvée dans la base et vous êtes donc prêt pour construire son interface web. 
+Voyage proposes a nice API to transparently manage storage of objects either into memory or in a document database.
+Application data are now saved into a database and we are ready to build the web user interface.
