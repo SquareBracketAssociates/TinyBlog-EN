@@ -1,0 +1,308 @@
+!!Data Persitency using Voyage and Mongo
+
+Until now we used model objects stored in memory and it works well because saving the Pharo image also save these objects.
+Nevertheless, it would be better to save these model data (blog posts) into an external database. 
+Pharo supports multiple object serializers such Fuel (binary format) or STON (text format).
+These serializers are useful and powerful.
+In this chapter, we will use another possibility: saving data in a document database such as Mongo (*https://www.mongodb.com*) using the Voyage framework. 
+Voyage provides a unified API to store and retrieve objects in various document-based databases such as Mongo or UnQLite. 
+But first, we will use Voyage and its capacity to simulate an external database in memory.
+This is really useful during development. 
+Then, you may install a local Mongo database and access it through Voyage. 
+As you will see, this second step will have a really little impact on our code.
+
+The last chapter explains how to load the code of previous chapters if needed.
+
+!!!Configure Voyage to Save TBBlog Objects
+
+By defining the class method ==isVoyageRoot==, we declare that objects of this class must be saved into the database as root objects.
+It means that the database will contain as many documents as instances of this class.
+
+[[[
+TBBlog class >> isVoyageRoot
+   "Indicates that instances of this class are top level documents in noSQL databases"
+   ^ true
+]]]
+
+We should establish connection to real database or work in memory.
+Let's start to work in memory by using this expression:
+
+[[[
+VOMemoryRepository new enableSingleton.
+]]]
+
+The ==enableSingleton== message indicates to Voyage that we will use only one database. 
+This will free us to specify the database each time.
+We create and initialize the database in memory in a class-side method named ==initializeVoyageOnMemoryDB==.
+
+[[[
+TBBlog class >> initializeVoyageOnMemoryDB
+   VOMemoryRepository new enableSingleton
+]]]
+
+We do not need to save the database into an instance variable because we have only one database accessible through Voyage configured in singleton  mode.
+
+The ==reset== class method re-initializes the database. 
+The ==initialize== class method ensure that the database is initialized when we load TinyBlog's code.
+Do not forget to execute this expression ==TBBlog initialize== to ensure that the database is initialized.
+
+[[[
+TBBlog class >> reset
+      self initializeVoyageOnMemoryDB
+      
+TBBlog class >> initialize
+      self reset
+]]]
+
+The class-side ==current== method is more tricky. 
+Before using Voyage, we implemented a simple singleton pattern (==TBBlog current==). 
+However, it does not work anymore because imagine that we saved our blog and then the server stop by accident. When we would reload a new version of the code, it would re-initializes the connection and create a new fresh instance of the blog. 
+It would then be possible to end up with a different instance than the saved one.
+
+So we change the implementation of the  ==current== class method to make a database request and retrieve saved objects. 
+Since we only save one blog object, it only consists in doing:  ==self selectOne: [ :each | true ]== or ==self selectAll anyOne==. 
+If the database contains no instance, we create a new one and save it.
+
+[[[
+TBBlog class >> current
+   ^ self selectAll 
+			ifNotEmpty: [ :x | x anyOne ]
+			ifEmpty: [ self new save ]
+]]]
+
+We can also remove the class instance variable named ==uniqueInstance== that we previously used to store our singleton object.
+
+[[[
+TBBlog class
+	instanceVariableNames: ''
+]]]
+
+!!!Saving a Blog
+
+Each time we modify a blog object, we must propagate changes into the database.
+For example, we modify the ==writeBlogPost:== method to save the blog when we add a new post.
+
+[[[
+TBBlog >> writeBlogPost: aPost
+	"Write the blog post in database"
+	self allBlogPosts add: aPost.
+	self save
+]]]
+
+We also save the blog when removing (==remove== method) a post from a blog.
+
+[[[
+TBBlog >> removeAllPosts
+	posts := OrderedCollection new.
+	self save.
+]]]
+
+!!!Revising Unit Tests
+
+We now save blogs in a database, either in memory or in an external Mongo server, through Voyage.
+We must be careful with unit tests that modify the database because they may corrupt production data.
+To circumvent this dangerous situation, a test should not modify the state of the system. 
+
+Let's add an instance variable ==previousRepository== in the ==TBBLogTest== class.
+
+[[[
+TestCase subclass: #TBBlogTest
+	instanceVariableNames: 'blog post first previousRepository'
+	classVariableNames: ''
+	package: 'TinyBlog-Tests'
+]]]
+
+Then, we modify the ==setUp== method to save the database before each test execution and we create a temporary database object that will be used by the test.
+
+[[[
+TBBlogTest >> setUp
+	previousRepository := VORepository current.
+	VORepository setRepository: VOMemoryRepository new.
+	blog := TBBlog current.
+	first := TBPost title: 'A title' text: 'A text' category: 'First Category'.
+	blog writeBlogPost: first.
+	post := (TBPost title: 'Another title' text: 'Another text' category: 'Second Category') beVisible
+]]]
+
+In the ==tearDown== method executed after each test, we restore the original database object.
+
+[[[
+TBBlogTest >> tearDown
+	VORepository setRepository: previousRepository
+]]]
+
+!!!Querying the Database
+
+The database is currently in memory and we can access to the blog object using the ==current== class-side method of the ==TBBlog== class.
+It is enough to show the API of Voyage since it will be the same to access a real Mongo database.
+
+You can create posts:
+[[[
+TBBlog createDemoPosts
+]]]
+
+You can count the number of blog saved. ==count== is part of the Voyage API. In this example, we get the result 1 because the blog is implemented as a Singleton.
+
+[[[
+TBBlog count
+>1
+]]]
+
+Similarly, you can retrieve all saved root objects of one kind.
+
+[[[
+TBBlog selectAll	
+]]]
+
+You can also remove a root objet using the ==remove== message.
+
+You can discover more about the Voyage API by looking at:
+- the ==Class== class,
+- the ==VORepository== class which is the root of the hierarchy of all databases either in memory or external.
+
+Those queries will be more relevant with more objects but they would be similar.
+
+!!!If we would save Posts [Optionnal]
+
+This section should not be implemented. It is only described as an example. More information about Voyage can be found in the Entreprise Pharo book *http://books.pharo.org*. We want to illustrate that declaring a class as a Voyage root has an influence on how an instance of this class is saved and reloaded. 
+
+So far, a post (an instance of ==TBPost==) is not declared as a Voyage root.
+Post objects are therefore saved as sub-parts into the blog object they belong to. 
+It implies that a post is not guaranteed to be unique after saving and re-loading from the database. 
+Indeed, after loading each blog objects will have their own posts objects even if some posts were shared before saving. 
+Shared objects before saving will be duplicated for each root objects after loading.
+
+We can declare posts as root objects meaning that a post can be saved independently from a blog. 
+It implies that saved blogs have a reference to a ==TBPost== object. 
+This would preserve posts sharing between blog objects. 
+
+However, all objects should be root objects.
+If we represent post comments, we would not define them as root objects too because manipulating a comment outside of its context (a post) does not make sense.
+
+!!!!Post as Root = Uniqueness
+
+If you want to share posts and make them unique between multiple blogs, therefore, the ==TBPost== class must be declared as a root in the database.
+In this case, posts are saved as autonomous entities and  instances of ==TBBlog== will reference posts entities instead of embedding them.
+The consequence is that a post is unique and can be shared via reference from a blog.
+To achieve this, we ""would"" define the following methods:
+
+[[[
+TBPost class >> isVoyageRoot
+   "Indicates that instances of this class are top level documents in noSQL databases"
+   ^ true
+]]]
+
+During the addition of a post to a blog, it would be important to save both the blog and the new post.
+
+[[[
+TBBlog >> writeBlogPost: aPost
+   "Write the blog post in database"
+   posts add: aPost.
+   aPost save. 
+   self save 
+]]]
+
+
+[[[
+TBBlog >> removeAllPosts
+   posts do: [ :each | each remove ].
+   posts := OrderedCollection new.
+   self save.
+]]]
+
+In the ==removeAllPosts==  method, we first remove all posts, then update the collection and finally save the blog.
+
+!!!Configure an External Mongo Database [Optionnal]
+
+By using Voyage, we can easily save our model objects into a Mongo database. 
+This section explains how to proceed and the few modifications to make into our code.
+This is not mandatory to do it.
+Even if you do it, we encourage you to continue to work with a memory database afterwards.
+
+!!!!Installing Mongo
+
+@todo Luc Here
+
+Quel que soit votre système d'exploitation (Linux, Mac OSX ou Windows), vous pouvez installer un serveur Mongo localement sur votre machine. Cela est pratique pour tester votre application sans avoir besoin d'une connexion Internet. 
+Une solution consiste à installer directement un serveur Mongo sur votre système (cf. *https://www.mongodb.com*). 
+Toutefois, nous vous conseillons plutôt d'installer Docker (*https://www.docker.com*) sur votre machine et à lancer un conteneur  qui exécute un serveur Mongo grâce à la ligne de commande suivante:
+
+[[[
+	docker run --name mongo -p 27017:27017 -d mongo
+]]]
+
+@@note Le serveur Mongo ne doit pas utiliser d'authentification (ce n'est pas le cas avec une installation locale par défaut) car la nouvelle méthode de chiffrement SCRAM utilisée par MongoDB 3.0 n'est actuellement pas supportée par Voyage.
+
+Quelques commandes utiles pour la suite :
+
+[[[
+	# pour stoper votre conteneur
+	docker stop mongo
+	
+	# pour re-démarrer votre conteneur
+	docker start mongo
+	
+	# pour détruire votre conteneur. Ce dernier doit être stoppé avant.
+	docker rm mongo
+]]]
+
+
+!!!!Connecting a Local Mongo Server
+
+Nous définissions les méthodes ==initializeLocalhostMongoDB== pour établir la connexion vers la base de données.
+
+[[[
+TBBlog class >> initializeLocalhostMongoDB
+   | repository |
+   repository := VOMongoRepository database: 'tinyblog'.
+   repository enableSingleton.
+]]]
+
+Il faut aussi s'assurer de la ré-initialisation de la connexion à la base lors du reset de la classe.
+
+[[[
+TBBlog class >> reset
+   self initializeLocalhostMongoDB
+]]]
+
+Vous pouvez maintenant re-créer vos posts de démo, et ils seront automatiquement sauvegardés dans votre base Mongo:
+
+[[[
+TBBlog reset.
+TBBlog createDemoPosts 
+]]]
+
+!!!!In case of trouble
+
+Notez que si vous avez besoin de réinitialiser la base extérieure complètement, vous pouvez utiliser la méthode ==dropDatabase==.
+
+[[[
+(VOMongoRepository
+   host: 'localhost'
+   database: 'tinyblog') dropDatabase
+]]]
+
+Si vous ne pouvez pas le faire depuis Pharo, vous pouvez le faire lorsque ==mongod== est en cours d'exécution avec l'expression suivante : 
+
+[[[
+mongo tinyblog --eval "db.dropDatabase()"
+]]]
+
+ou dans le conteneur docker :
+
+[[[
+docker exec -it mongo bash -c 'mongo tinyblog --eval "db.dropDatabase()"'
+]]]
+
+!!!!Points of Attention: Changing TBBlog Definition
+
+Si vous utilisez une base locale plutôt qu'une base en mémoire, à chaque fois que vous déclarez une nouvelle racine d'objets ou modifiez la définition d'une classe racine (ajout, retrait, modification d'attribut) il est capital de ré-initialiser le cache maintenu par Voyage.  La ré-initialisation se fait comme suit:
+
+[[[
+VORepository current reset
+]]]
+
+
+!!!Conclusion
+
+Voyage propose une API sympathique pour gérer de manière transparente la sauvegarde d'objets soit en mémoire soit dans une base de données document. Votre application peut maintenant être sauvée dans la base et vous êtes donc prêt pour construire son interface web. 
