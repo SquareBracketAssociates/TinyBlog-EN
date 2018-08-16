@@ -1,11 +1,10 @@
 !!Web Components for TinyBlog
 
 In this chapter, we build the public view of TinyBlog that displays the posts of the blog. 
-
-Figure *@ApplicationArchitectureUserWithoutCategory* shows the components we will work on during this chapter.
+Figure *@ApplicationArchitectureUserWithoutCategory* shows the components we will work on during this chapter. 
 If you feel lost at any moment, please refer to it.
 
-+Component Architecture of the Public View (opposed to the Administration View).>file://figures/ApplicationArchitectureUserWithoutCategory.pdf|width=75|label=ApplicationArchitectureUserWithoutCategory+
++Component Architecture of the Public View (opposed to the Administration View).>file://figures/ApplicationArchitectureUserWithoutCategory.pdf|width=60|label=ApplicationArchitectureUserWithoutCategory+
 
 Before starting, you can load the code of previous chapters as described in the last chapter of this book.
 
@@ -18,7 +17,7 @@ Figure *@ComponentOverview* shows the visual components we will define in this c
 !!!!The TBScreenComponent component
 
 
-All components contained in ==TBApplicationRootComponent== will be subclasses of the abstract class ==TBScreenComponent==. This class allows us to factorize shared behaviors between all our components.
+All components contained in ==TBApplicationRootComponent== will be subclasses of the abstract class ==TBScreenComponent==. This class allows us to factorize shared behavior between all our components.
 
 [[[
 WAComponent subclass: #TBScreenComponent
@@ -37,13 +36,6 @@ TBScreenComponent >> blog
    ^ TBBlog current
 ]]]
 
-Inspect now the blog object returned  by ==TBBlog current== and verify that it contains some posts.  
-If it does not, execute: 
-
-[[[
-	TBBlog createDemoPosts
-]]]
-
 Let's define a method ==renderContentOn:== on this new component that temporarily displays a message.
 If you refresh your browser, nothing appears because this new component is not displayed at all yet.
 
@@ -52,10 +44,11 @@ TBScreenComponent >> renderContentOn: html
    html text: 'Hello from TBScreenComponent'
 ]]]
 
+
 !!!Using the TBScreenComponent component
 
 In the final architecture, ==TBScreenComponent== is an abstract component and should not be used directly.
-Nevertheless, we will do it temporarily while developing other components. 
+Nevertheless, we will do it temporarily while developing other components.
 Let's add an instance variable ==main== in ==TBApplicationRootComponent== class. 
 
 [[[
@@ -100,6 +93,15 @@ We will often use the same following steps:
 - first, we define a class and the behavior of a new component;
 - then, we reference it from an existing component that uses it;
 - and we express the composite/sub-component relationship by redefining the ==children== method.
+
+!!! Populating the Blog
+
+You can inspect the blog object returned  by ==TBBlog current== and verify that it contains some posts.  
+If it does not, execute: 
+
+[[[
+	TBBlog createDemoPosts
+]]]
 
 
 !!!Definition of TBHeaderComponent

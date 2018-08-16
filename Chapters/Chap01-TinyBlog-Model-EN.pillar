@@ -114,7 +114,7 @@ Propose a solution.
 The sequence 3 of the week 6 of the Mooc can help you to understand why it is better to avoid hardcoding class references (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_67.html*).
 
 
-!!!Posts creation methods
+!!!Posts Creation Methods
 
 On class-side, we add methods to ease posts creation for blogs (in the protocol 'instance creation') that belong to a category or not.
 
@@ -133,7 +133,7 @@ TBPost class >> title: aTitle text: aText category: aCategory
             yourself
 ]]]
 
-!!!Post  creation
+!!!Creating a Post
 
 You can now create posts. Using the Playground tools execute the following expression:
 
@@ -148,7 +148,7 @@ When you inspect the code above (right click and "Inspect it"), you will obtain 
 
 +Inspector on a TBPost instance.>figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
 
-!!! Adding some unit tests
+!!! Adding Some Unit Tests
 
 Even though the model is quite simple we can define some tests.
 In Test Driven Developpement mode we write test first. 
@@ -189,7 +189,7 @@ TBPostTest >> testPostIsCreatedCorrectly
 
 Your tests should pass.
 
-!!! Post queries
+!!! Post Queries
 
 In the protocol 'testing', define the following methods that checks whether a post is visible, and whether it is classified or not.
 

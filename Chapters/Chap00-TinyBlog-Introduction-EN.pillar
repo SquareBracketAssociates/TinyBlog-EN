@@ -21,7 +21,7 @@ Finally, to help you to get over possible errors and avoid to get stuck, the las
 +The TinyBlog application.>figures/TinyBlogOnPharoCloud.png|width=100|label=TinyBlogOnPharoCloudHere+
 
 
-!!!Installation de Pharo
+!!!Pharo Installation
 
 In this tutorial, we suppose that you are using Pharo 6.1 with an image in which many frameworks and web libraries have been loaded: Seaside (component-based web application server), Magritte (an automatic generation report system based on descriptions), Bootstrap (a library to visually tune web applications), Voyage (a framework to save your objects in document databases) and some others.
 
@@ -37,7 +37,7 @@ You can rebuild this web Pharo image in Pharo 6.1 (*http://pharo.org/download*) 
       load 
 ]]]
 
-!!! Naming rules
+!!! Naming Rules
 
 In the following, we prefix all the class names ==TB== (for TinyBlog).
 You may:
