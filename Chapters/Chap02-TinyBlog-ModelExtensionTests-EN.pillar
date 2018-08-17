@@ -31,7 +31,7 @@ TBBlog >> initialize
 ]]]
 
 
-!!!Only one blog object
+!!!Only One Blog Object
 
 In the rest of this project, we assume that we will manage only one blog. 
 Later, you may add the possibility to manage multiple blogs such as one per user of the TinyBlog application. 
@@ -66,7 +66,7 @@ TBBlog class >> initialize
 ]]]
 
 
-!!!Testing the model
+!!!Testing the Model
 
 
 We now adopt a Test Driven Development approach i.e., we will write a unit test first and then develop the business functionality until the test is green. We will repeat this process for each functionality of the model.
@@ -111,7 +111,7 @@ Here we see the limits of using a Singleton. Indeed, if you deploy a blog and th
 
 We will now develop tests first and then implement all functionalities to make them green.
 
-!!!A first test
+!!!A First Test
 
 The first test adds a post in the blog and verifies that this post is effectivly added.
 
@@ -142,7 +142,7 @@ TBBlog >> size
 
 The previous test should now pass (i.e. be green).
 
-!!!Increasing coverage
+!!!Increasing Test Coverage
 
 We should also add tests to cover all functionalities that we introduced.
 
@@ -157,9 +157,12 @@ TBBlogTest >> testRemoveAllBlogPosts
    self assert: blog size equals: 0
 ]]]
 
-!!! Other functionalities
+!!! Other Functionalities
 
-!!!!Retrieve all posts (visible and invisible)
+We follow now the test driven way of defining methods. We first define a test. We verify that this test
+is failing. Then we define the method under test and verify that the test passes.
+
+!!!!All Posts 
 
 Let's a test that fails:
 
@@ -177,7 +180,7 @@ TBBlog >> allBlogPosts
 ]]]
 
 
-!!!!Retrieve visible posts
+!!!!Visible Posts
 
 Unit test:
 
@@ -195,19 +198,24 @@ TBBlog >> allVisibleBlogPosts
 ]]]
 
 
-!!!!Retrieve all posts of one category
-
+!!!!All Posts of a Category
+The following test verifies that we can access all the posts of a given category. 
+Once defined, we should make sure that the test failed.
 [[[
 TBBlogTest >> testAllBlogPostsFromCategory
    self assert: (blog allBlogPostsFromCategory: 'First Category') size equals: 1
 ]]]
+
+Then we can define the functionality and make sure that our test passes.
 
 [[[
 TBBlog >> allBlogPostsFromCategory: aCategory
    ^ posts select: [ :p | p category = aCategory ]
 ]]]
 
-!!!!Retrieve all visible posts of one category
+!!!!All visible Posts of a Category
+The following test verifies that we can access all the visible posts of a given category. 
+Once defined, we should make sure that the test failed.
 
 [[[
 TBBlogTest >> testAllVisibleBlogPostsFromCategory
@@ -216,6 +224,7 @@ TBBlogTest >> testAllVisibleBlogPostsFromCategory
    self assert: (blog allVisibleBlogPostsFromCategory: 'Second Category') size equals: 1
 ]]]
 
+Then we can define the functionality and make sure that our test passes.
 [[[
 TBBlog >> allVisibleBlogPostsFromCategory: aCategory
 	^ posts select: [ :p | p category = aCategory 
@@ -223,6 +232,8 @@ TBBlog >> allVisibleBlogPostsFromCategory: aCategory
 ]]]
 
 !!!!Check unclassified posts
+
+The following test verifies that we do not have unclassified blogs in our test fixture. 
 
 [[[
 TBBlogTest >> testUnclassifiedBlogPosts

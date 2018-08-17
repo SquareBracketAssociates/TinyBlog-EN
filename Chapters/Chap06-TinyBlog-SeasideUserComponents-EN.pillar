@@ -48,7 +48,8 @@ TBScreenComponent >> renderContentOn: html
 !!!Using the TBScreenComponent component
 
 In the final architecture, ==TBScreenComponent== is an abstract component and should not be used directly.
-Nevertheless, we will do it temporarily while developing other components.
+Nevertheless, we will use it temporarily while developing other components.
+
 Let's add an instance variable ==main== in ==TBApplicationRootComponent== class. 
 
 [[[
