@@ -82,10 +82,17 @@ TBApplicationRootComponent >> children
    ^ { main }
 ]]]
 
+Figure *@fig:Hello* shows the result that you should obtain in your browser.
+Currently, there is only the text: ==Hello from TBScreenComponent== displayed by the ==TBScreenComponent== sub-component.
+(voir figure *@fig:Hello*).
+
++First visual rendering of ==TBScreenComponent==.>file://figures/HelloFromScreenComponent.png|width=75|label=fig:Hello+
+
+
+
 +==ApplicationRootComponent== temporarily uses a ==ScreenComponent== that contains a ==HeaderComponent==.>file://figures/ComponentRelationship1.pdf|width=75|label=compt1+
 
-Figure *@compt1* shows the result that you should obtain in your browser.
-Currently, there is only the text: ==Hello from TBScreenComponent== displayed by the ==TBScreenComponent== sub-component.
+
 
 
 !!!Pattern of Component Definition
