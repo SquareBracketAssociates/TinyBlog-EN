@@ -162,7 +162,7 @@ You can discover more about the Voyage API by looking at:
 
 Those queries will be more relevant with more objects but they would be similar.
 
-!!!If we would save Posts [Optional]
+!!!If we would Save Posts [Optional]
 
 This section should not be implemented. It is only described as an example. More information about Voyage can be found in the Enterprise Pharo book *http://books.pharo.org*. We want to illustrate that declaring a class as a Voyage root has an influence on how an instance of this class is saved and reloaded. 
 
@@ -271,7 +271,7 @@ TBBlog reset.
 TBBlog createDemoPosts 
 ]]]
 
-!!!!In case of trouble
+!!!!In Case of Trouble
 
 If you need to re-initialize completely an external database, you can use the ==dropDatabase== method.
 
