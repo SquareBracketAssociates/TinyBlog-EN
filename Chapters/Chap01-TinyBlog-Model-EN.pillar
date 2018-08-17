@@ -8,7 +8,9 @@ The model is particularly simple: it starts with a post.
 
 !!! TBPost Class
 
-We start with the post representation. It is defined by the class ==TBPost==:
++TBPost.>file://figures/postUML.pdf|width=10|label=postUml+
+
+We start with the post representation. It is super simple as shown by Figure *@postUml*. It is defined by the class ==TBPost==:
 
 [[[
 Object subclass: #TBPost
@@ -146,7 +148,7 @@ TBPost
 
 When you inspect the code above (right click and "Inspect it"), you will obtain an inspector on the newly created object as shown in Figure *@inspectorOnTBPost*.
 
-+Inspector on a TBPost instance.>figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
++Inspector on a TBPost instance.>file://figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
 
 !!! Adding Some Unit Tests
 

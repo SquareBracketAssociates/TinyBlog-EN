@@ -84,7 +84,7 @@ TBApplicationRootComponent class >> canBeRoot
    ^ true
 ]]]
 
-+TinyBlog is a Registered Seaside Application.>file://figures/BrowseApplications.png|width=75|label=BrowseApplications+
++TinyBlog is a registered Seaside application.>file://figures/BrowseApplications.png|width=75|label=BrowseApplications+
 
 You can verify that your application is correctly registered into Seaside by connecting to the Seaside server through your web browser, click on "Browse the applications installed in your image" and then see that TinyBlog appears in the list as illustrated on Figure *@BrowseApplications*. Alternatively, you can visit *http://localhost:8080/TinyBlog*.
 
@@ -100,7 +100,7 @@ TBApplicationRootComponent >> renderContentOn: html
 
 If you open *http://localhost:8080/TinyBlog* in your web browser, the page should look like the one on Figure *@EmptyPage*.
 
-+A First Seaside Web Page.>file://figures/TinyBlog-EmptyPage2.png|width=75|label=EmptyPage+
++A first Seaside web page.>file://figures/TinyBlog-EmptyPage2.png|width=75|label=EmptyPage+
 
 You can customize the web page header and declare it as HTML 5 compliant by redefining the ==updateRoot:== method.
 
