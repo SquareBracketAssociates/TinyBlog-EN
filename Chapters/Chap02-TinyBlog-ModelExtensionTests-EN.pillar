@@ -159,8 +159,8 @@ TBBlogTest >> testRemoveAllBlogPosts
 
 !!! Other Functionalities
 
-We follow now the test driven way of defining methods. We first define a test. We verify that this test
-is failing. Then we define the method under test and verify that the test passes.
+We follow now the test-driven way of defining methods: First we define a test. Then we verify that this test
+is failing. Then we define the method under test and finally verify that the test passes.
 
 !!!!All Posts 
 
@@ -179,10 +179,11 @@ TBBlog >> allBlogPosts
    ^ posts
 ]]]
 
+Your test should pass.
 
 !!!!Visible Posts
 
-Unit test:
+We define a new unit test accessing visible blogs:
 
 [[[
 TBBlogTest >> testAllVisibleBlogPosts
@@ -190,13 +191,14 @@ TBBlogTest >> testAllVisibleBlogPosts
    self assert: blog allVisibleBlogPosts size equals: 1
 ]]]
 
-Model code added:
+We add the corresponding method: 
 
 [[[
 TBBlog >> allVisibleBlogPosts
    ^ posts select: [ :p | p isVisible ]
 ]]]
 
+Verify that the test passes. 
 
 !!!!All Posts of a Category
 The following test verifies that we can access all the posts of a given category. 
@@ -213,6 +215,7 @@ TBBlog >> allBlogPostsFromCategory: aCategory
    ^ posts select: [ :p | p category = aCategory ]
 ]]]
 
+Verify that the test passes. 
 !!!!All visible Posts of a Category
 The following test verifies that we can access all the visible posts of a given category. 
 Once defined, we should make sure that the test failed.
@@ -231,6 +234,7 @@ TBBlog >> allVisibleBlogPostsFromCategory: aCategory
 									and: [ p isVisible ] ]
 ]]]
 
+Verify that the test passes. 
 !!!!Check unclassified posts
 
 The following test verifies that we do not have unclassified blogs in our test fixture. 
@@ -240,18 +244,24 @@ TBBlogTest >> testUnclassifiedBlogPosts
    self assert: (blog allBlogPosts select: [ :p | p isUnclassified ]) size equals: 0
 ]]]
 
+Verify that the test passes. 
+
 !!!!Retrieve all categories
 
+Again we define a new test and verify that it fails.
 [[[
 TBBlogTest >> testAllCategories
    blog writeBlogPost: post.
    self assert: blog allCategories size equals: 2
 ]]]
 
+We then add the new behavior.
 [[[
 TBBlog >> allCategories
    ^ (self allBlogPosts collect: [ :p | p category ]) asSet
 ]]]
+
+Verify that the test passes. 
 
 !!!Testing data 
 
