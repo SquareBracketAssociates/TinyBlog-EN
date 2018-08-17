@@ -26,7 +26,7 @@ ZnZincServerAdaptor startOn: 8080.
 ]]]
 
 The second one uses the graphical tool named "Seaside Control Panel" (World Menu>Tools>Seaside Control Panel).
-In the contextual menu (right clic) of this tool, select "add adaptor..." and add a server of type ==ZnZincServerAdaptor==, then define the port number (e.g. 8080) it should run on (cf. figure *@RunningSeaside*). By opening a web browser on the URL *http://localhost:8080*, you should see the Seaside home page as displayed on Figure *@SeasideWebStart*.
+In the contextual menu (right clic) of this tool, select "add adaptor..." and add a server of type ==ZnZincServerAdaptor==, then define the port number (e.g. 8080) it should run on (cf. Figure *@RunningSeaside*). By opening a web browser on the URL *http://localhost:8080*, you should see the Seaside home page as displayed on Figure *@SeasideWebStart*.
 
 +Running Seaside.>file://figures/SeasideWebStart.png|width=75|label=SeasideWebStart+
 
@@ -38,11 +38,11 @@ The repository and the documentation of Bootstrap for Pharo is available there:
 But it is already loaded into the PharoWeb image we are using with this book.
 
 You can also find a public demonstration here: *http://pharo.pharocloud.com/bootstrap* or directly browse the examples locally in your browser by clicking on the ""bootstrap"" link in the list of applications hosted by Seaside or directly enter this URL *http://localhost:8080/bootstrap*.
-You should see Bootstrap examples as shown in figure *@bootstrap*.
+You should see Bootstrap examples as shown in Figure *@bootstrap*.
 
 +Browsing the Seaside Bootstrap Library.>file://figures/SeasideBootstrap.png|width=75|label=bootstrap+
 
-By clicking on the ""Examples"" link at the bottom of the page, you can see both Bootstrap graphical elements and the Seaside code needed to obtain them (cf. figure *@examplebootstrap*). 
+By clicking on the ""Examples"" link at the bottom of the page, you can see both Bootstrap graphical elements and the Seaside code needed to obtain them (cf. Figure *@examplebootstrap*). 
 
 +A Bootstrap element and its code.>file://figures/TBSAlert.png|width=75|label=examplebootstrap+
 
@@ -86,7 +86,7 @@ TBApplicationRootComponent class >> canBeRoot
 
 +TinyBlog is a Registered Seaside Application.>file://figures/BrowseApplications.png|width=75|label=BrowseApplications+
 
-You can verify that your application is correctly registered into Seaside by connecting to the Seaside server through your web browser, click on "Browse the applications installed in your image" and then see that TinyBlog appears in the list as illustrated on figure *@BrowseApplications*. Alternatively, you can visit *http://localhost:8080/TinyBlog*.
+You can verify that your application is correctly registered into Seaside by connecting to the Seaside server through your web browser, click on "Browse the applications installed in your image" and then see that TinyBlog appears in the list as illustrated on Figure *@BrowseApplications*. Alternatively, you can visit *http://localhost:8080/TinyBlog*.
 
 !!!First Simple Rendering
 
@@ -98,7 +98,7 @@ TBApplicationRootComponent >> renderContentOn: html
 ]]]
 
 
-If you open *http://localhost:8080/TinyBlog* in your web browser, the page should look like the one on figure *@EmptyPage*.
+If you open *http://localhost:8080/TinyBlog* in your web browser, the page should look like the one on Figure *@EmptyPage*.
 
 +A First Seaside Web Page.>file://figures/TinyBlog-EmptyPage2.png|width=75|label=EmptyPage+
 
@@ -121,13 +121,13 @@ We are now ready to define the visual components of our web application.
 
 !!!!Overview of TinyBlog
 
-Figure *@ComponentOverview* shows an overview of them and their responsibilities while figure *@ApplicationArchitecture* shows the general architecture of our application and the relations between those components.
+Figure *@ComponentOverview* shows an overview of them and their responsibilities while Figure *@ApplicationArchitecture* shows the general architecture of our application and the relations between those components.
 
 +Main components of TinyBlog (public view).>file://figures/ComponentOverview.pdf|width=75|label=ComponentOverview+
 
 !!!!Description of the Main Components
 
-To ease your understanding of the incremental development of this application, figure  *@ApplicationArchitecture* describes the targeted architecture.
+To ease your understanding of the incremental development of this application, Figure  *@ApplicationArchitecture* describes the targeted architecture.
 
 +Architecture of TinyBlog.>file://figures/ApplicationArchitecture.pdf|width=75|label=ApplicationArchitecture+
 
