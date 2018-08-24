@@ -4,11 +4,12 @@
 
 In this chapter, we start to develop a part of the domain model of TinyBlog.
 The model is particularly simple: it starts with a post. 
+In the next chapter we will add a blog containing a list of posts.
 
 
 !!! TBPost Class
 
-+TBPost.>file://figures/postUML.pdf|width=10|label=postUml+
++TBPost: a really basic class mostly handling data.>file://figures/postUML.pdf|width=2s0|label=postUml+
 
 We start with the post representation. It is super simple as shown by Figure *@postUml*. It is defined by the class ==TBPost==:
 
@@ -91,7 +92,7 @@ TBPost >> notVisible
 !!!Initialization
 
 The ==initialize== method ('initialization' protocol) sets the date to the current day and the visibility to false: the user must explicitly make a post visible. 
-This allows him to write drafts and only publish when the post is finished.
+This allows him to write drafts and only publish a post when the post is finished.
 By default, a post belongs to the 'Unclassified' category that we define at the class level.
 This category name is defined on class-side by the ==unclassifiedTag== method.
 
@@ -118,8 +119,9 @@ The sequence 3 of the week 6 of the Mooc can help you to understand why it is be
 
 !!!Posts Creation Methods
 
-On class-side, we add methods to ease posts creation for blogs (in the protocol 'instance creation') that belong to a category or not.
+On class-side, we add class methods (i.e. methods execute on class) to ease posts creation for blogs - usually such kind of methods are grouped in the protocol 'instance creation'.
 
+We define two methods.
 [[[
 TBPost class >> title: aTitle text: aText
    ^ self new
@@ -137,7 +139,7 @@ TBPost class >> title: aTitle text: aText category: aCategory
 
 !!!Creating a Post
 
-You can now create posts. Using the Playground tools execute the following expression:
+Let us create posts to check a bit the created objects. Using the Playground tools execute the following expression:
 
 [[[
 TBPost 
@@ -152,6 +154,7 @@ When you inspect the code above (right click and "Inspect it"), you will obtain 
 
 !!! Adding Some Unit Tests
 
+Manually looking at objects is not a way to systematically verifying that such objects follow some expected invariant.
 Even though the model is quite simple we can define some tests.
 In Test Driven Developpement mode we write test first. 
 Here we prefered to let you define a little class to familiarize with the IDE. 
@@ -166,6 +169,7 @@ TestCase subclass: #TBPostTest
 	package: 'TinyBlog-Tests'
 ]]]
 
+Let us define a two tests.
 [[[
 TBPostTest >> testWithoutCategoryIsUnclassified
 
@@ -207,7 +211,7 @@ TBPost >> isUnclassified
 It is not really good to harcode a reference to the class ==TBPost== in a method body.
 Propose a solution.
 
-In addition, let us take the time to update our test for this new aspect.
+In addition, let us take the time to update our test to take advantage of the new behavior.
 
 [[[
 TBPostTest >> testWithoutCategoryIsUnclassified
@@ -225,6 +229,6 @@ TBPostTest >> testWithoutCategoryIsUnclassified
 
 !!! Conclusion
 
-We develop a first part of the model (la classe ==TBPost==) and some tests. 
+We develop a first part of the model (the class ==TBPost==) and some tests. 
 We strongly suggest writing some other unit tests to make sure that your model fully work. 
 
