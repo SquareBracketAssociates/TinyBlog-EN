@@ -1,7 +1,7 @@
 !! About this book
 @chapIntro
-In this project, we will guide you to develop a mini project: a small web application, named TinyBlog, that manages a blog system (see its final state in Figure *@TinyBlogOnPharoCloud*)
-The idea is that a visitor of the web site can read the posts and that the post author could connect to the web site to admin the application and manage its posts (add, remove and modify existing ones). 
+In this book, we will guide you to develop a mini project: a small web application, named TinyBlog, that manages a blog system (see its final state in Figure *@TinyBlogOnPharoCloudHere*).
+The idea is that a visitor of the web site can read the posts and that the post author can connect to the web site as admin to manage its posts (add, remove and modify existing ones).
 
 TinyBlog is a small pedagogical application that will show you how to define and deploy a web application using Pharo / Seaside / Mongo and frameworks available in Pharo such as NeoJSON. 
 
@@ -9,12 +9,14 @@ Our goal is that you will be able to reuse and adapt such an infrastructure to c
 
 
 !!! Structure
-In the first part called "Tutorial", you will develop and deploy, TinyBlog, an application and its administration using Pharo, the Seaside application web server framework as well as some other frameworks such as Voyage and Magritte. Deployment with Mongo DB is optional but it allows you to see that Voyage is an elegant facade to persist your data within Mongo. 
+In the first part called "Core Tutorial", you will develop and deploy, TinyBlog, an application and its administration using Pharo, the Seaside application web server framework as well as some other frameworks such as Voyage and Magritte. Deployment with Mongo DB is optional but it allows you to see that Voyage is an elegant facade to persist your data within Mongo. 
 
-In the second part, we will show you some optional aspects such as data export, use of Mustache or how to expose your application using a REST API. 
+In the second part and optional part, we will show you some optional aspects such as data export, use of Mustache or how to expose your application using a REST API. 
 
-Presented solutions are sometimes not the best to offer you a room for improvement.
-Our goal is not to be exhaustive. We present one way to develop TinyBlog nevertheless we invite the reader to read further references such as books or tutorials on Pharo to deepen his expertise and enhance his application.
+Presented solutions are sometimes not the best. 
+This is done that way to offer you a room for improvement.
+Our goal is not to be exhaustive. 
+We present one way to develop TinyBlog nevertheless we invite the reader to read further references such as books or tutorials on Pharo to deepen his expertise and enhance his application.
 
 Finally, to help you to get over possible errors and avoid to get stuck, the last chapter describes how to load the code described in each chapter. 
 

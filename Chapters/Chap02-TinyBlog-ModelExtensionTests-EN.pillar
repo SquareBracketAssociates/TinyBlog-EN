@@ -13,7 +13,9 @@ Before starting, use back the code of the previous chapter or use the informatio
 !!! TBBlog class
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We develop the class ==TBBlog== that contains posts and its unit tests.
+We develop the class ==TBBlog== that contains posts and its unit tests (as shown by Figure *@postBlogUml*).
+
++TBPost.>file://figures/postBlogUML.pdf|width=55|label=postBlogUml+
 
 [[[
 Object subclass: #TBBlog
@@ -287,7 +289,7 @@ If you inspect the result of the following snippet, you will see that the curren
 
 Be aware that if you execute this ==createDemoPosts== method multiple times, your blog singleton object will contain multiple copies of these posts.
 
-!!!Possible extensions
+!!!Possible Extensions
 
 Many extensions can be made such as: retrieve the list of categories that contains at least one visible post, delete a category and all posts that it contains, rename a category, move a post from one category to another, make (in)visible one category and all its content, etc. We encourage you to develop some of them. 
 
