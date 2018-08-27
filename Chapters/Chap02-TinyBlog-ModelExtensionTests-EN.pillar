@@ -1,11 +1,10 @@
-!! TinyBlog: Extending and testing the model
+!! TinyBlog: Extending and Testing the Model
 @chapModelExtensionAndUnitTests
 
-% full hash of full code 35785aaaf1284f1a472980f07522fc7d0d4743e6
-
-In this chapter we extend the model and add more tests. Note that when you will get fluent in Pharo, you will tend to write
-first your tests and then execute tests to code in the debugger. We did not do it because coding in the debugger requires 
-more explanation. You can see such practice in the Mooc video entitled  ''Coding a Counter in the Debugger'' (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_26.html*) and read the book ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
+In this chapter we extend the model and add more tests.
+Note that when you will get fluent in Pharo, you will tend to write first your tests and then execute tests to code in the debugger. 
+We did not do it because coding in the debugger requires more explanation. 
+You can see such a practice in the Mooc video entitled  ''Coding a Counter in the Debugger'' (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_26.html*) and read the book ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
 
 Before starting, use back the code of the previous chapter or use the information of Chapter *@chaLoading*.
 
@@ -13,9 +12,11 @@ Before starting, use back the code of the previous chapter or use the informatio
 !!! TBBlog class
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We develop the class ==TBBlog== that contains posts and its unit tests (as shown by Figure *@postBlogUml*).
+We develop the class ==TBBlog== that contains posts (as shown by Figure *@postBlogUml*). We define some unit tests.
 
-+TBPost.>file://figures/postBlogUML.pdf|width=55|label=postBlogUml+
++TBBlog: A simple class containing posts.>file://figures/postBlogUML.pdf|width=55|label=postBlogUml+
+
+Here is its definition: 
 
 [[[
 Object subclass: #TBBlog
@@ -39,20 +40,24 @@ In the rest of this project, we assume that we will manage only one blog.
 Later, you may add the possibility to manage multiple blogs such as one per user of the TinyBlog application. 
 Currently, we use a Singleton design pattern on the ==TBBlog== class. 
 However pay attention since this pattern introduces a kind of global variable in your application and brings less modularity to your system. 
-Therefore avoid to make explicit references to the singleton. 
+Therefore avoid to make explicit references to the singleton, better use an instance variable whose value first refers to the singleton so that later you can pass another object without being forced to rewrite everything.
 Do not generalize what we are doing for this class.
 
 
 Since all the management of a singleton is a class behavior, we define such methods at the class level of ==TBBlog==. 
+We define an instance variable at the class level: 
 
 [[[
 TBBlog class
    instanceVariableNames: 'uniqueInstance'
 ]]]
+
+Then we define two methods pour manage the singleton. 
 [[[
 TBBlog class >> reset
    uniqueInstance := nil
 ]]]
+
 [[[
 TBBlog class >> current
    "answer the instance of the TBRepository"
@@ -70,10 +75,9 @@ TBBlog class >> initialize
 
 !!!Testing the Model
 
+We now adopt a Test-Driven Development approach i.e., we will write a unit test first and then develop the functionality until the test is green. We will repeat this process for each functionality of the model.
 
-We now adopt a Test Driven Development approach i.e., we will write a unit test first and then develop the business functionality until the test is green. We will repeat this process for each functionality of the model.
-
-We create unit tests in the ==TBBlogTest== class that belongs to the ==TinyBlog-Tests== tag. A tag is just a label to sort classes inside a package (See menu item 'Add Tag...'). We use a tag because using two packages will make this project more complex. However, while implementing a real application, it is recommended to have a separate package for the tests.
+We create unit tests in the ==TBBlogTest== class that belongs to the ==TinyBlog-Tests== tag. A tag is just a label to sort classes inside a package (See menu item 'Add Tag...'). We use a tag because using two packages will make this project more complex. However, while implementing a real application, it is recommended to have one (or multiple) separate test packages.
 
 [[[
 TestCase subclass: #TBBlogTest
@@ -82,12 +86,12 @@ TestCase subclass: #TBBlogTest
    package: 'TinyBlog-Tests'
 ]]]
 
-Before each test execution, the ==setUp== method initializes the context of tests.
+Before each test execution, the ==setUp== method initializes the test context (also called test fixture).
 For example, it erases the blog content, adds one post and creates another temporary post that is not saved.
 
 Pay attention since we will have to modify such behavior in the future else each time we will run the test
 we will destroy our data. 
-This is an example of the kind of bad behavior that a singleton introduces.
+This is an example of the kind of insidious behavior that a singleton introduces.
 
 [[[
 TBBlogTest >> setUp
@@ -100,8 +104,10 @@ TBBlogTest >> setUp
    post := (TBPost title: 'Another title' text: 'Another text' category: 'Second Category') beVisible
 ]]]
 
-As you may notice, we test different configurations. 
+As you may notice, we test different configurations.
 Posts do not belong to the same category, one is visible and the other is not visible.
+
+
 At the end of each test, the ==tearDown==  method is executed and resets the blog.
 
 [[[
@@ -109,7 +115,7 @@ TBBlogTest >> tearDown
    TBBlog reset
 ]]]
 
-Here we see the limits of using a Singleton. Indeed, if you deploy a blog and then execute the tests, you will lose all posts that have been created because we reset the Blog singleton. We will address this problem in the future.
+Here we see one of the limits of using a Singleton. Indeed, if you deploy a blog and then execute the tests, you will lose all posts that have been created because we reset the Blog singleton. We will address this problem in the future.
 
 We will now develop tests first and then implement all functionalities to make them green.
 
@@ -123,7 +129,7 @@ TBBlogTest >> testAddBlogPost
    self assert: blog size equals: 2
 ]]]
 
-If you try to execute it, you will notice that this test is not green because we did not define the methods ==writeBlogPost:==, ==removeAllPosts== and ==size==.
+If you try to execute it, you will notice that this test is not green (does not pass) because we did not define the methods ==writeBlogPost:==, ==removeAllPosts== and ==size==.
 Let's add them:
 
 [[[
@@ -159,9 +165,9 @@ TBBlogTest >> testRemoveAllBlogPosts
    self assert: blog size equals: 0
 ]]]
 
-!!! Other Functionalities
+!!!Other Functionalities
 
-We follow now the test-driven way of defining methods: First we define a test. Then we verify that this test
+We follow the test-driven way of defining methods: First we define a test. Then we verify that this test
 is failing. Then we define the method under test and finally verify that the test passes.
 
 !!!!All Posts 
