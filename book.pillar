@@ -30,6 +30,6 @@ ${inputFile:Chapters/Chap06-TinyBlog-SeasideUserComponents-EN.pillar}$
 %
 % ${inputFile:Chapters/Chap12-TinyBlog-Export.pillar}$
 %
-% ${inputFile:Chapters/Chap14-TinyBlog-Loading-EN.pillar}$
+${inputFile:Chapters/Chap14-TinyBlog-Loading-EN.pillar}$
 %
 % ${inputFile:Chapters/Chap15-TinyBlog-SavingCode-EN.pillar}$
