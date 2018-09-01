@@ -50,7 +50,10 @@ TBScreenComponent >> renderContentOn: html
 In the final architecture, ==TBScreenComponent== is an abstract component and should not be used directly.
 Nevertheless, we will use it temporarily while developing other components.
 
-Let's add an instance variable ==main== in ==TBApplicationRootComponent== class. 
++==ApplicationRootComponent== temporarily uses a ==ScreenComponent== that contains a ==HeaderComponent==.>file://figures/ComponentRelationship1.pdf|width=75|label=compt1+
+
+
+Let's add an instance variable ==main== in ==TBApplicationRootComponent== class. We obtain the situation described in Figure *@compt1*.
 
 [[[
 WAComponent subclass: #TBApplicationRootComponent
@@ -90,7 +93,6 @@ Currently, there is only the text: ==Hello from TBScreenComponent== displayed by
 
 
 
-+==ApplicationRootComponent== temporarily uses a ==ScreenComponent== that contains a ==HeaderComponent==.>file://figures/ComponentRelationship1.pdf|width=75|label=compt1+
 
 
 
@@ -105,10 +107,16 @@ We will often use the same following steps:
 !!! Populating the Blog
 
 You can inspect the blog object returned  by ==TBBlog current== and verify that it contains some posts.  
+You can also do it simply as: 
+[[[
+TBBlog current allBlogPosts size
+]]]
+
+
 If it does not, execute: 
 
 [[[
-	TBBlog createDemoPosts
+TBBlog createDemoPosts
 ]]]
 
 

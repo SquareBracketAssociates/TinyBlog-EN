@@ -12,7 +12,7 @@ ${inputFile:Chapters/Chap05-TinyBlog-SeasideIntro-EN.pillar}$
 
 ${inputFile:Chapters/Chap06-TinyBlog-SeasideUserComponents-EN.pillar}$
 
-% ${inputFile:Chapters/Chap06-TinyBlog-SeasideCategories-EN.pillar}$
+${inputFile:Chapters/Chap06-TinyBlog-SeasideCategories-EN.pillar}$
 %
 % ${inputFile:Chapters/Chap07-TinyBlog-Authentification-EN.pillar}$
 %
