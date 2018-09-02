@@ -13,7 +13,7 @@ Posts are sorted by a category. If no category is specified, posts are sorted in
 To manage a list of categories,  we will define a component named ==TBCategoriesComponent==.
 
 
-!!!!Displyaing Categories
+!!!!Displaying Categories
 
 We need a component to display a list of categories defined in the blog. This component should support the 
 selection of one category.
@@ -30,8 +30,7 @@ testAllBlogPostsFromCategory
 
 !!!!Component Definition
 
-Nous définissons un nouveau composant nommé ==TBCategoriesComponent==. 
-Ce composant va garder une collection triée par ordre alphabétique de chaines de caractères pour chacune des catégories ainsi qu'un pointeur sur le composant postsList associé. 
+Let us define a new component named ==TBCategoriesComponent==. It keeps a sorted collection of string representing each category as well as a reference to the component managing the post list. 
 
 [[[
 WAComponent subclass: #TBCategoriesComponent
@@ -40,7 +39,7 @@ WAComponent subclass: #TBCategoriesComponent
    package: 'TinyBlog-Components'
 ]]]
 
-Nous définissons les accesseurs associés.
+We define the associated accessors.
 
 [[[
 TBCategoriesComponent >> categories
@@ -62,7 +61,7 @@ TBCategoriesComponent >> postsList
    ^ postsList
 ]]]
 
-Nous définissons aussi une méthode de création au niveau classe.
+We define a creation method as a class method. 
 
 [[[
 TBCategoriesComponent class >> categories: categories postsList: aTBScreen
@@ -70,8 +69,9 @@ TBCategoriesComponent class >> categories: categories postsList: aTBScreen
 ]]]
 
 
-!!!! Liaison depuis la liste de bulletins
-Nous avons donc besoin d'ajouter une variable d'instance pour stocker la catégorie courante dans la classe ==TBPostsListComponent==.
+!!!! From the Post List
+
+In the class ==TBPostsListComponent==, we need to add an instance variable to store the current category.
 
 [[[
 TBScreenComponent subclass: #TBPostsListComponent
@@ -80,7 +80,8 @@ TBScreenComponent subclass: #TBPostsListComponent
    package: 'TinyBlog-Components'
 ]]]
 
-Nous définissons les accesseurs associés.
+We define its associated accessors.
+
 [[[
 TBPostsListComponent >> currentCategory
    ^ currentCategory
@@ -92,9 +93,9 @@ TBPostsListComponent >> currentCategory: anObject
 ]]]
 
 
-!!!! La méthode selectCategory:
+!!!! The method selectCategory:
 
-La méthode ==selectCategory:== (protocole 'actions') communique au composant ==TBPostsListComponent== la nouvelle catégorie courante.
+We define the method  ==selectCategory:== (protocol 'actions') to communicate the current category to the ==TBPostsListComponent== component.
 
 [[[
 TBCategoriesComponent >> selectCategory: aCategory
@@ -104,9 +105,10 @@ TBCategoriesComponent >> selectCategory: aCategory
 % Notez que si nous voulions avoir un effet visuel plus avancé le composant catégories devrait peut être lui aussi garder trace de la catégorie couramment sélectionnée.
 
 
-!!! Rendu des catégories
-Nous pouvons maintenant ajouter une méthode (protocole 'rendering') pour afficher les catégories sur la page. En particulier, pour chaque catégorie nous définissons le fait que cliquer sur la catégorie la sélectionne comme la catégorie courante.
-Nous utilisons un callback (message ==callback:==). L'argument de ce message est un block qui peut contenir n'importe quelle expression Pharo. Cela illustre la puissance de Seaside.
+!!! Category Rendering
+
+We can now define method for the rendering of the category component on the page. 
+Let us call it ==renderCategoryLinkOn:with:==, we define in particular that clicking on a category will select it as the current one. We use a callback (message ==callback:==). The argument of this message is a block that can contains any Pharo expression. This illustrates how simple is to call function to react to event. 
 
 [[[
 TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
@@ -115,7 +117,7 @@ TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
       with: aCategory
 ]]]
 
-La méthode de rendu de ce composant ==TBCategoriesComponent== est simple : on itère sur toutes les catégories et on les affiche en utilisant Bootstrap.
+The method ==renderContentOn:== of  ==TBCategoriesComponent== is simple: we iterate on all categories and we display them using Bootstrap.
 
 [[[
 TBCategoriesComponent >> renderContentOn: html
@@ -126,7 +128,7 @@ TBCategoriesComponent >> renderContentOn: html
          self renderCategoryLinkOn: html with: cat ] ]
 ]]]
 
-Nous avons presque fini mais il faut encore afficher la liste des catégories et mettre à jour la liste des bulletins en fonction de la catégorie courante. 
+We are nrealy there. We need to display the list of categories and update the posts based on the current category.
 
 !!!Mise à jour de la liste des bulletins
 
