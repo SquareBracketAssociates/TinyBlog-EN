@@ -128,15 +128,16 @@ TBCategoriesComponent >> renderContentOn: html
          self renderCategoryLinkOn: html with: cat ] ]
 ]]]
 
-We are nrealy there. We need to display the list of categories and update the posts based on the current category.
+We are nearly there. We need to display the list of categories and update the posts based on the current category.
 
-!!!Mise à jour de la liste des bulletins
+!!!Updating Post List
 
-Nous devons mettre à jour les bulletins.
-Pour cela, modifions la méthode de rendu du composant ==TBPostsListComponent==.
+Now we should update the list of posts. 
+We modify the rendering method of the component ==TBPostsListComponent==.
 
-La méthode ==readSelectedPosts== récupère les bulletins à afficher depuis la base et les filtre en fonction de la catégorie courante. Si la catégorie courante est ==nil==, cela signifie que l'utilisateur n'a pas encore sélectionné de catégorie et l'ensemble des bulletins visibles de la base est affiché. 
-Si elle contient une valeur autre que ==nil==, l'utilisateur a sélectionné une catégorie et l'application affiche alors la liste des bulletins attachés à cette catégorie.
+The method ==readSelectedPosts== collects the posts to be displayed. It filters them based on the current category. 
+When the current category is nil, it means that the user did not select yet a category. Therefore we display all the posts. When the current category is something else than nil, 
+the user selected a category and the application display the corresponding posts. 
 
 [[[
 TBPostsListComponent >> readSelectedPosts
@@ -145,7 +146,7 @@ TBPostsListComponent >> readSelectedPosts
       ifNotNil: [ self blog allVisibleBlogPostsFromCategory: self currentCategory ]
 ]]]
 
-Nous pouvons maintenant modifier la méthode chargée du rendu de la liste des posts:
+We modify now the method responsible of the post list rendering: 
 
 [[[
 TBPostsListComponent >> renderContentOn: html
@@ -158,20 +159,27 @@ TBPostsListComponent >> renderContentOn: html
          html render: (TBPostComponent new post: p) ] ]
 ]]]
 
-Une instance du composant ==TBCategoriesComponent== est ajoutée sur la page et permet de sélectionner la catégorie courante (voir la figure *@ugly*). 
-De même qu'expliqué précédemment, une nouvelle instance de ==TBCategoriesComponent== est créé à chaque rendu du composant ==TBPostsListComponent==, donc il n'est pas nécessaire de l'ajouter dans la liste des sous-composants retourné par ==children:==.
+An instance of the component ==TBCategoriesComponent== is added to the page and allows one to select the current category (see Figure *@ugly*). 
 
-+Catégories afin de sélectionner les posts.>file://figures/categoriesUgly.png|width=75|label=ugly+
+As previously explained, a new instance of ==TBCategoriesComponent== is created each time the component 
+ ==TBPostsListComponent== is rendered, therefore it is not mandatory to add it to the ==children== sublist of the component.
 
-!!!! Améliorations possibles
++Categories and Posts.>file://figures/categoriesUgly.png|width=75|label=ugly+
 
-Mettre en dur le nom des classes et la logique de création des catégories et des bulletins n'est pas optimale. Proposer quelques méthodes pour réaliser cela.
+!!!! Possible Enhancements
 
-!!!Look et agencement
+Hardcodeing class name and the creation logic of categories and posts is not really optimal. 
+Propose some solution.
 
-Nous allons maintenant agencer le composant ==TBPostsListComponent== en utilisant un 'responsive design' pour la liste des bulletins (voir la figure  *@nicer5*). Cela veut dire que le style CSS va adapter les composants à l'espace disponible.
+!!!Look and Layout
 
-Les composants sont placés dans un container Bootstrap puis agencés sur une ligne avec deux colonnes. La dimension des colonnes est déterminée en fonction de la résolution (viewport) du terminal utilisé. Les 12 colonnes de Bootstrap sont réparties entre la liste des catégories et la liste des posts. Dans le cas d'une résolution faible, la liste des catégories est placée au dessus de la liste des posts (chaque élément occupant 100\% de la largeur du container).
+We will not place better the component  ==TBPostsListComponent== using a more 'responsive' design (as shown in Figure  *@nicer5*). It means that the CSS style should adapt the component to the available space.
+
+Components are placed in a Bootstrap container then positioned on a line with two columns. 
+Column dimension is determined based on the viewport and resolution of the device used. 
+The 12 columsn of Bootstrap are distributed over the category and post lists.
+
+In the case of a low resolution, the list of categories is placed above the post list (each element using 100\% of the container width).
 
 
 [[[
@@ -197,13 +205,12 @@ TBPostsListComponent >> renderContentOn: html
              html render: (TBPostComponent new post: p) ] ] ] ]
 ]]]
 
-Vous devez obtenir une application proche de celle représentée par la figure *@nicer5*.
+You should obtain a situation close to the one presented in Figure *@nicer5*.
 
-+Liste des catégories avec un meilleur agencement.>file://figures/NicerCategories.png|width=75|label=nicer5+
++Post list with a better layout.>file://figures/NicerCategories.png|width=75|label=nicer5+
 
-Lorsqu'on sélectionne une catégorie, la liste des posts est bien mise à jour.
-Toutefois, l'entrée courante dans la liste des catégories n'est pas sélectionnée.
-Pour cela, on modifie la méthode suivante :
+When one selects a category,  the post list is updated. However, the selected category is  not selected. We modify the
+following method to address this point. 
 
 [[[
 TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
@@ -213,12 +220,12 @@ TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
       with: aCategory
 ]]]
 
-Bien que le code fonctionne, on ne doit pas laisser la méthode ==TBPostsListComponent >> renderContentOn: html== dans un tel état. Elle est bien trop longue et difficilement réutilisable. Proposer une solution. 
+Even if the code works, we cannot keep the method == renderContentOn:== in such state. It is far too long and not reusable. Propose a solution.
 
 
-!!!Modulariser son code avec des petites méthodes
+!!!Modular Code with Small Methods
 
-Voici notre solution au problème précédent. Pour permettre une meilleure lecture et réutilisation future, nous commençons par définir les méthodes de création des composants 
+Here is our solution to the previous problem. To ease reading and future reuse, we start to define component creation methods.
 
 [[[
 TBPostsListComponent >> categoriesComponent
@@ -252,9 +259,9 @@ TBPostsListComponent >> renderContentOn: html
 								do: [ :p | html render: (self postComponentFor: p) ] ] ] ]
 ]]]
 
-!!!! Autre passe de découpage
+!!!! Another Pass
 
-Continuons à découper cette méthode en plusieurs petites méthodes.  Pour cela, créons des méthodes pour les traitements élémentaires. 
+We continue to cut this method in other smaller methods. We create one method for each of the elementary tasks. 
 
 [[[
 TBPostsListComponent >> basicRenderCategoriesOn: html
@@ -267,7 +274,7 @@ TBPostsListComponent >> basicRenderPostsOn: html
 		html render: (self postComponentFor: p) ]
 ]]]
 
-Puis nous utilisons ces traitements pour simplifier la méthode ==renderContentOn:==.
+Then we use such tasks to simplify the method ==renderContentOn:==.
 
 [[[
 TBPostsListComponent >> renderContentOn: html
@@ -301,21 +308,22 @@ TBPostsListComponent >> renderPostColumnOn: html
 ]]]
 
 
-L'application finale est affichée dans la figure *@final*.
+The final application is showing in Figure  *@final*.
 
 +Final TinyBlog Public UI.>file://figures/finalPublicWebPage.png|width=85|label=final+
 
 !!! Conclusion
-Nous avons défini une interface pour notre blog en utilisant un ensemble de composants définissant chacun
-leur propre état et leurs responsabilités. Maintenant il faut remarquer que de très nombreuses applications se construisent de la même manière. Donc vous avez les bases pour définir de nombreuses applications web. 
+We defined an interface for our blog using a set of components each specifying its own state and responsibility. 
+Many web applications are built the same way reusing components. You have the foundation to build more advanced
+web application. 
 
-Dans le prochaine chapitre, nous allons voir comment gérer l'identification permettant d'accéder à la partie administration des bulletins.
+In the next chapter, we show how to manage authentification to access the post admin part of our application. 
 
-!!!! Améliorations possibles
+!!!! Possible Enhancements
 
-A titre d'exercice, vous pouvez :
-- trier les catégories par ordre alphabétique ou
-- ajouter un lien nommé 'All' dans la liste des catégories permettant d'afficher toutes les posts visible quelque soit leur catégorie.
+As exercise you can:
+- sort category alphabetically, or
+- add a link named 'All' in the category list to display all the posts.
 
 
 
