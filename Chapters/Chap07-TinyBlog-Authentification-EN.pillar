@@ -1,23 +1,24 @@
-!! Authentification et Session 
+!! Authentification and Session 
 
-Le scénario assez classique que nous allons développer dans ce chapitre est le suivant : l'utilisateur doit s'authentifier pour accéder à la partie administration de TinyBlog. Il le fait à l'aide d'un compte et d'un mot de passe. 
+In this chapter we will develop a traditional scenario: the user should login to access to the administration part of the application. He does it using a login and password. 
 
-La figure *@ApplicationArchitectureAdminHeader* montre un aperçu de l'architecture visée dans ce chapitre.
+Figure *@ApplicationArchitectureAdminHeader* shows the architecture that we will reach in this chapter.
 
-+Gérant l'authentification pour accéder à l'administration.>file://figures/ApplicationArchitectureAdminHeader.pdf|width=75|label=ApplicationArchitectureAdminHeader+
++Authentification flow.>file://figures/ApplicationArchitectureAdminHeader.pdf|width=75|label=ApplicationArchitectureAdminHeader+
 
-Nous commençons par mettre en place une première version permettant de naviguer entre la partie publique TinyBlog rendue par le composant
-gérant la liste des bulletins (==TBPostsListComponent==) et une première version de la partie d'administration du site comme sur la figure *@SimpleAdminLink*.
-Cela va nous permettre d'illustrer l'invocation de composant.
+Let us start to put in place a first version that allows one to navigate between the part of TinyBlog rendered 
+by the component ==TBPostsListComponent== and a first darft of the administration component as shown in Figure 
+ *@SimpleAdminLink*. This illustrates how to invoke a component. 
 
-Nous intègrerons ensuite un composant d'identification sous la forme d'une boîte modale.
-Cela va nous permettre d'illustrer comment la saisie de champs utilise de manière élégante les variables d'instances d'un composant.
+In the  following we  will  build and  integrate a  component managing  the  login based  on modal  interaction. 
+This will illustrate how we can elegantly map filed inputs to instance variables of a component.
 
-Enfin, nous montrerons aussi comment stocker l'utilisateur connecté dans la session courante.
+Finally we will show how the user information is stored into the current session. 
 
-!!! Composant d'administration simple (v1)
 
-Définissons un composant d'administration très simple. Ce composant hérite de la classe ==TBScreenComponent== comme mentionné dans un chapitre précédent et illustré dans la figure *@ApplicationArchitectureAdminHeader*.
+!!! A Simple Admin Component (v1)
+
+Let us define a really super simple administration component. This component inherits from the class  ==TBScreenComponent== as mentioned in previous chapters and illustrated in Figure *@ApplicationArchitectureAdminHeader*.
 
 [[[
 TBScreenComponent subclass: #TBAdminComponent
@@ -26,7 +27,7 @@ TBScreenComponent subclass: #TBAdminComponent
    package: 'TinyBlog-Components'
 ]]]
 
-Nous définissons une première version de la méthode de rendu afin de pourvoir tester.
+We define a first version of the rendering method to be able to test our approach.
 
 [[[
 TBAdminComponent >> renderContentOn: html
@@ -36,15 +37,14 @@ TBAdminComponent >> renderContentOn: html
       html horizontalRule ]
 ]]]
 
-!!! Ajout d'un bouton 'admin'
+!!! Adding 'admin' Button 
 
-Ajoutons maintenant un bouton dans l'en-tête du site (composant ==TBHeaderComponent==) afin d'accéder à la partie administration du site comme sur la figure *@SimpleAdminLink*.
-Pour cela, modifions les composants existants: ==TBHeaderComponent== (en-tête) et ==TBPostsListComponent== (partie publique).
+We add now a button in the header of the site  (component ==TBHeaderComponent==) so that the user can access to the admin as shown in Figure *@SimpleAdminLink*.
+To do so, we modify the existing components:  ==TBHeaderComponent== (header) et ==TBPostsListComponent== (public part).
 
-+Lien simple vers la partie administration.>file://figures/SimpleAdminLink.png|width=100|label=SimpleAdminLink+
++Simple link to the admin part.>file://figures/SimpleAdminLink.png|width=100|label=SimpleAdminLink+
 
-Commençons par ajouter le bouton 'admin' dans l'en-tête:
-
+Let us add a button in the header:
 [[[
 TBHeaderComponent >> renderContentOn: html	
 		html tbsNavbar beDefault; with: [  
@@ -69,14 +69,17 @@ TBHeaderComponent >> renderSimpleAdminButtonOn: html
             html text: ' Admin View' ]]
 ]]]
 
-Si vous rafraichissez votre navigateur , le bouton admin est bien présent mais il n'a aucun effet pour l'instant (voir la figure *@withAdminView1*).
-Il faut définir un ==callback:== sur ce bouton (un bloc) qui remplace le composant courant (==TBPostsListComponent==) par le composant d'administration (==TBAdminComponent==).
+When you refresh the web browser, the admin buttin is present but it does not have any effect (See Figure *@withAdminView1*).
 
-+Barre de navigation avec un button admin.>file://figures/withAdminView1.png|width=80|label=withAdminView1+
+We should define a callback on this button (message ==callback:==) to replace the current component
+ (==TBPostsListComponent==) by  the administration component (==TBAdminComponent==).
 
-!!! Revisons la barre de navigation
++Header with an admin button.>file://figures/withAdminView1.png|width=80|label=withAdminView1+
 
-Commençons par réviser la définition de ==TBHeaderComponent== en lui ajoutant une variable d'instance ==component== pour stocker et accéder au composant courant (qui sera soit la liste de bulletin, soit le composant d'administration). Ceci va nous permettre de pouvoir accéder au composant depuis la barre de navigation :
+!!! Header Revision
+
+Let us revise the definition of 
+ ==TBHeaderComponent== by adding a new instance variable named ==component== to store and access to the current component (either post list or admin component). This will allow us  to access to the component from the header. 
 
 [[[
 WAComponent subclass: #TBHeaderComponent
@@ -93,7 +96,8 @@ TBHeaderComponent >> component
    ^ component
 ]]]
 
-Nous ajoutons une méthode de classe.
+We add a new class method. 
+
 [[[
 TBHeaderComponent class >> from: aComponent
    ^ self new
@@ -102,19 +106,18 @@ TBHeaderComponent class >> from: aComponent
 ]]]
 
 
-!!! Activation du button d'admin
-Modifions l'instanciation du composant en-tête dans ==TBScreenComponent== afin de passer le composant qui sera
-sous la barre de navigation à celle-ci :
+!!! Admin Button Activation
+We modify the component instantiation in ==TBScreenComponent== method to pass the component which will be under the header. 
 
 [[[
 TBScreenComponent >> createHeaderComponent
 	^ TBHeaderComponent from: self
 ]]]
 
-Notez que la méthode ==createHeaderComponent== est bien définie dans la superclasse
-==TBScreenComponent== car elle est applicable pour toutes ses souclasses.
+Note that the method  ==createHeaderComponent== is defined in the superclass 
+==TBScreenComponent== and it is applicable to all the subclasses.
 
-Nous pouvons maintenant ajouter le ==callback:== sur le bouton :
+We can add now the callback on the button:
 
 [[[
 TBHeaderComponent >> renderSimpleAdminButtonOn: html
@@ -127,28 +130,32 @@ TBHeaderComponent >> renderSimpleAdminButtonOn: html
 				html text: ' Admin View' ]]
 ]]]
 
-Il ne reste plus qu'à définir la méthode ==goToAdministrationView== sur le composant ==TBPostsListComponent== dans le protocole 'actions' :
+We just need to define the method ==goToAdministrationView== on the component ==TBPostsListComponent==: 
 
 [[[
 TBPostsListComponent >> goToAdministrationView
 	self call: TBAdminComponent new
 ]]]
 
-Avant de cliquer sur le bouton 'Admin' dans votre navigateur, vous devez cliquer sur 'New Session' afin de recréer le composant ==TBHeaderComponent==. 
-Vous devez obtenir la situation présentée dans la figure *@withAdminCom*.
-Le bouton 'Admin' permet maintenant de voir la partie administraion v1 s'afficher.
-Attention à ne cliquer qu'une seule fois car ce bouton 'Admin' est toujours présent dans la partie administration bien qu'il ne soit fonctionnel.
-Nous allons le remplacer par un bouton 'Disconnect'.
+Before clicking on the admin button, you should renew the current session by clicking on 
+ 'New Session': it will recreate the component ==TBHeaderComponent==. 
+ 
+ You should get the situation presented in Figure *@withAdminCom*.
+ The 'Admin' button allows one to access the admin part v1. 
+ 
+ Pay attention  not to click twice  on the admin button because  we do not manage it  yet for the admin  part. We will
+replace it by a Disconnect button.
 
-+Affichage du composant admin en cours de définition.>file://figures/WithAdminComp.png|width=80|label=withAdminCom+
++Admin component under definition.>file://figures/WithAdminComp.png|width=80|label=withAdminCom+
 
 
-!!! Ajout d'un bouton 'disconnect'
+!!! 'disconnect' Button Addition
 
-Lorsqu'on affiche la partie administration, nous allons remplacer le composant en-tête par un autre.
-Cette nouvelle en-tête affichera un bouton 'Disconnect'.
+When we display the admin part, we will replace the header component by a new one. 
+This new header will display a disconnect button. 
 
-Définissons un nouveau composant en-tête:
+Let us define this new header component:
+
 [[[	
 TBHeaderComponent subclass: #TBAdminHeaderComponent
 	instanceVariableNames: ''
@@ -168,7 +175,7 @@ TBAdminComponent >> createHeaderComponent
    ^ TBAdminHeaderComponent from: self
 ]]]
 
-Maintenant nous pouvons spécialiser notre nouvelle barre de navigation dédiée à l'administration pour afficher un bouton de déconnexion.
+Now we can  specialize our new admin header  to display a disconnect button.
 
 [[[
 TBAdminHeaderComponent >> renderDisconnectButtonOn: html
@@ -185,7 +192,9 @@ TBAdminComponent >> goToPostListView
 	self answer
 ]]]
 
-Cliquez sur 'New Session' en bas à gauche de votre navigateur et ensuite sur le bouton 'Admin', vous devez maintenant voir la partie administration v1 s'afficher avec un bouton 'Disconnect' permettant de revenir à la partie publique comme sur la figure *@SimpleAdminLink*.
+What is see is that the message ==answer== gives back the control to the component that calls it. So we go back the post list.
+
+Reset the current session by clicking on 'New Session'. Then you can click on the 'Admin' button, you should see now the admin v1 display itself with a 'Disconnect' button. This button allows on to go back the public part as shown in Figure *@SimpleAdminLink*.
 
 
 !!!!Notion call:/answer:
