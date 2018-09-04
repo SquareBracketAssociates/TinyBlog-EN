@@ -197,27 +197,30 @@ What is see is that the message ==answer== gives back the control to the compone
 Reset the current session by clicking on 'New Session'. Then you can click on the 'Admin' button, you should see now the admin v1 display itself with a 'Disconnect' button. This button allows on to go back the public part as shown in Figure *@SimpleAdminLink*.
 
 
-!!!!Notion call:/answer:
+!!!!call:/answer: Notion
 
-Si vous étudiez le code précédent, vous verrez que nous avons utilisé le mécanisme ==call:==/==answer:== de Seaside pour mettre en place la navigation entre les composants ==TBPostsListComponent== et ==TBAdminComponent==.
-Les message ==call:== remplace le composant courant par le composant passé en argument et lui donne le flot de calcul et ==answer:== retourne une valeur à cet appel et redonne le contr\^ole au composant appellant.
-Ce mécanisme puissant et élégant est expliqué dans la vidéo 1 de la semaine 5 du Mooc (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_5.html*).
+When you study the previous code, you see that we use the 
+==call:==/==answer:== mechanism of Seaside to navigate between the components ==TBPostsListComponent== and ==TBAdminComponent==.
 
-!!! Composant fenêtre modale d'identification 
+The message 
+==call:== replaces the current component with the one passed in argument and gives it the flow of control.
+The message ==answer:== returns a value to this call and gives back the flow of control to the calling argument. 
+This mechanism is really poweful and elegant. It is explained in the vidéo 1 of week 5 of the Pharo Mooc (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_5.html*).
 
-Développons maintenant un composant d'identification qui lorsqu'il sera invoqué ouvrira une boite de dialogue pour demander un login et un mot de passe. 
-Le résultat que nous voulons obtenir est montré sur la figure *@authentification*. 
+!!! Modal Window for Authentification
 
-Sachez qu'il existe des bibliothèques de composants Seaside prêt à l'emploi.
-Par exemple, le projet Heimdal disponible sur *http://www.github.com/DuneSt/* offre un composant d'identification ou  
-le projet Steam *https://github.com/guillep/steam* offre d'autres composants permettant d'interroger google ou twitter.
+Let us develop now a authentification component that when invoked will open a dialog box to request 
+the login and password. The result we want to obtain is shown in Figure *@authentification*. 
 
-+Aperçu du composant d'identification.>file://figures/Authentification.png|width=75|label=authentification+
+There are are some libraries of components ready to be used. 
+For example, the Heimdal project available at *http://www.github.com/DuneSt/* offers an authentification component or the Steam project *https://github.com/guillep/steam* offers ways to interrogate google ou twitter accounts. 
 
-!!!! Définition d'un composant d'identification
++Authentification component.>file://figures/Authentification.png|width=75|label=authentification+
 
-Nous définissons une nouvelle sous-classe de la classe ==WAComponent== et des accesseurs. 
-Ce composant contient un login, un mot de passe ainsi que le composant qui l'a invoqué pour accéder à la partie administration.
+!!!! Authentification Component Definition
+
+We define a new subclass of  ==WAComponent== and its accessors. 
+This component contains a login, a password and a component which invoked it to access to the admin part. 
 
 [[[
 WAComponent subclass: #TBAuthentificationComponent
@@ -256,7 +259,8 @@ TBAuthentificationComponent >> component: anObject
    component := anObject
 ]]]
 
-La variable d'instance ==component== sera initialisée par la méthode de classe suivante :
+The instance  variable ==component==  will be initialized  by the following  class method:
+classe suivante :
 
 [[[
 TBAuthentificationComponent class >> from: aComponent
@@ -266,10 +270,12 @@ TBAuthentificationComponent class >> from: aComponent
 ]]]
 
 
-!!! Rendu du composant d'identification
+!!! Authentification Component Rendering
 
-La méthode ==renderContentOn:== définit le contenu d'une boîte de dialogue modale avec l'identifiant ==myAuthDialog==. Cet identifiant sera utilisé pour sélectionner le composant qui sera rendu visible en mode modal plus tard.
-Il est composé d'une en-tête et d'un corps. Notez l'utilisation des messages ==tbsModal==, ==tbsModalBody:==, ==tbsModalContent:==  qui permettent une interaction modale avec ce composant.
+The following method ==renderContentOn:== defines the contents of a dialog box with the ID  ==myAuthDialog==. 
+This ID will be used to select the component that should be made visible when in modal mode.
+
+This dialog box has a header and a body. Note the use of the messages ==tbsModal==, ==tbsModalBody:==, and ==tbsModalContent:==  which supports a modal interaction with the component.
 
 [[[
 TBAuthentificationComponent >> renderContentOn: html
