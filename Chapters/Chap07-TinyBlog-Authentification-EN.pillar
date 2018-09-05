@@ -288,8 +288,8 @@ TBAuthentificationComponent >> renderContentOn: html
                self renderBodyOn: html ] ] ]
 ]]]
 
-L'en-tête affiche un bouton pour fermer la boîte de dialogue et un titre avec de larges fontes. 
-Notez que vous pouvez également utiliser la touche ==esc== du clavier pour fermer la fenêtre modale.
+The header displays a button to close the dialog box and a title with large fonts.
+Note that you can also use the ESC key to close the modal window box. 
 
 [[[
 TBAuthentificationComponent >> renderHeaderOn: html
@@ -301,7 +301,7 @@ TBAuthentificationComponent >> renderHeaderOn: html
             with: 'Authentication' ]
 ]]]
 
-Le corps du composant affiche un masque de saisie pour l'identifiant, le mot de passe et finalement des boutons. 
+The body of the component displays the input field for the login identifier, password and some buttons.
 
 [[[
 TBAuthentificationComponent >> renderBodyOn: html
@@ -313,9 +313,9 @@ TBAuthentificationComponent >> renderBodyOn: html
                 html tbsModalFooter: [ self renderButtonsOn: html ] ] ]
 ]]]
 
+The method ==renderAccountFieldOn:== shows how the value of an input field is passed and stored in an instance variable of a component when the user finishes its input. 
 
-La méthode ==renderAccountFieldOn:== montre comment la valeur d'un input field est passée puis stockée dans une variable d'instance du composant quand l'utilisateur confirme sa saisie. 
-Le paramètre de la méthode ==callback:== est un bloc qui prend lui-même un argument représentant la valeur du text input.
+The parameter of the ==callback:== message is a bloc which takes as argument the value of the input field.
 
 [[[
 TBAuthentificationComponent >> renderAccountFieldOn: html
@@ -328,7 +328,7 @@ TBAuthentificationComponent >> renderAccountFieldOn: html
             value: account ]
 ]]]
 
-Le même procédé est utilisé pour le mot de passe.
+The same process is used for the password. 
 
 [[[
 TBAuthentificationComponent >> renderPasswordFieldOn: html
@@ -341,9 +341,11 @@ TBAuthentificationComponent >> renderPasswordFieldOn: html
 ]]]
 
 
-Deux boutons sont ajoutés en bas de la fenêtre modale.
-Le bouton =='Cancel'== qui permet de fermer la fenêtre modale grâce à son attribut 'data-dismiss' et le bouton =='SignIn'== associé à un bloc de callback qui envoie le message ==validate==.
-La touche ==enter== du clavier permet également d'activer le bouton =='SignIn'== car c'est le seul dont l'attribut 'type' a la valeur 'submit'. 
+Finally in the following ==renderContentOn:== method, two buttons are added at the bottom of the modal window. 
+The =='Cancel'== button which allows one to close the window using the attribute 'data-dismiss' and the =='SignIn'== 
+button which sends the ==validate== using a callback. 
+
+The enter key is bound to the =='SignIn'== button activation by declaring it the primary button. 
 
 
 [[[
@@ -359,7 +361,7 @@ TBAuthentificationComponent >> renderButtonsOn: html
       value: 'SignIn'
 ]]]
 
-Dans la méthode ==validate==, nous envoyons simplement un message au composant principal en lui passant les identifiants rentrés par l'utilisateur.
+In the ==validate== method, we simply send a message to the main component giving it the information entered by the user. 
 
 [[[
 TBAuthentificationComponent >> validate
