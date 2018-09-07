@@ -631,23 +631,27 @@ TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
 
 !!! Storing the Admin in the Current Session
 
-Actuellement, si l'administrateur du blog veut naviguer entre la partie privée et la partie publique de TinyBlog, il doit se reconnecter à chaque fois.
-Nous allons simplifier cela en stockant l'administrateur courant en session lors d'une connexion réussie.
+With the current setup, when the blog admin wants to navigate between the private and public part, he must reconnects
+each time. 
+We will simplify this situation but storing the current admin information in the session when the connection is
+succesful. 
+
+A session object is given to the each instance of the application. 
+Such session allows on to keep information which are shared and accessible between components.
+
+We will then store the current admin in a session and modify the components to display buttons that support
+a simplified navigation when the admin is logged. 
+
+When he explicitely disconnect or when the session expires, we delete the current session. 
+
+Figure *@SessionNavigation* shows the navigation between the pages of TinyBlog.
+
++Navigation and identification in TinyBlog.>file://figures/sessionAuthSimplifiedNavigation.pdf|width=100|label=SessionNavigation+
 
 
-Un objet session est attribué à chaque instance de l'application.
-Il permet de conserver principalement des informations qui sont partagées et accessible entre les composants.
-Nous stockerons donc l'administrateur courant en session et modifierons les composants pour afficher des boutons permettant une navigation simplifiée lorsque l'administrateur est connecté.
-Lorsqu'il se déconnecte explicitement ou que la session expire, nous supprimerons la session courante.
+!!!Definition and use of specific session
 
-La figure *@SessionNavigation* illustre la navigation entre les pages que nous souhaitons mettre en place dans TinyBlog.
-
-+Navigation et identification dans TinyBlog.>file://figures/sessionAuthSimplifiedNavigation.pdf|width=100|label=SessionNavigation+
-
-
-!!!Définition et utilisation d'une classe session spécifique
-
-Commençons par définir une nouvelle sous-classe de ==WASession== nommée ==TBSession== dans laquelle nous ajoutons une variable d'instance pour stocker l'administrateur connecté.
+Let us start to define a subclass of ==WASession== and name it ==TBSession==. We add in this new class an instance variable that stores the current admin. 
 
 [[[
 WASession subclass: #TBSession
