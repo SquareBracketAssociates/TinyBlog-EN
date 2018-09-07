@@ -345,7 +345,7 @@ Finally in the following ==renderContentOn:== method, two buttons are added at t
 The =='Cancel'== button which allows one to close the window using the attribute 'data-dismiss' and the =='SignIn'== 
 button which sends the ==validate== using a callback. 
 
-The enter key is bound to the =='SignIn'== button activation by declaring it the primary button. 
+The enter key is bound to the =='SignIn'== button activation when using the method ==tbsSubmitButton==. This method sets the 'type' attribute to 'submit'.
 
 
 [[[
@@ -376,9 +376,10 @@ TBAuthentificationComponent >> validate
 %
 % De plus le composant ==TBAuthentificationComponent== pourrait afficher l'utilisateur lorsque celui-ci est logué.
 
-!!!Intégration du composant d'identification
+!!!Authentification Component Integration
 
-Pour intégrer notre composant d'identification, modifions le bouton 'Admin' de la barre d'en-tête (==TBHeaderComponent==) ainsi:
+To integrate our authentification component, we modify the Admin button of the header 
+component (==TBHeaderComponent==) as follows:
 
 [[[
 TBHeaderComponent >> renderButtonsOn: html
@@ -397,17 +398,20 @@ TBHeaderComponent >> renderModalLoginButtonOn: html
          html text: ' Login' ]
 ]]]
 
-La méthode ==renderModalLoginButtonOn:== commence par intégrer le code du composant ==TBAuthentificationComponent== dans la page web (==render:==). 
-Le composant étant instancié à chaque affichage, il n'a pas besoin d'être retourné par la méthode ==children==.
-On ajoute également un bouton nommé 'Login' avec un pictogramme un pictogramme clé.
-Lorsque l'utilisateur clique sur ce bouton, la boîte modale ayant l'identifiant ==myAuthDialog== est affichée.
+The method ==renderModalLoginButtonOn:== starts by rendering the component ==TBAuthentificationComponent== within this web page.
+This component is created during each display and it does not have to be returned by the  
+==children== method.
+In addition, we add 'Login' button with a icon lock.
+When the user clicks on this button, the modal dialog identified with the ID ==myAuthDialog== will be displayed.
 
-En rechargeant la page de TinyBlog dans votre navigateur, nous voyons maintenant un bouton 'Login' dans l'en-tête permettant d'ouvrir la fenêtre modale comme illustré sur la figure *@authentification*.
+Reloading the TinyBlog page, you should see now a 'Login' button in the header (button that will pop up the authentification we just developed) as illustrated by Figure *@authentification*.
 
-!!! Gestion naive des logins
+!!! Naively Managing Logins
 
-Toutefois, si vous cliquez sur le bouton 'SignIn', une erreur se produit. 
-En utilisant le debugger Pharo, on comprend qu'il faut définir la méthode ==tryConnectionWithLogin:andPassword:== sur le composant ==TBPostsListComponent== car c'est le message envoyé par le callback du bouton 'SignIn' de la fenêtre modale: 
+When you click on the 'SignIn' button you get an error.
+Using the Pharo debugger, you can see that we should define the method 
+ ==tryConnectionWithLogin:andPassword:== on the component ==TBPostsListComponent== 
+since it is the one sent by the callback of the button.
 
 [[[
 TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
@@ -416,14 +420,14 @@ TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
          ifFalse: [ self loginErrorOccurred ]
 ]]]
 
-Pour l'instant, le login et le mot de passe pour accéder à la partie administration sont directement stockés en dur dans le code de cette méthode ce qui n'est pas très bon. 
+For the moment we store directly the login and password in the method and this is not really a good practice. 
 
-!!! Gestion des erreurs
+!!! Managing Errors
 
-Nous avons déjà défini la méthode ==goToAdministrationView== précédemment.
-Ajoutons la méthode ==loginErrorOccured== et un mécanisme pour afficher un message d'erreur lorsque l'utilisateur n'utilise pas les bons identifiants comme sur la figure *@loginErrorMessage*
+We defined the method  ==goToAdministrationView==. Let us add the method ==loginErrorOccured== and a mechanism
+to display an error message when the user does not use the correct identifiers as shown in Figure *@loginErrorMessage*.
 
-Pour cela nous ajoutons une variable d'instance ==showLoginError== qui représente le fait que nous devons afficher une erreur. 
+For this we will add a new instance variable ==showLoginError== that represents the fact that we should display an error. 
 
 [[[
 TBScreenComponent subclass: #TBPostsListComponent
@@ -432,29 +436,28 @@ TBScreenComponent subclass: #TBPostsListComponent
    package: 'TinyBlog-Components'
 ]]]
 
-La méthode ==loginErrorOccurred== spécifie qu'une erreur doit être affichée. 
+The method ==loginErrorOccurred== specifies that an error should be displayed.
 
 [[[
 TBPostsListComponent >> loginErrorOccurred
 	showLoginError := true
 ]]]
 
-Nous ajoutons une méthode pour tester cet état.
+We add a method to test this state.
+
 [[[
 TBPostsListComponent >> hasLoginError
    ^ showLoginError ifNil: [ false ]
 ]]]
-	
-Nous définissons aussi un message d'erreur. 
+
+We define also an error message. 
 
 [[[
 TBPostsListComponent >> loginErrorMessage
    ^ 'Incorrect login and/or password'
 ]]]
 
-
-Nous modifions la méthode ==renderPostColumnOn:== afin de faire un traitement 
-spécifique en cas d'erreur. 
+We modify the method ==renderPostColumnOn:== to perform a specific task to handle the errors.
 
 [[[
 TBPostsListComponent >> renderPostColumnOn: html
@@ -467,8 +470,9 @@ TBPostsListComponent >> renderPostColumnOn: html
          self basicRenderPostsOn: html ] 
 ]]]
 
-La méthode ==renderLoginErrorMessageIfAnyOn:== affiche si nécessaire un message d'erreur. Elle repositionne 
-la variable d'instance ==showLoginError== pour ne que le message ne soit pas afficher indéfiniment.
+The method ==renderLoginErrorMessageIfAnyOn:== displays if necessary an error message.
+It sets the instance variable ==showLoginError== so that we do not display the error
+undefinitely. 
 
 [[[
 TBPostsListComponent >> renderLoginErrorMessageIfAnyOn: html
@@ -480,16 +484,15 @@ TBPostsListComponent >> renderLoginErrorMessageIfAnyOn: html
    ]
 ]]]
 
-+Message d'erreur en cas d'identifiants erronnés.>file://figures/LoginErrorMessage.png|width=75|label=loginErrorMessage+
++Error message in case wrong identifiers.>file://figures/LoginErrorMessage.png|width=75|label=loginErrorMessage+
 
 
-!!!Modélisation des administrateurs
+!!!Modeling the Admin
 
-Nous ne souhaitons pas stocker les identifiants administrateur du blog dans le code comme nous l'avons fait précédemment.
-Nous allons maintenant réviser cela et stocker ces identifiants dans le modèle.
+We do not want to store the administrator identifiers in the code as we did previously. We revise this now and will store the identifiers in a model: a class ==Admin==.
 
-Commençons par enrichir notre modèle de Tinyblog avec la notion d'administrateur.
-Ajoutons donc une nouvelle classe nommée ==TBAdministrator== caractérisé par son pseudo, son login et son mot de passe.
+Let us start to enrich our TinyBlog model with the notion of administrator. We define a class
+named ==TBAdministrator== characterized by it pseudo, login and password.
 
 [[[
 Object subclass: #TBAdministrator
@@ -513,14 +516,14 @@ TBAdministrator >> password
    ^ password
 ]]]
 
-Notez que nous ne stockons pas le mot de passe administrateur en clair dans la variable d'instance ==password== mais son hash en MD5.
+Note that we do not store the admin password in the instance variable ==password== but its hash encoded in MD5.
 
 [[[
 TBAdministrator >> password: anObject
    password := MD5 hashMessage: anObject
 ]]]
 
-Nous définissons aussi une méthode de création.
+We define also a new instance creation method.
 
 [[[
 TBAdministrator class >> login: login password: password
@@ -530,16 +533,17 @@ TBAdministrator class >> login: login password: password
 			yourself	
 ]]]
 
-Vous pouvez vérifier cela en inspectant l'expression suivante :
+You can verify that the model works by executing the following expression: 
 
 [[[
 luc := TBAdministrator login: 'luc' password: 'topsecret'.
 ]]] 
 
-!!! Administrateur pour un blog
+!!! Blog admin
 
-Un blog possède un administrateur qui peut s'identifier sur le blog afin administrer les posts qu'il contient. 
-Ajoutons donc un champ ==adminUser== et un accesseur en lecture dans la classe ==TBBlog== afin d'y stocker l'administrateur du blog:
+We decide for simplicity that a blog has one admin.
+We add the instance variable ==adminUser== and an accessor in the classe ==TBBlog== to store 
+the blog admin.
 
 [[[
 Object subclass: #TBBlog
@@ -553,7 +557,9 @@ TBBlog >> administrator
    ^ adminUser
 ]]]
 
-Nous définissons le login et password que nous utiliserons par défaut. Comme vous allez le voir plus loin, nous allons modifier les attributs de l'administrateur et ceux-ci seront sauvés en même temps que le blog dans la base de données.
+We define a default login and password that we use as default. 
+As we will see later, we will modify such attributes and these modified attributes will be 
+saved at the same time that the blog in a database.
 
 [[[
 TBBlog class >> defaultAdminPassword
@@ -565,7 +571,8 @@ TBBlog class >> defaultAdminLogin
    ^ 'admin'
 ]]]
 
-Maintenant nous nous pouvons créer une administrateur par défaut. 
+Now we create a default admin.
+
 [[[
 TBBlog >> createAdministrator
 	^ TBAdministrator
@@ -573,8 +580,7 @@ TBBlog >> createAdministrator
 			password: self class defaultAdminPassword
 ]]]
 
-
-Lors de l'initialisation d'un blog ajoutons un administrateur par défaut.
+And we initialize the blog to set a default administrateur.
 
 [[[
 TBBlog >> initialize
@@ -583,15 +589,15 @@ TBBlog >> initialize
    adminUser := self createAdministrator
 ]]]
 
-!!! Définir un administrateur 
+!!! Setting a New Admin
 
-Il ne faut pas oublier de re-créer le blog ainsi:
+We should not recreate the blog: 
 
 [[[
 	TBBlog reset; createDemoPosts
 ]]]
 
-Vous pouvez maintenant modifier le login et le mot de passe administrateur de votre blog ainsi:
+We can now modify the admin information as follows:  
 
 [[[
 |admin|
@@ -601,17 +607,19 @@ admin password: 'thebrightside'.
 TBBlog current save
 ]]]
 
-Notez que sans rien faire, l'administrateur du blog a été sauvegardé par Voyage dans la base de données.
-En effet, la classe ==TBBlog== étant une racine Voyage, tous ces attributs sont stockés dans la base automatiquement lors de l'envoi du message ==save==.
+Note that without doing anything, the blog admin information has been saved by Voyage in the database. 
+Indeed the class ==TBBlog== is a Voyage root, all its atttributes are automatically stored in the database when it received
+the message ==save==.
 
-!!!!Améliorations possibles
+!!!!Possible Enhancements
 
-Etendre le modèle de l'application ainsi nécessite l'écriture de nouveaux tests unitaires.  A vous de jouer!
+Define some tests for the extensions by writing new unit tests. 
 
 
-!!!Intégration du compte administrateur
+!!!Integrating the Admin Information
 
-Modifions maintenant la méthode ==tryConnectionWithLogin:andPassword:== pour qu'elle utilise les identifiants de l'administrateur du blog courant.  Notez que nous comparons les hash MD5 des mots de passe car nous ne stockons pas le mot de passe en clair dans le modèle.
+Let us modify the method ==tryConnectionWithLogin:andPassword:== so that it uses the current blog admin identifiers. 
+Note that we are comparing the hash MD5 of the password since we do not store the password.
 
 [[[
 TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
@@ -621,7 +629,7 @@ TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
          ifFalse: [ self loginErrorOccurred ]
 ]]]
 
-!!! Stocker l'administrateur courant en session
+!!! Storing the Admin in the Current Session
 
 Actuellement, si l'administrateur du blog veut naviguer entre la partie privée et la partie publique de TinyBlog, il doit se reconnecter à chaque fois.
 Nous allons simplifier cela en stockant l'administrateur courant en session lors d'une connexion réussie.
