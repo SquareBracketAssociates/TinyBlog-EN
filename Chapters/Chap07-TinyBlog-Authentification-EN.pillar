@@ -670,15 +670,15 @@ TBSession >> currentAdmin: anObject
     currentAdmin := anObject
 ]]] 
 
-Nous définissons une méthode ==isLogged== qui nous permettra de savoir si l'administrateur est loggé.
+We define a method ==isLogged== allows one to know if the administration is logged.
 
 [[[
 TBSession >> isLogged
     ^ self currentAdmin notNil
 ]]]
 
-Indiquons maintenant à Seaside qu'il doit utiliser l'objet ==TBSession== comme objet de session courant pour l'application TinyBlog.
-Cette initialisation s'effectue dans la méthode ==initialize== de la classe ==TBApplicationRootComponent== que l'on modifie ainsi:
+Now we should indicate to Seaside to use  ==TBSession== as the class of the current session for our application.
+This initialization is done in the class method ==initialize== in the class ==TBApplicationRootComponent== as follows:
 
 [[[
 TBApplicationRootComponent class >> initialize
@@ -693,11 +693,12 @@ TBApplicationRootComponent class >> initialize
          addLibrary: TBSDeploymentLibrary
 ]]]
 
-Pensez à exécuter cette méthode via ==TBApplicationRootComponent initialize== avant de tester à nouveau l'application.
+Do not forget to exectute this expression ==TBApplicationRootComponent initialize== before testing the application.
 
-!!!Stockage de l'administrateur courant en session
+!!!Storing the Current Admin 
 
-Lors d'une connexion réussie, nous ajoutons l'objet administrateur dans la session grâce à l'accesseur en écriture ==currentAdmin:==.
+When a connection is successful, we add the admin object to the current session using the message ==currentAdmin:==.
+Note that the current session is available to every Seaside component via ==self session==.
 
 [[[
 TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
@@ -710,9 +711,10 @@ TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
 ]]]
 
 
-!!!Navigation simplifiée vers la partie administration
+!!!Simplified navigation
 
-Pour mettre en place une navigation simplifiée, modifions l'en-tête pour afficher soit le bouton de connexion soit un bouton de navigation simple vers la partie administration sans étape de connexion si un administrateur est déjà connecté c'est-à-dire présent en session. 
+To put in place the simplified navigation we discussed above, we modify the header to display either a login button or a 
+a simple navigation button to the admin part without forcing any reconnection. For this we use the session and the fact that we can know if a user is logged. 
 
 [[[
 TBHeaderComponent >> renderButtonsOn: html
@@ -721,13 +723,13 @@ TBHeaderComponent >> renderButtonsOn: html
 		  ifFalse: [ self renderModalLoginButtonOn: html ]     
 ]]]
 
-Vous pouvez tester dans votre navigateur en commençant une nouvelle session (bouton 'New Session' en bas à gauche).
-Une fois connecté, l'administrateur est ajouté en session.
-Remarquez que le bouton déconnexion ne fonctionne plus correctement car il n'invalide pas la session.
+You can test this new navigation but first create a new session  ('New Session' button).
+One reconnected the admin is added in session. 
+Note that the deconnection button does not work correctly since it does invalidate the session. 
 
-!!!Déconnexion
+!!!Managing Deconnection
 
-Ajoutons une méthode ==reset== sur notre objet session afin de supprimer l'administrateur courant, invalider la session courante et rediriger vers le point d'entrée de l'application.
+We add a method  ==reset== on our session object to delete the current admin, invalidate the current session and redirect to the application entry point. 
 
 [[[
 TBSession >> reset
@@ -736,7 +738,7 @@ TBSession >> reset
 	self unregister.
 ]]]
 
-Modifions maintenant le bouton déconnexion de l'en-tête de la partie administration pour envoyer ce message ==reset== à la session courante:
+Now we modify the header deconnection button to send the message ==reset== to the correct session. 
 
 [[[
 TBAdminHeaderComponent >> renderDisconnectButtonOn: html
@@ -748,11 +750,11 @@ TBAdminHeaderComponent >> renderDisconnectButtonOn: html
          html tbsGlyphIcon iconLogout ]
 ]]]
 
-Le bouton 'Disconnect' fonctionne à nouveau correctement.
+Now we  'Disconnect' button works the way it should. 
 
-!!! Navigation simplifiée vers la partie publique
+!!! Simplified Navigation to the Public Part
 
-Ajoutons maintenant un nouveau bouton dans l'en-tête de la partie administration pour revenir à la partie publique sans se déconnecter.
+We can add now a button in the header of the admin part to go back to the public part without being forced to get disconnected. 
 
 [[[
 TBAdminHeaderComponent >> renderButtonsOn: html
@@ -772,22 +774,19 @@ TBAdminHeaderComponent >> renderPublicViewButtonOn: html
             html text: ' Public View' ]]
 ]]]
 
-
-Vous pouvez maintenant tester la navigation dans votre application qui doit correspondre avec la représentation sur la figure *@SessionNavigation*.
+Now you can test the naviagtion. It should correspond to the situation depicted by Figure *@SessionNavigation*.
 
 !!! Conclusion
 
-Nous avons mis en place une gestion de l'identification pour TinyBlog.
-Cela comprend un composant réutilisable d'identification sous la forme d'une fenêtre modale.
-Nous avons également différencié les composants affichés lorsqu'un administrateur est connecté ou non.
-Enfin, nous avons utilisé la session pour faciliter la navigation d'un administrateur connecté jusqu'à sa déconnexion.
+We put in place an authentification for TinyBlog. We create a reusable modal component. We made the distinction between 
+component displayed when a user is connected or ot not and ease the navigation of a connected user using session. 
 
-Nous voici prêts à définir la partie administrative de l'application ce qui est l'objet du chapitre suivant.
-Nous en profiterons pour vous montrer un aspect avancé qui permet la définition automatique de formulaires ou d'objets ayant de nombreux champs.
+We are now ready for the administration part of the application and we will work on this in the next chapter.
+We will take advantage of it to show and advanced aspect: the automatic form generation.
 
-!!!! Améliorations possibles
+!!!! Possible Enhancements
 
-A titre d'exercice, vous pouvez :
-- afficher le login de l'administrateur dans l'en-tête lorsqu'il est connecté,
-- ajouter la possibilité d'avoir plusieurs compte administrateurs chacun avec ses propres identifiants.
+You can: 
+- Add the admin logging in the header
+- Manage multipel admin accounts. 
 
