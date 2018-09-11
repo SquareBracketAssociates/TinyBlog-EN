@@ -1,42 +1,45 @@
-!! Interface web d'administration et génération automatique
+!! Administration Web Interface and Automatic Form Generation
 
-Nous allons maintenant développer la partie administration de TinyBlog.
-Dans les chapitres précédents, nous avons défini des composants Seaside qui interagissent entre eux 
-et où chaque composant est responsable son état et de son rendu graphique.  
-Dans ce chapitre, nous voulons vous montrer que l'on peut aller encore plus loin et générer des composants Seaside à partir de la description d'objets en utilisant le framework Magritte. 
+We will now develop the administration part of TinyBlog.
+In previous chapter, we define Seaside components that interact together and where each component
+is responsible for its internal state, behavior and its graphical rendering. 
 
-La figure *@RapportNewLookActions2* montre une partie du résultat que nous allons obtenir. L'autre partie étant l'édition de bulletins. 
+In this chapter, we want to show that we can go a step further and generate Seaside components from object descriptions
+using the Magritte framework.
 
-+Gestion des bulletins.>file://figures/RapportNewLookActions.png|width=75|label=RapportNewLookActions2+
+Figure *@RapportNewLookActions2* shows a part of the result we will obtain,  the other part being post edition.
 
++Post managment.>file://figures/RapportNewLookActions.png|width=75|label=RapportNewLookActions2+
 
-La figure *@ApplicationAdmin* montre un aperçu de l'architecture visée dans ce chapitre.
+Figure *@ApplicationAdmin* shows a survey of the architecture that we will develop in this chapter.
 
-+ Composants pour l'administration.>file://figures/ApplicationArchitectureWithAdmin.pdf|width=75|label=ApplicationAdmin+
++Administration components.>file://figures/ApplicationArchitectureWithAdmin.pdf|width=75|label=ApplicationAdmin+
 
-!!!Décrire les données métiers avec Magritte
+!!!Describing Domain DataDécrire les données métiers avec Magritte
 
-Magritte est une bibliothèque qui permet une fois les données décrites de générer diverses représentations ou opérations (telles des requêtes). 
-Couplé avec Seaside, Magritte permet de générer des formulaires et des rapports.  
-Le logiciel Quuve de la société Debris Publishing est un brillant exemple de la puissance de Magritte: tous les tableaux sont automatiquement générés (voir *http://www.pharo.org/success*). 
-La validation des données est aussi définie au niveau de Magritte au lieu d'être dispersée dans le code de l'interface graphique. 
-Ce chapitre ne montre pas cet aspect.
+Magritte is a library that allows one to generate various representations once the objects are described. 
+Coupled with Seaside, Magritte generates forms and reports.
+The Quuve of the Debris Publishing company
+is a brillant example of Magritte power: all tables and reports are automatically generated (see *http://www.pharo.org/success*).
 
-Un chapitre dans le livre sur Seaside (*http://book.seaside.st*) est disponible sur Magritte ainsi qu'un tutoriel en cours d'écriture sur *https://github.com/SquareBracketAssociates/Magritte*.
+Data validation is also done at the Magritte level instead of being dispersed in the user interface code. 
+This chapter will not cover such aspects. Resources on Magritte are a chapter in the Seaside book 
+ (*http://book.seaside.st*) as well as a tutorial under writing available at *https://github.com/SquareBracketAssociates/Magritte*.
 
-Une description est un objet qui spécifie des informations sur des données de notre modèle comme son type, si une donnée est obligatoire, 
-si elle doit être triée, ou quelle est sa valeur par défaut.
+A description is an object that specifies information on the datat of our model as well as its type, whether the information 
+is mandatory, if it should be sorted and what is the default value. 
 
-!!! Description d'un bulletin
+!!!Post Description
 
-Commençons par décrire les cinq variables d'instance de l'objet ==TBPost== à l'aide de Magritte. 
-Ensuite, nous en tirerons avantage pour générer automatiquement des composants Seaside.
+Let us start to describe the five instance variable of ==TBPost== with Magritte.
+Then we will show how we can get a form generated for us. 
 
-Les cinq méthodes suivantes sont dans le protocole 'magritte-descriptions' de la classe ==TBPost==.
-Noter que le nom des méthodes n'est pas important mais que nous suivons une convention. 
-C'est le pragma ==<magritteDescription>== qui permet à Magritte d'identifier les descriptions.
+We will define the five following methods in the protocol 'magritte-descriptions' of the class ==TBPost==.
+Note that the method names are not important but we follow a convention. 
+This is the pragma ==<magritteDescription>== (method annotation) that allows Magritte to identify 
+descriptions. 
 
-Le titre d'un bulletin est une chaine de caractères devant être obligatoirement complétée.
+The post title is a string of characters that is mandatory.
 
 [[[
 TBPost >> descriptionTitle
@@ -47,7 +50,8 @@ TBPost >> descriptionTitle
       yourself
 ]]]
 
-Le texte d'un bulletin est une chaine de caractères multi-lignes devant être obligatoirement complété.
+A post test is a multi-line that is mandatory.
+
 
 [[[
 TBPost >> descriptionText
@@ -58,8 +62,8 @@ TBPost >> descriptionText
       yourself
 ]]]
 
-La catégorie d'un bulletin est une chaîne de caractères qui peut ne pas être renseignée. 
-Dans ce cas, le post sera de toute manière rangé dans la catégorie 'Unclassified'.
+The category is represented as a string and it does not have to be given. In such case 
+the post will be sorted in the 'Unclassified' category.
 
 [[[
 TBPost >> descriptionCategory
@@ -69,7 +73,8 @@ TBPost >> descriptionCategory
       yourself
 ]]]
 
-La date de création d'un bulletin est importante car elle permet de définir l'ordre de tri pour l'affichage des posts. C'est donc une variable d'instance contenant obligatoirement une date.
+The post creation time is important since it is used to sort posts. 
+It is then required. 
 
 [[[
 TBPost >> descriptionDate
@@ -80,8 +85,7 @@ TBPost >> descriptionDate
       yourself
 ]]]
 
-
-La variable d'instance ==visible== doit obligatoirement contenir une valeur booléenne.
+The visible instance variable should be a Boolean and it is required.
 
 [[[
 TBPost >> descriptionVisible
@@ -92,35 +96,36 @@ TBPost >> descriptionVisible
       yourself
 ]]]
 
-Nous pourrions enrichir les descriptions pour qu'il ne soit pas possible de poster un bulletin ayant une date antérieure à celle du jour. 
-Nous pourrions changer la description d'une catégorie pour que ses valeurs possibles soient définies par l'ensemble des catégories existantes. 
-Tout cela permettrait de produire des interfaces plus complètes et toujours aussi simplement.
+We could enrich the descriptions so that it is not possible to publish a post with a date before the current day. 
+We could change the description of a category to make sure that a category is part of a predefined list of categories. 
+We do not do it to keep it to the main point. 
 
-!!! Création automatique de composant
 
-Une fois un bulletin décrit nous pouvons générer un composant Seaside en envoyant le message ==asComponent== à une instance.
+!!! Automatic Component Creation
+
+Once a post described we can  generate a Seaside component by sending a message ==asComponent== to an post instance.
 
 [[[
-	aTBPost asComponent
+aTBPost asComponent
 ]]]
 
-Nous allons voir cela dans la suite.
+Let us see how we can use this in the following.
 
 
-!!! Mise en place d'un rapport des bulletins
+!!! Building a post report 
 
-Nous allons développer un nouveau composant qui sera utilisé par le composant ==TBAdminComponent==.
-Le composant ==TBPostReport== est un rapport qui contiendra tous les posts.
-Le rapport étant généré par Magritte sous la forme d'un composant Seaside, nous aurions pu n'avoir qu'un seul composant. 
-Toutefois, nous pensons que distinguer le composant d'administration du rapport est une bonne chose pour l'évolution de la partie administration.
+We will develop a new component that will be used by the component  ==TBAdminComponent==.
+The  ==TBPostReport== component is a report that will contain all the posts.
+As we will see below the report Seaside component will be generated automatically from Magritte.
+We could have develop only one component but we prefer to distinguish it from the admin component for future evolution. 
 
-!!!! Le composant PostsReport
+!!!! The PostsReport Component
 
-La liste des posts est affichée à l'aide d'un rapport généré dynamiquement par le framework Magritte.
- Nous utilisons ce framework pour réaliser les différentes fonctionnalités de la partie administration de TinyBlog (liste des posts, création, édition et suppression d'un post).
+Post list is displayed using a report dynamically generated by Magritte. 
+We will use Magritte to implement the different behavio of the admin activity (post list, post creation, edition, delete of a post).
 
-Pour rester modulaire, nous allons créer un composant Seaside pour cette tâche. Le composant ==TBPostsReport== est une souclasse
-de la classe ==TBSMagritteReport== qui gére les rapports avec Bootstrap.
+The component ==TBPostsReport== is a subclass of 
+==TBSMagritteReport== that manages reports with Bootstrap.
 
 [[[
 TBSMagritteReport subclass: #TBPostsReport
@@ -129,7 +134,7 @@ TBSMagritteReport subclass: #TBPostsReport
    package: 'TinyBlog-Components'
 ]]]
 
-Nous ajoutons une méthode de création qui prend en argument un blog et donc ses bulletins. 
+We add a creation method that takes a blog as argument.
 
 [[[
 TBPostsReport class >> from: aBlog
@@ -138,10 +143,11 @@ TBPostsReport class >> from: aBlog
    ^ self rows: allBlogs description: allBlogs anyOne magritteDescription
 ]]]
 
-!!! Intégration de PostsReport dans AdminComponent
+!!!  AdminComponent Integration with PostsReport
 
-Révisons maintenant notre composant ==TBAdminComponent== pour afficher ce rapport.
-On ajoute une variable d'instance ==report== et ses accesseurs à la classe ==TBAdminComponent==.
+Let us now revise our ==TBAdminComponent== to display this report. 
+
+We add an instance variable ==report== and its accessors in the class ==TBAdminComponent==.
 
 [[[
 TBScreenComponent subclass: #TBAdminComponent
@@ -160,15 +166,16 @@ TBAdminComponent >> report: aReport
    report := aReport
 ]]]
 
-Comme le rapport est un composant fils du composant admin nous n'oublions pas de redéfinir la méthode ==children== comme suit.
-Notez que la collection contient à la fois les sous-composants définis dans la super-classe (le composant en-tête) et ceux dans la classe courante (le composant rapport).
+Since the report is a son component of  the admin component we should not forget to redefine the method ==children==.
+Note that the collection contains the subcomponents defined in the superclass (header component) and those
+in current class (report component).
 
 [[[
 TBAdminComponent >> children
    ^ super children copyWith: self report
 ]]]
 
-Dans la méthode ==initialize==, nous instancions un rapport tout en lui fournissant accès aux données du blog.
+In ==initialize== method we instantiate a report by giving it a blog instance.
 
 [[[
 TBAdminComponent >> initialize
@@ -176,7 +183,7 @@ TBAdminComponent >> initialize
    self report: (TBPostsReport from: self blog)
 ]]]
 
-Modifions le rendu de la partie administration afin d'afficher le rapport.
+Let us modify the admin part rendering to display the report. 
 
 [[[
 TBAdminComponent >> renderContentOn: html
@@ -187,16 +194,17 @@ TBAdminComponent >> renderContentOn: html
       html render: self report ]
 ]]]
 
-Vous pouvez déjà tester dans votre navigateur. 
+You can test this change by refreshing your web browser.
 
-!!! Filtrer les colonnes
 
-Par défaut, un rapport affiche l'intégralité des données présentes dans chaque post. 
-Cependant certaines colonnes ne sont pas utiles.
-Il faut donc filtrer les colonnes.
-Nous ne retiendrons ici que le titre, la catégorie et la date de rédaction.
+!!! Filter Columns
 
-Nous ajoutons une méthode de classe pour la sélection des colonnes et modifions ensuite la méthode ==from:== pour en tirer parti.
+By default, a report displays the full data of each post. 
+However, some columns are not useful 
+We should filter the columns. 
+Here we only keep the title, category and publication date.
+
+We add a class method for the column selection and modifier the method ==from:== to use this.
 
 [[[
 TBPostsReport class >> filteredDescriptionsFrom: aBlogPost
@@ -214,17 +222,18 @@ TBPostsReport class >> from: aBlog
 ]]]
 
 
-La figure *@RapportV1* montre ce que vous devez obtenir dans votre navigateur.
+Figure *@RapportV1* shows the situation that you should get.
 
-+Rapport Magritte contenant les bulletins du blog.>file://figures/RapportMagritteV1.png|width=100|label=RapportV1+
++Magritte report with posts.>file://figures/RapportMagritteV1.png|width=100|label=RapportV1+
 
 
-!!! Amélioration du rapport
+!!! Report Enhancements
 
-Le rapport généré est brut. Il n'y a pas de titres sur les colonnes et l'ordre d'affichage des colonnes n'est pas fixé.
-Celui-ci peut varier d'une instance à une autre. 
-Pour gérer cela, il suffit de modifier les descriptions Magritte pour chaque variable d'instance.
-Nous spécifions une priorité et un titre (message ==label:==) comme suit : 
+The previous report is pretty raw. 
+There is no title on columns and the display column order is not fixed. 
+This can change from one instance to the other. 
+To handle this, we modify the description for each instance variable. 
+We specify a priority and a title  (message ==label:==) as follows: 
 
 [[[
 TBPost >> descriptionTitle
@@ -236,6 +245,7 @@ TBPost >> descriptionTitle
       beRequired;
       yourself
 ]]]
+
 [[[
 TBPost >> descriptionText
    <magritteDescription>
@@ -246,6 +256,7 @@ TBPost >> descriptionText
       beRequired;
       yourself
 ]]]
+
 [[[
 TBPost >> descriptionCategory
    <magritteDescription>
@@ -255,6 +266,7 @@ TBPost >> descriptionCategory
       accessor: #category;
       yourself
 ]]]
+
 [[[
 TBPost >> descriptionDate
    <magritteDescription>
@@ -265,6 +277,7 @@ TBPost >> descriptionDate
       beRequired;
       yourself
 ]]]
+
 [[[
 TBPost >> descriptionVisible
    <magritteDescription>
@@ -276,19 +289,17 @@ TBPost >> descriptionVisible
       yourself
 ]]]
 
+You should obtain the situation such as represented by Figure *@adminReportDraft*.
++Administration Report.>file://figures/RapportMagritteV2.png|width=85|label=adminReportDraft+
 
-Vous devez obtenir la situation telle que représentée par la figure *@adminReportDraft*.
-+Administration avec un rapport.>file://figures/RapportMagritteV2.png|width=85|label=adminReportDraft+
 
+!!!Post Administration
 
-!!!Administration des bulletins
-
-Nous pouvons maintenant mettre en place un CRUD (Create Read Update Delete) permettant de gérer les bulletins.
-Pour cela, nous allons ajouter une colonne (instance ==MACommandColumn==) au rapport qui regroupera les différentes opérations en utilisant ==addCommandOn:==. 
-Cette méthode permet de définir un lien qui déclenchera l'exécution d'une méthode de l'objet courant lorsqu'il sera cliqué grâce à un callback.
-
-Ceci se fait lors de la création du rapport. 
-En particulier nous donnons un accès au blog depuis le rapport.
+We can now put in place a CRUD (Create Read Update Delete) allowing to generate posts.
+For this, we will add a new column (instance of ==MACommandColumn==) to the report.  
+This column will group the different operations using the ==addCommandOn:== message. 
+This method allows one to define a link that will execute a method of the current object. 
+We give access to the blog the report is build for.
 
 [[[
 TBSMagritteReport subclass: #TBPostsReport
@@ -307,8 +318,7 @@ TBSMagritteReport >> blog: aTBBlog
    blog := aTBBlog
 ]]]
 
-
-La méthode ==from:== ajoute une nouvelle colonne au rapport. Elle regroupe les différentes opérations en utilisant ==addCommandOn:==. 
+The method  ==from:== adds a new column to the report. It groups the different operations. 
 
 [[[
 TBPostsReport class >> from: aBlog
