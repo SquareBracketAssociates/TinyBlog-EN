@@ -334,17 +334,19 @@ TBPostsReport class >> from: aBlog
 ]]]
 
 
-Nous allons devoir définir les méthodes liées à chaque opérations dans une prochaine section.
+We will have to define the methods linked to each operation in the following section. 
 
-Par ailleurs, cette méthode est un peu longue et elle ne permet pas de separer la définition du rapport de l'ajout d'opérations sur les éléments. Une solution est de créer une méthode d'instance ==addCommands== et de l'appeller explicitement.  Faites cette transformation.
+In addition this method is a bit lengthly and it does not separate the report definition from the operation definition.
+A possible solution is to create an instance method named  ==addCommands== and to call it explicitly. 
+Try to do it to practice.
 
 
 
-!!! Gérer l'ajout d'un bulletin
+!!! Post Addition
 
-L'ajout (add) est dissocié des bulletins et se trouvera donc juste avant le rapport. 
-Etant donné qu'il fait partie du composant ==TBPostsReport==, nous devons redéfinir la méthode ==renderContentOn:== du composant ==TBPostsReport== pour insérer le lien ==add==.
-
+Addition a post is not associated with a post and we place just before the main report. 
+Since this behavior is then part of the component ==TBPostsReport==, we should redefine the method
+==renderContentOn:== of the component ==TBPostsReport== to insert a link ==add==.
 
 [[[
 TBPostsReport >> renderContentOn: html
@@ -355,14 +357,14 @@ TBPostsReport >> renderContentOn: html
    super renderContentOn: html
 ]]]
 
-Identifiez-vous à nouveau et vous devez obtenir la situation telle que représentée par la figure *@RapportNewLookActions*.
-+Rapport des bulletins avec des liens d'édition.>file://figures/RapportNewLookActions.png|width=75|label=RapportNewLookActions+
+Login another time and you should get the situation as it is represented in Figure *@RapportNewLookActions*.
++Post report with links.>file://figures/RapportNewLookActions.png|width=75|label=RapportNewLookActions+
 
 
-!!! Implémentation des actions CRUD
-
-A chaque action (Create/Read/Update/Delete) correspond une méthode de l'objet ==TBPostsReport==. 
-Nous allons maintenant les implémenter. 
+!!! CRUD Action Implementation
+Each action  (Create/Read/Update/Delete) should invoke methods of the instance of ==TBPostsReport==. 
+We implement them now. 
+A personalized form is built based on the requested operation
 Un formulaire personnalisé est construit en fonction de l'opération demandé (il n'est pas utile par exemple d'avoir un bouton "Sauver" alors que l'utilisateur veut simplement lire le post).
 
 !!!Ajouter un bulletin
