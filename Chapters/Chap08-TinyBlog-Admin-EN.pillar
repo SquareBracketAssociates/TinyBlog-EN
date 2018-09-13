@@ -364,12 +364,12 @@ Login another time and you should get the situation as it is represented in Figu
 !!! CRUD Action Implementation
 Each action  (Create/Read/Update/Delete) should invoke methods of the instance of ==TBPostsReport==. 
 We implement them now. 
-A personalized form is built based on the requested operation
-Un formulaire personnalisé est construit en fonction de l'opération demandé (il n'est pas utile par exemple d'avoir un bouton "Sauver" alors que l'utilisateur veut simplement lire le post).
+A personalized form is built based on the requested operation (it is not necessary to have a save butten when the user is just viewing a post).
 
-!!!Ajouter un bulletin
-Commençons par gérer l'ajout d'un bulletin.
-La méthode ==renderAddPostForm:== suivante illustre la puissance de Magritte pour générer des formulaires.
+
+!!! Post Addition
+Let us begin with post addition.
+The following method ==renderAddPostForm:== iillustres the power of Magritte to generate forms:
 
 [[[
 TBPostsReport >> renderAddPostForm: aPost
@@ -378,10 +378,12 @@ TBPostsReport >> renderAddPostForm: aPost
         yourself
 ]]]
 
-Ici, le message ==asComponent==, envoyé à un objet métier instance de la classe ==TBPost==, créé directement un composant Seaside. Nous ajoutons une décoration à ce composant Seaside afin de gérer ok/cancel.
+Here the message ==asComponent==, sent to the object of class ==TBPost==, creates directly a component.
+We add a decoration to this component to manage ok/cancel.
 
-
-La méthode ==addPost== pour sa part, affiche le composant rendu par la méthode ==renderAddPostForm:== et lorsque qu'un nouveau post est créé, elle l'ajoute au blog. La méthode ==writeBlogPost:== sauve les changements.
+The method ==addPost== displays the component returned the method ==renderAddPostForm:== and 
+when a new post is created, it is added for the blog. 
+The method ==writeBlogPost:== saves the changes the user may do. 
 
 [[[
 TBPostsReport >> addPost
@@ -390,17 +392,17 @@ TBPostsReport >> addPost
     post ifNotNil: [ blog writeBlogPost: post ]
 ]]]
 
- On voit une fois encore l'utilisation du message ==call:== pour donner la main à un composant.
-Le lien pour ajouter un bulletin permet maintenant d'afficher un formulaire de création que nous rendrons plus présentable (Voir figure *@AffichePostRaw*).
+In this method we see another use of the message ==call:== to give the control to a component. 
+The link to add a post allows one to display a creation form that we will make better looking later (See Figure *@AffichePostRaw*).
 
 
-+Affichage rudimentaire d'un bulletin.>file://figures/AffichePostRaw.png|width=75|label=AffichePostRaw+
++Basic rendering of a post.>file://figures/AffichePostRaw.png|width=75|label=AffichePostRaw+
 
 
 
-!!!!Afficher un bulletin
-Pour afficher un bulletin en lecture nous définissons deux méthodes similaires aux précédentes.
-Notez que nous utilisons l'expression ==readonly: true== pour indiquer que le formulaire n'est pas éditable.
+!!!!Post Display
+To display a post in read-only mode, we define two methods similar to the previous. 
+Note that we use the ==readonly: true== to indicate that the form is not editable.
 
 [[[
 TBPostsReport >> renderViewPostForm: aPost
@@ -410,15 +412,17 @@ TBPostsReport >> renderViewPostForm: aPost
        yourself
 ]]]
 
-Voir un bulletin ne nécessite pas d'action supplémentaire que d'afficher le composant.
+Looking at a post does not require any extra action other than rendering it.
+
 [[[
 TBPostsReport >> viewPost: aPost
    self call: (self renderViewPostForm: aPost)
 ]]]
 
-!!!!Editer un bulletin
+!!!!Post Edition
 
-Pour éditer un bulletin nous utilisons la même approche. 
+To edit a post, we use the same approach.
+
 [[[
 TBPostsReport >> renderEditPostForm: aPost
    ^ aPost asComponent addDecoration: (
@@ -428,7 +432,8 @@ TBPostsReport >> renderEditPostForm: aPost
       yourself
 ]]]
 
-Maintenant la méthode ==editPost:== récupère la valeur du message ==call:== et sauve les changements apportés.
+Now the method ==editPost:== gets the value of the ==call:== message and saves the changes made.
+
 [[[
 TBPostsReport >> editPost: aPost
    | post |
@@ -446,7 +451,7 @@ TBBlog >> removeBlogPost: aPost
     self save.
 ]]]
 
-ainsi qu'un test unitaire :
+Let us add a unit test:
 
 [[[
 TBBlogTest >> testRemoveBlogPost
@@ -455,8 +460,8 @@ TBBlogTest >> testRemoveBlogPost
     self assert: blog size equals: 0
 ]]]
 
-Pour éviter une opération accidentelle, nous utilisons une boite modale pour que l'utilisateur confirme la suppression du post. 
-Une fois le post effacé, la liste des posts gérés par le composant ==TBPostsReport== est actualisée et le rapport est rafraîchi.
+To avoid an unwanted operation, we use a modal dialog so that the user confirms the deletion of the post. 
+One the post is displayed, the list of managed posts by ==TBPostsReport== is changed and should be refresh.
 
 [[[
 TBPostsReport >> deletePost: aPost
