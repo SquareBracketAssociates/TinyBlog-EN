@@ -471,10 +471,10 @@ TBPostsReport >> deletePost: aPost
 
 
 
-!!!Gérer le rafraîchissement des données
+!!! Refreshing Posts
 
-Les méthodes ==addPost:== et ==deletePost:== font bien leur travail mais les données à l'écran ne sont pas mises à jour.
-Il faut donc rafraichir la liste des bulletins car il y a un décalage entre les données en mémoire et celles stockées dans la base de données.
+The methods  ==addPost:== and ==deletePost:== are working well but the display is not refreshed. 
+We need to refresh the post lists using the expression ==self refresh==.
 
 [[[
 TBPostsReport >> refreshReport
@@ -498,13 +498,14 @@ TBPostsReport >> deletePost: aPost
                  self refreshReport ]
 ]]]
 
-Le rapport est maintenant fonctionnel  et gère même les contraintes de saisie c'est-à-dire que le formulaire assure par exemple que les champs déclarés comme obligatoire dans les descriptions Magritte sont bien renseignés.
+The report is not working and it even manage input constraints: for example, mandatory fields should be filled up.
 
-!!!Amélioration de l'apparence des formulaires
+!!!Better Form Look
 
-Pour tirer parti de Bootstrap, nous allons modifier les définitions Magritte. Tout d'abord, spécifions que le rendu du formulaire doit se baser sur Bootstrap.
+To take advantage of Bootstrap, we will modify Magritte definitions.
+First we specify that the report rendering based on Bootstrap.
 
-Un container en Magritte est l'élément qui va contenir les composants créer à partir des descriptions.
+A container in Magritte is the element that will contain the other components created from descriptions.
 
 [[[
 TBPost >> descriptionContainer
@@ -514,7 +515,7 @@ TBPost >> descriptionContainer
         yourself
 ]]]
 
-Nous pouvons maintenant nous occuper des différents champs de saisie et améliorer leur apparence.
+We want can now pay attention of the different input fields and improve their appearance. 
 
 [[[
 TBPost >> descriptionTitle
@@ -530,7 +531,7 @@ TBPost >> descriptionTitle
         yourself
 ]]]
 
-+Formulaire d'ajout d'un post avec Bootstrap.>file://figures/AddAPostBootstrap.png|width=85|label=addAPostBootstrap+
++Post form addition with Bootstrap.>file://figures/AddAPostBootstrap.png|width=85|label=addAPostBootstrap+
 
 
 [[[
@@ -559,8 +560,6 @@ TBPost >> descriptionCategory
         yourself
 ]]]
 
-
-
 [[[
 TBPost >> descriptionVisible
     <magritteDescription>
@@ -573,13 +572,13 @@ TBPost >> descriptionVisible
         yourself
 ]]]
 
-Grâce à ces nouvelles descriptions Magritte, les formulaires générés sous la forme de composants Seaside utilisent Bootstrap. 
-Par exemple, formulaire d'édition d'un post doit maintenant ressembler à celui de la figure *@addAPostBootstrap*.
+Based on new Magritte descriptions, forms generated now use Bootstrap. 
+For example, the post form edition should not looks like Figure *@addAPostBootstrap*.
 
 
 !!!Conclusion 
 
-Nous avons mis en place la partie administration de TinyBlog sous la forme d'un rapport des bulletins contenus dans le blog courant. 
-Nous avons également ajouté des liens permettant une gestion CRUD de chaque bulletin. 
-Nous avons réalisé tout cela en utilisant Magritte. 
-En effet, nous avons ajouté des descriptions sur les bulletins et généré des composants Seaside (des formulaires) à partir de ces descriptions.
+In this chapter we defined the administration of TinyBlog based on report built out of the posts contained in the current blog.
+We added links to manage CRUD for each post.
+What we show is that adding descriptions on post let us generate Seaside components automatically. 
+
