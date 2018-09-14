@@ -9,7 +9,7 @@ In the next chapter we will add a blog containing a list of posts.
 
 !!! TBPost Class
 
-+TBPost: a really basic class mostly handling data.>file://figures/postUML.pdf|width=2s0|label=postUml+
++TBPost: a really basic class mostly handling data.>file://figures/postUML.pdf|width=20|label=postUml+
 
 We start with the post representation. It is super simple as shown by Figure *@postUml*. It is defined by the class ==TBPost==:
 
