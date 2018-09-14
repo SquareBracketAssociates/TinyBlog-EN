@@ -17,8 +17,8 @@ ${inputFile:Chapters/Chap06-TinyBlog-SeasideCategories-EN.pillar}$
 ${inputFile:Chapters/Chap07-TinyBlog-Authentification-EN.pillar}$
 
 ${inputFile:Chapters/Chap08-TinyBlog-Admin-EN.pillar}$
-%
-% ${inputFile:Chapters/Chap13-TinyBlog-Deployment-EN.pillar}$
+
+${inputFile:Chapters/Chap13-TinyBlog-Deployment-EN.pillar}$
 
 ! Optional Elements
 
