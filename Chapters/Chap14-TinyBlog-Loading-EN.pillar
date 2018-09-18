@@ -10,7 +10,7 @@ Obviously, we believe that this is better that you use you own code but having o
 
 !!! Chapter 3: Extending and Testing the Model
 
-You can load the correction of Chapter 2 as follow: 
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new 
@@ -26,7 +26,7 @@ All tests should be green.
 
 !!! Chapter 4: Data Persitency using Voyage and Mongo
 
-You can load the correction of Chapter 3 as follow: 
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new 
@@ -40,7 +40,7 @@ Once loaded execute the tests.
 
 !!! Chapter 5: Commencer avec Seaside
 
-You can load the correction of Chapter 4 as follow: 
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new 
@@ -59,7 +59,7 @@ ZnZincServerAdaptor startOn: 8080.
 
 Open your web browser at ==http://localhost:8080/TinyBlog==
 
-Yoy may need to recreate some posts as follows: 
+You may need to recreate some posts as follows: 
 
 [[[
 TBBlog reset ; createDemoPosts
@@ -67,7 +67,7 @@ TBBlog reset ; createDemoPosts
 
 !!! Chapitre 6: Web Components for TinyBlog
 
-You can load the correction of Chapter 5 as follow: 
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new
@@ -81,7 +81,7 @@ Same process as above.
 
 !!! Chapitre 7: Gestion des catégories
 
-Vous pouvez charger la correction des chapitres précédents en exécutant le code suivant:
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new
@@ -91,15 +91,17 @@ Metacello new
     load
 ]]]
 
-Pour tester le code, vous devez lancer le serveur HTTP pour Seaside:
+
+To test the application, start the HTTP server:
 
 [[[
 ZnZincServerAdaptor startOn: 8080.
 ]]]
 
-Ouvrez votre browser sur ==http://localhost:8080/TinyBlog==
+Open your web browser at ==http://localhost:8080/TinyBlog==
 
-Si vous avez besoin de créer quelques posts initiaux:
+
+You may need to recreate some posts as follows: 
 
 [[[
 TBBlog reset ; createDemoPosts
@@ -109,7 +111,7 @@ TBBlog reset ; createDemoPosts
 
 !!! Chapitre 8: Authentification et Session
 
-Vous pouvez charger l'application TinyBlog avec la partie publique en exécutant :
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new
@@ -119,7 +121,7 @@ Metacello new
     load
 ]]]
 
-Pour tester le code, vous devez lancer le serveur HTTP pour Seaside:
+To test the application, start the HTTP server:
 
 [[[
 ZnZincServerAdaptor startOn: 8080.
@@ -128,7 +130,7 @@ ZnZincServerAdaptor startOn: 8080.
 !!! Chapitre 9: Interface Web d’administration et génération automatique
 
 
-Vous pouvez charger l'application TinyBlog avec l'authentification en exécutant :
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new
@@ -143,7 +145,7 @@ Metacello new
 !!! Chapitre 10: Déploiement de TinyBlog
 
 
-Vous pouvez charger l'application TinyBlog contenant la partie administration en exécutant :
+You can load the correction of the previous chapter as follow: 
 
 [[[
 Metacello new
@@ -153,7 +155,7 @@ Metacello new
     load
 ]]]
 
-Vous devez également créer un compte du PharoCloud, reporter vos identifiants dans le code ci-dessous :
+You should create an account on PharoCloud and use your IDs in the following code:
 
 [[[
 	
@@ -199,7 +201,7 @@ client := #EphemericCloudClient asClass userID: ephUser authToken: ephToken.
 		ifFalse: [ client lastPublishedInstance hostname ]
 ]]]
 
-Si vous exécutez ce code (cela prend un peu de temps), votre image Pharo courante sera automatiquement envoyée sur votre espace PharoCloud.
+When you execute the following code (it will take some time), your Pharo image will be automatically be deployed on PharoCloud.
 
 
 %!! Chapitre : Une Interface Web avec Teapot pour TinyBlog
