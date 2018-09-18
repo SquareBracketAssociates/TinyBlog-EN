@@ -106,9 +106,10 @@ By clicking on the public URL given by PharoCloud you will be able to display yo
 
 +Your TinyBlog Application on PharoCloud.>file://figures/TinyBlogOnPharoCloud.png|width=85|label=tinyBlogOnPharoCloud+
 
-!!!Déploiement automatique sur Ephemeric Cloud de PharoCloud 
+!!!Automatic Deployment on PharoCloud's Ephemeric Cloud
 
-Plutôt que faire une archive zip et utiliser son navigateur, la documentation de PharoCloud (*http://docs.swarm.pharocloud.com/*) indique comment déployer directement son image Pharo en exécutant le code suivant (attention, c'est un peu long le temps que l'image soit transférée sur PharoCloud) :
+Instead of creating a zip archive and using your web browser, the documentation of 
+ PharoCloud (*http://docs.swarm.pharocloud.com/*) shows how to deploy automatically by executing the following code (it takes some time):
 
 [[[
 |client EPHUSER EPHTOKEN| 
@@ -127,12 +128,17 @@ client := EphemericCloudClient userID: EPHUSER authToken: EPHTOKEN.
 ]]]
 
 
-!!! A propos de dépendances
+!!! About Dependencies
 
-Les bonnes pratiques lors de développements en Pharo sont de spécifier clairement les dépendances sur les packages utilisés afin d'avoir une reproductibilité complète d'un projet. Une telle reproductibilité permet alors l'utilisation de serveur de construction tels que Travis ou Jenkins.
-Pour cela, une configuration (une classe spéciale) définit d'une part l'architecture du projet (dépendances et packages du projet) et les versions des packages versionnés. 
+Good development practice in Pharo are to specific explicitly the dependencies on the used packages. 
+This ensures the fact that we can reproduce a software artefact.
+Such reproducibility supports then the use of an integration server such as Travis or Jenkins.
+For this a configuration (a special class) defines the architecture of a project (dependencies to other projects as well as structure of your projects) and the associated version. 
+This is this way that we build automatically the PharoWeb image
 
-Dans le cadre de ce projet, nous n'abordons pas ce point plus avancé. Un chapitre entier est consacré à l'expression de configurations dans le livre intitulé "Deep Into Pharo" (cf. *http://books.pharo.org*). 
+In this book we do not cover this point.
+A full chapter is dedicated to the expression of configurations in the book named 
+ "Deep Into Pharo" (cf. *http://books.pharo.org*). 
  
 %!!!!! Optionel. 
 %Si vous voulez essayer de créer une configuration, vous pouvez utiliser Versionner. 
