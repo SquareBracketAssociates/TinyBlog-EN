@@ -1,10 +1,10 @@
-!! Authentification and Session 
+!! Authentication and Session 
 
 In this chapter we will develop a traditional scenario: the user should login to access to the administration part of the application. He does it using a login and password. 
 
 Figure *@ApplicationArchitectureAdminHeader* shows the architecture that we will reach in this chapter.
 
-+Authentification flow.>file://figures/ApplicationArchitectureAdminHeader.pdf|width=75|label=ApplicationArchitectureAdminHeader+
++Authentication flow.>file://figures/ApplicationArchitectureAdminHeader.pdf|width=75|label=ApplicationArchitectureAdminHeader+
 
 Let us start to put in place a first version that allows one to navigate between the part of TinyBlog rendered 
 by the component ==TBPostsListComponent== and a first darft of the administration component as shown in Figure 
@@ -207,17 +207,17 @@ The message
 The message ==answer:== returns a value to this call and gives back the flow of control to the calling argument. 
 This mechanism is really poweful and elegant. It is explained in the vidéo 1 of week 5 of the Pharo Mooc (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_5.html*).
 
-!!! Modal Window for Authentification
+!!! Modal Window for Authentication
 
-Let us develop now a authentification component that when invoked will open a dialog box to request 
+Let us develop now a authentication component that when invoked will open a dialog box to request 
 the login and password. The result we want to obtain is shown in Figure *@authentification*. 
 
 There are are some libraries of components ready to be used. 
-For example, the Heimdal project available at *http://www.github.com/DuneSt/* offers an authentification component or the Steam project *https://github.com/guillep/steam* offers ways to interrogate google ou twitter accounts. 
+For example, the Heimdal project available at *http://www.github.com/DuneSt/* offers an authentication component or the Steam project *https://github.com/guillep/steam* offers ways to interrogate google ou twitter accounts. 
 
-+Authentification component.>file://figures/Authentification.png|width=75|label=authentification+
++Authentication component.>file://figures/Authentification.png|width=75|label=authentification+
 
-!!!! Authentification Component Definition
+!!!! Authentication Component Definition
 
 We define a new subclass of  ==WAComponent== and its accessors. 
 This component contains a login, a password and a component which invoked it to access to the admin part. 
@@ -270,7 +270,7 @@ TBAuthentificationComponent class >> from: aComponent
 ]]]
 
 
-!!! Authentification Component Rendering
+!!! Authentication Component Rendering
 
 The following method ==renderContentOn:== defines the contents of a dialog box with the ID  ==myAuthDialog==. 
 This ID will be used to select the component that should be made visible when in modal mode.
@@ -376,9 +376,9 @@ TBAuthentificationComponent >> validate
 %
 % De plus le composant ==TBAuthentificationComponent== pourrait afficher l'utilisateur lorsque celui-ci est logué.
 
-!!!Authentification Component Integration
+!!!Authentication Component Integration
 
-To integrate our authentification component, we modify the Admin button of the header 
+To integrate our authentication component, we modify the Admin button of the header 
 component (==TBHeaderComponent==) as follows:
 
 [[[
@@ -404,7 +404,7 @@ This component is created during each display and it does not have to be returne
 In addition, we add 'Login' button with a icon lock.
 When the user clicks on this button, the modal dialog identified with the ID ==myAuthDialog== will be displayed.
 
-Reloading the TinyBlog page, you should see now a 'Login' button in the header (button that will pop up the authentification we just developed) as illustrated by Figure *@authentification*.
+Reloading the TinyBlog page, you should see now a 'Login' button in the header (button that will pop up the authentication we just developed) as illustrated by Figure *@authentification*.
 
 !!! Naively Managing Logins
 
@@ -778,7 +778,7 @@ Now you can test the naviagtion. It should correspond to the situation depicted 
 
 !!! Conclusion
 
-We put in place an authentification for TinyBlog. We create a reusable modal component. We made the distinction between 
+We put in place an authentication for TinyBlog. We create a reusable modal component. We made the distinction between 
 component displayed when a user is connected or ot not and ease the navigation of a connected user using session. 
 
 We are now ready for the administration part of the application and we will work on this in the next chapter.
