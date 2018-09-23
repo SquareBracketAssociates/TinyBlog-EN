@@ -228,7 +228,7 @@ Even if you do it, we encourage you to continue to work with a memory database a
 
 !!!!Installing Mongo
 
-Regardless of your operating system (Linux, Mac OsX or Windows), you can install a local Mongo server on your machine (cf. *https://www.mongodb.com*). 
+Regardless of your operating system (Linux, MacOS or Windows), you can install a local Mongo server on your machine (cf. *https://www.mongodb.com*). 
 This is useful to test your application without requiring an internet connection. 
 Instead directly installing Mongo, we suggest to install Docker (*https://www.docker.com*) on your machine and execute a Mongo container using the following command line:
 
