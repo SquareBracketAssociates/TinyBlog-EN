@@ -231,7 +231,7 @@ TBScreenComponent subclass: #TBPostsListComponent
 
 +The ==ApplicationRootComponent== uses ==PostsListComponent==.>file://figures/ComponentRelationship2.pdf|width=75|label=compt2+
 
-We can now modify the main component of the application  (==TBApplicationRootComponent==) so that it displays this new component as shown in figure *@compt2*. 
+We can now modify ==TBApplicationRootComponent==, the main component of the application, so that it displays this new component as shown in figure *@compt2*. 
 To achieve this, we modify its ==initialize== method: 
 
 [[[
