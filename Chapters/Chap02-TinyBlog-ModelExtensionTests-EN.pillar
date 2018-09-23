@@ -4,9 +4,9 @@
 In this chapter we extend the model and add more tests.
 Note that when you will get fluent in Pharo, you will tend to write first your tests and then execute tests to code in the debugger. 
 We did not do it because coding in the debugger requires more explanation. 
-You can see such a practice in the Mooc video entitled  ''Coding a Counter in the Debugger'' (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_26.html*) and read the book ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
+You can see such a practice in the Mooc video entitled  ''Coding a Counter in the Debugger'' (See *http://mooc.pharo.org*) and read the book ''Learning Object-Oriented Programming, Design with TDD in Pharo'' (*http://books.pharo.org*).
 
-Before starting, use back the code of the previous chapter or use the information of Chapter *@chaLoading*.
+Before starting, use back the code of the previous chapter or use the information of Chapter *@cha:Loading*.
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! TBBlog class

@@ -114,7 +114,7 @@ TBPost >> initialize
 
 In the solution above, it would be better that the ==initialize== method does not hard code the reference to the ==TBPost== class. 
 Propose a solution.
-The sequence 3 of the week 6 of the Mooc can help you to understand why it is better to avoid hardcoding class references (*http://rmod-pharo-mooc.lille.inria.fr/MOOC/WebPortal/co/content_67.html*).
+The sequence 3 of the week 6 of the Mooc can help you to understand why it is better to avoid hardcoding class references (See *http://mooc.pharo.org*).
 
 
 !!!Posts Creation Methods
