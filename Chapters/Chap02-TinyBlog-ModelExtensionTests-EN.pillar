@@ -52,7 +52,7 @@ TBBlog class
    instanceVariableNames: 'uniqueInstance'
 ]]]
 
-Then we define two methods pour manage the singleton. 
+Then we define two methods to manage the singleton. 
 [[[
 TBBlog class >> reset
    uniqueInstance := nil
