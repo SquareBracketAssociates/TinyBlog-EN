@@ -7,7 +7,7 @@ Figure *@ApplicationArchitectureAdminHeader* shows the architecture that we will
 +Authentication flow.>file://figures/ApplicationArchitectureAdminHeader.pdf|width=75|label=ApplicationArchitectureAdminHeader+
 
 Let us start to put in place a first version that allows one to navigate between the part of TinyBlog rendered 
-by the component ==TBPostsListComponent== and a first darft of the administration component as shown in Figure 
+by the component ==TBPostsListComponent== and a first draft of the administration component as shown in Figure 
  *@SimpleAdminLink*. This illustrates how to invoke a component. 
 
 In the  following we  will  build and  integrate a  component managing  the  login based  on modal  interaction. 
@@ -168,7 +168,7 @@ TBAdminHeaderComponent >> renderButtonsOn: html
    html form: [ self renderDisconnectButtonOn: html ]
 ]]]
 
-Indiquons au composant ==TBAdminComponent== d'utiliser cette en–tête:
+The ==TBAdminComponent== component must use this header:
 
 [[[
 TBAdminComponent >> createHeaderComponent
