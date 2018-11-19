@@ -386,7 +386,7 @@ We explained that the ==children== method of a component should return its sub-c
 Indeed, before executing the ==renderContentOn:== method of a composite, Seaside needs to retrieve all its sub-components and their state.
 However, if sub-components are instantiated in the ==renderContentOn:== method of the composite (such as in ==TBPostsListComponent>>renderContentOn:==), it is not needed that ==children== returns those sub-components.
 
-Note that, instantiating sub-components in the rendering method is not a goor practice since it increases the loading time of the web page.
+Note that, instantiating sub-components in the rendering method is not a good practice since it increases the loading time of the web page.
 
 If we would store all sub-components that display posts, we should add an instance variable ==postComponents==.
 
