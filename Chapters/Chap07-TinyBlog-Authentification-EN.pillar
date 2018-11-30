@@ -516,11 +516,11 @@ TBAdministrator >> password
    ^ password
 ]]]
 
-Note that we do not store the admin password in the instance variable ==password== but its hash encoded in MD5.
+Note that we do not store the admin password in the instance variable ==password== but its hash encoded in SHA256.
 
 [[[
 TBAdministrator >> password: anObject
-   password := MD5 hashMessage: anObject
+   password := SHA256 hashMessage: anObject
 ]]]
 
 We define also a new instance creation method.
@@ -619,12 +619,12 @@ Define some tests for the extensions by writing new unit tests.
 !!!Integrating the Admin Information
 
 Let us modify the method ==tryConnectionWithLogin:andPassword:== so that it uses the current blog admin identifiers. 
-Note that we are comparing the hash MD5 of the password since we do not store the password.
+Note that we are comparing the hash SHA256 of the password since we do not store the password.
 
 [[[
 TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
    (login = self blog administrator login and: [ 
-      (MD5 hashMessage: password) = self blog administrator password ])
+      (SHA256 hashMessage: password) = self blog administrator password ])
          ifTrue: [ self goToAdministrationView ]
          ifFalse: [ self loginErrorOccurred ]
 ]]]
@@ -703,7 +703,7 @@ Note that the current session is available to every Seaside component via ==self
 [[[
 TBPostsListComponent >> tryConnectionWithLogin: login andPassword: password
    (login = self blog administrator login and: [ 
-      (MD5 hashMessage: password) = self blog administrator password ])
+      (SHA256 hashMessage: password) = self blog administrator password ])
          ifTrue: [ 
             self session currentAdmin: self blog administrator.
             self goToAdministrationView ]
