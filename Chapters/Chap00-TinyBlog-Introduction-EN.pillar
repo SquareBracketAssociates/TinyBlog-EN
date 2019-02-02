@@ -27,7 +27,7 @@ Finally, to help you to get over possible errors and avoid to get stuck, the las
 
 In this tutorial, we suppose that you are using Pharo 6.1 with an image in which many frameworks and web libraries have been loaded: Seaside (component-based web application server), Magritte (an automatic generation report system based on descriptions), Bootstrap (a library to visually tune web applications), Voyage (a framework to save your objects in document databases) and some others.
 
-To develop your application and follow this tutorial, we suggest to use the image available at the following URL: *http://mooc.pharo.org/image/PharoWeb-61.zip* since it contains all the mandatory packages.
+To develop your application and follow this tutorial, we suggest to use the image available at the following URL: *http://mooc.pharo.org/image/PharoWeb-60.zip* since it contains all the mandatory packages.
 
 You can rebuild this web Pharo image in Pharo 6.1 (*http://pharo.org/download*) with the following script:
 
