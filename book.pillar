@@ -32,4 +32,4 @@ ${inputFile:Chapters/Chap13-TinyBlog-Deployment-EN.pillar}$
 %
 ${inputFile:Chapters/Chap14-TinyBlog-Loading-EN.pillar}$
 %
-% ${inputFile:Chapters/Chap15-TinyBlog-SavingCode-EN.pillar}$
+${inputFile:Chapters/Chap15-TinyBlog-SavingCode-EN.pillar}$

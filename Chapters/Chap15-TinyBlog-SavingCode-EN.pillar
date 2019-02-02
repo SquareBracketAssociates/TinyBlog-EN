@@ -1,0 +1,28 @@
+!! Save your code
+
+When you save the Pharo image (left click on the Pharo background to access the World menu and select 'save' menuentry), it contains all objects of the system as well as all classes.
+This solution is useful but fragile.
+We will show you how Pharoers save their code as packages and send them on a remote dedicated server using Monticello: the package versioning tool of Pharo.
+
+The Pharo Mooc (*http://mooc.pharo.org*) contains video that describes the procedure to save code such as the video of the Week 1 that shows haw to develop a counter application and save the code: *http://rmod-pharo-mooc.lille.inria.fr/MOOC/Videos/W1/C019-W1S-Videos-Redo-Counter-Traditional-FR-V3-HD_720p_4Mbs.m4v*.
+
+!!!!Create a code repository
+
+There are multiple online servers to freely host your code repositories such as Smalltalkhub *http://smalltalkhub.com* or SS3 *http://ss3.gemstone.com*. 
+
+- Create an account on  *http://smalltalkhub.com/*.
+- Connect on *http://smalltalkhub.com/*. 
+- Create a project named "TinyBlog" (if you encounter connection problems because this web site is still in beta version, try with another web browser or use *http://ss3.gemstone.com*).
+
+!!!!Save your packages
+
+- In Pharo, open Monticello Browser using the world menu (left click on the Pharo background).
+- Add a new repository of type SmalltalkHub or HTTP for *http://ss3.gemstone.com*.
+- Select this repository and select the 'Add to package...' in its contextual menu (right click) to add this repository to the TinyBlog package.
+- You can now select you 'TinyBlog' package and click on the 'Save' button. 
+- Write a description for your commit and save. Your code has been sent to the server.
+
+The code of your TinyBlog application is now saved in your 'TinyBlog' repository on remote server (e.g. Smalltalkhub).
+You can now load this code in a new Pharo image.
+In this tutorial, we recommend you to always use a Pharo image with all Web packages already loaded (Pharo Web image) as mentioned in the first chapter.
+This way, you can always load your code without dealing with dependencies with third-party packages.
