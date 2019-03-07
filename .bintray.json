@@ -6,8 +6,8 @@
         "desc": "Tiny Blog: Un tutorial web",
         "licenses": ["MIT"],
         "website_url": "https://github.com/SquareBracketAssociates/TinyBlogTutorial",
-        "issue_tracker_url": "https://github.com/SquareBracketAssociates/TinyBlogTutorial/issues",
-        "vcs_url": "https://github.com/SquareBracketAssociates/TinyBlogTutorial.git",
+        "issue_tracker_url": "https://github.com/SquareBracketAssociates/TinyBlog-EN/issues",
+        "vcs_url": "https://github.com/SquareBracketAssociates/TinyBlog-EN.git",
         "labels": ["work-in-progress"]
     },
 
@@ -18,8 +18,8 @@
 
     "files": [
         {
-            "includePattern": "build/(book).spiral.pdf",
-            "uploadPattern": "$1TinyBlogFR-wip.pdf",
+            "includePattern": "_support/pdf/book.pdf",
+            "uploadPattern": "book.pdf",
             "matrixParams": { "override": 1 }
         }
     ],
