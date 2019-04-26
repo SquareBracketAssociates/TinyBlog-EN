@@ -26,7 +26,7 @@ script:
 
 after_success:
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - mv _result/pdf/index.pdf TinyBlogEN-wip.pdf
+  - mv _result/pdf/book.pdf TinyBlogEN-wip.pdf
   - bash upload.sh TinyBlogEN-wip.pdf
 
 branches:
