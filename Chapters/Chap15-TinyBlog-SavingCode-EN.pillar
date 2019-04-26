@@ -41,7 +41,7 @@ We list the key points here:
 - Create a project on *http://www.github.com* or similar.
 - Use Iceberg pour add a un projet, choose to clone from github by example.
 - Create a folder =='src'== with the filelist or using the command line in the folder that you just cloned. 
-- Open your project and add your packages (Define a baseline to be able to reload your code).
+- Open your project and add your packages (Define a baseline to be able to reload your code -- check *https://github.com/pharo-open-documentation/pharo-wiki/blob/master/General/Baselines.md*)
 - Commit your code.
 - Push your code on github.
 
