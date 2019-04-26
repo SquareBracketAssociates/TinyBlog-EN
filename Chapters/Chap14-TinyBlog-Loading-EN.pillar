@@ -38,7 +38,7 @@ Metacello new
 
 Once loaded execute the tests.
 
-!!! Chapter 5: Commencer avec Seaside
+!!! Chapter 5: First Steps with Seaside
 
 You can load the correction of the previous chapter as follow: 
 
@@ -79,7 +79,7 @@ Metacello new
 
 Same process as above.
 
-!!! Chapitre 7: Gestion des catégories
+!!! Chapitre 7: Managing Categories
 
 You can load the correction of the previous chapter as follow: 
 
@@ -109,7 +109,7 @@ TBBlog reset ; createDemoPosts
 
 
 
-!!! Chapitre 8: Authentification et Session
+!!! Chapitre 8: Authentication and Session
 
 You can load the correction of the previous chapter as follow: 
 
@@ -127,7 +127,7 @@ To test the application, start the HTTP server:
 ZnZincServerAdaptor startOn: 8080.
 ]]]
 
-!!! Chapitre 9: Interface Web d’administration et génération automatique
+!!! Chapitre 9: Administration Web Interface and Automatic Form Generation
 
 
 You can load the correction of the previous chapter as follow: 
@@ -142,7 +142,7 @@ Metacello new
 
 
 
-!!! Chapitre 10: Déploiement de TinyBlog
+!!! Chapitre 10: Deploying TinyBlog
 
 
 You can load the correction of the previous chapter as follow: 
