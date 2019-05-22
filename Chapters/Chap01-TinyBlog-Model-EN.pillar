@@ -208,7 +208,7 @@ TBPost >> isUnclassified
    ^ self category = TBPost unclassifiedTag
 ]]]
 
-It is not really good to harcode a reference to the class ==TBPost== in a method body.
+It is not really good to hardcode a reference to the class ==TBPost== in a method body.
 Propose a solution.
 
 In addition, let us take the time to update our test to take advantage of the new behavior.
