@@ -2,7 +2,11 @@
 
 When you save the Pharo image (left click on the Pharo background to access the World menu and select 'save' menuentry), it contains all objects of the system as well as all classes.
 This solution is useful but fragile.
-We will show you how Pharoers save their code as packages and send them on a remote dedicated server using Monticello: the package versioning tool of Pharo.
+We will show you how Pharoers save their code as packages and send them on a remote dedicated server.
+Until Pharo 6.0, Pharo offers the possibility to save packages using Monticello: the package versioning tool of Pharo on *http://smalltalkhub.com* or *http://ss3.gemstone.com*. 
+From Pharo 70 Pharo still support Monticello but offers a much better way to store your code on github, bitbucket, or gitlab using git with a new dedicated tool.
+
+!!! Up to Pharo 6.0
 
 The Pharo Mooc (*http://mooc.pharo.org*) contains video that describes the procedure to save code such as the video of the Week 1 that shows haw to develop a counter application and save the code: *http://rmod-pharo-mooc.lille.inria.fr/MOOC/Videos/W1/C019-W1S-Videos-Redo-Counter-Traditional-FR-V3-HD_720p_4Mbs.m4v*.
 
@@ -26,3 +30,18 @@ The code of your TinyBlog application is now saved in your 'TinyBlog' repository
 You can now load this code in a new Pharo image.
 In this tutorial, we recommend you to always use a Pharo image with all Web packages already loaded (Pharo Web image) as mentioned in the first chapter.
 This way, you can always load your code without dealing with dependencies with third-party packages.
+
+
+!!! With Pharo 70
+
+We suggest you read the chapter in the book "Managing Your Code with Iceberg" (available at *http://books.pharo.org*).
+
+We list the key points here: 
+
+- Create a project on *http://www.github.com* or similar.
+- Use Iceberg pour add a un projet, choose to clone from github by example.
+- Create a folder =='src'== with the filelist or using the command line in the folder that you just cloned. 
+- Open your project and add your packages (Define a baseline to be able to reload your code -- check *https://github.com/pharo-open-documentation/pharo-wiki/blob/master/General/Baselines.md*)
+- Commit your code.
+- Push your code on github.
+
