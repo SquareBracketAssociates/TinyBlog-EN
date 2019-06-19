@@ -160,7 +160,7 @@ In Test Driven Developpement mode we write test first.
 Here we prefered to let you define a little class to familiarize with the IDE. 
 Let us fix this!
 
-We define the class ==TBPPostTest== (as subclass of the class ==TestCase==).
+We define the class ==TBPostTest== (as subclass of the class ==TestCase==).
 
 [[[
 TestCase subclass: #TBPostTest
