@@ -1,6 +1,5 @@
 ${inputFile:Chapters/Chap00-TinyBlog-Introduction-EN.pillar}$
 
-! Core Tutorial 
 
 ${inputFile:Chapters/Chap01-TinyBlog-Model-EN.pillar}$
 
@@ -20,10 +19,10 @@ ${inputFile:Chapters/Chap08-TinyBlog-Admin-EN.pillar}$
 
 ${inputFile:Chapters/Chap13-TinyBlog-Deployment-EN.pillar}$
 
-! Optional Elements
+
 
 %Todo
-% ${inputFile:Chapters/Chap12-TinyBlog-Export.pillar}$
+%${inputFile:Chapters/Chap12-TinyBlog-Export.pillar}$
 % ${inputFile:Chapters/Chap09-TinyBlog-SeasideREST.pillar}$
 
 
