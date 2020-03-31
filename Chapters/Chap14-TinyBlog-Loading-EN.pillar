@@ -1,8 +1,9 @@
-!! Loading Chapter Code 
+!! Loading Chapter Code
 @cha:loading
 
-This chapter contains the expressions to load the code described in each of the chapters. 
-Such expressions can be executed in the PharoWeb 5 image (*http://files.pharo.org/mooc/image/PharoWeb-5.0.zip*) or in PharoWeb 6.1 (*http://files.pharo.org/mooc/image/PharoWeb-61.zip*).
+This chapter contains the expressions to load the code described in each of the chapters.
+Such expressions can be executed in any Pharo 8.0 (or above) image.
+Nevertheless, using the Pharo MOOC image (cf. Pharo Launcher) is usually faster because it already includes several libraries such as: Seaside, Voyage, ...
 
 When you start for example the chapter 4, you can load all the code of the previous chapters (1, 2, and 3) by following the process described in the following section 'Chapter 4'.
 
@@ -10,44 +11,44 @@ Obviously, we believe that this is better that you use you own code but having o
 
 !!! Chapter 3: Extending and Testing the Model
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
-Metacello new 
-	smalltalkhubUser: 'PharoMooc' project: 'TinyBlog'; 
-	version: #chapter2solution;
-	configuration: 'TinyBlog';
-	load.
+Metacello new
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter2/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 Run the tests!
-To do so, you can use the TestRunner  (World menu > Test Runner), look for the package TinyBlog-Tests and click on "Run Selected". 
-All tests should be green. 
+To do so, you can use the TestRunner  (Tools menu > Test Runner), look for the package TinyBlog-Tests and click on "Run Selected".
+All tests should be green.
 
 !!! Chapter 4: Data Persitency using Voyage and Mongo
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
-Metacello new 
-	smalltalkhubUser: 'PharoMooc' project: 'TinyBlog'; 
-	version: #chapter3solution;
-	configuration: 'TinyBlog';
-	load.
+Metacello new
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter3/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 Once loaded execute the tests.
 
 !!! Chapter 5: First Steps with Seaside
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
-Metacello new 
-	smalltalkhubUser: 'PharoMooc' project: 'TinyBlog'; 
-	version: #chapter4solution;
-	configuration: 'TinyBlog';
-	load.
+Metacello new
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter4/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 Execute the tests.
@@ -59,7 +60,7 @@ ZnZincServerAdaptor startOn: 8080.
 
 Open your web browser at ==http://localhost:8080/TinyBlog==
 
-You may need to recreate some posts as follows: 
+You may need to recreate some posts as follows:
 
 [[[
 TBBlog reset ; createDemoPosts
@@ -67,28 +68,28 @@ TBBlog reset ; createDemoPosts
 
 !!! Chapitre 6: Web Components for TinyBlog
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
 Metacello new
-    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-    version: #chapter5solution;
-    configuration: 'TinyBlog';
-    load
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter5/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 Same process as above.
 
 !!! Chapitre 7: Managing Categories
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
 Metacello new
-    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-    version: #chapter6solution;
-    configuration: 'TinyBlog';
-    load
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter6/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 
@@ -101,7 +102,7 @@ ZnZincServerAdaptor startOn: 8080.
 Open your web browser at ==http://localhost:8080/TinyBlog==
 
 
-You may need to recreate some posts as follows: 
+You may need to recreate some posts as follows:
 
 [[[
 TBBlog reset ; createDemoPosts
@@ -111,14 +112,14 @@ TBBlog reset ; createDemoPosts
 
 !!! Chapitre 8: Authentication and Session
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
 Metacello new
-    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-    version: #chapter7solution;
-    configuration: 'TinyBlog';
-    load
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter7/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 To test the application, start the HTTP server:
@@ -130,14 +131,14 @@ ZnZincServerAdaptor startOn: 8080.
 !!! Chapitre 9: Administration Web Interface and Automatic Form Generation
 
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
 Metacello new
-    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-    version: #chapter8solution;
-    configuration: 'TinyBlog';
-    load
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter8/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 
@@ -145,23 +146,23 @@ Metacello new
 !!! Chapitre 10: Deploying TinyBlog
 
 
-You can load the correction of the previous chapter as follow: 
+You can load the correction of the previous chapter as follow:
 
 [[[
 Metacello new
-    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-    version: #chapter9solution;
-    configuration: 'TinyBlog';
-    load
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog:chapter9/src';
+   onConflict: [ :ex | ex useLoaded ];
+   load
 ]]]
 
 You should create an account on PharoCloud and use your IDs in the following code:
 
 [[[
-	
+
 ephUser :='<your PharoCloud Ephemeric login>'.
 ephToken :='<your PharoCloud Ephemeric passwod>'.
-	
+
 "Seaside Deployment configuration"
 WAAdmin clearAll.
 WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance.
@@ -172,13 +173,13 @@ WAFileHandler default
 WAAdmin defaultDispatcher
     register: WAFileHandler default
     at: 'files'.
-	 
+
 "Load TinyBlog"
-Gofer new
-   smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-   package: 'ConfigurationOfTinyBlog';
+Metacello new
+   baseline:'TinyBlog';
+   repository: 'github://LucFabresse/TinyBlog/src';
+   onConflict: [ :ex | ex useLoaded ];
    load.
-#ConfigurationOfTinyBlog asClass loadFinalApp.
 
 "Create Demo posts if needed"
 #TBBlog asClass createDemoPosts.
@@ -189,39 +190,16 @@ WADispatcher default defaultName: 'TinyBlog'.
 "Register TinyBlog on Seaside"
 TBApplicationRootComponent initialize.
 
-Metacello new 	
+Metacello new
 	smalltalkhubUser: 'mikefilonov' project: 'EphemericCloudAPI';
 	configuration: 'EphemericCloudAPI';
 	load.
 
 "deployment on PharoCloud"
-client := #EphemericCloudClient asClass userID: ephUser authToken: ephToken. 
-	(client publishSelfAs: 'TinyBlog') 
-		ifTrue:[ ZnZincServerAdaptor startOn: 8080 ] 
+client := #EphemericCloudClient asClass userID: ephUser authToken: ephToken.
+	(client publishSelfAs: 'TinyBlog')
+		ifTrue:[ ZnZincServerAdaptor startOn: 8080 ]
 		ifFalse: [ client lastPublishedInstance hostname ]
 ]]]
 
 When you execute the following code (it will take some time), your Pharo image will be automatically be deployed on PharoCloud.
-
-
-%!! Chapitre : Une Interface Web avec Teapot pour TinyBlog
-
-%Vous pouvez charger la correction de la semaine précédente en exécutant le code suivant:
-
-%[[[
-%Metacello new
-%    smalltalkhubUser: 'PharoMooc' project: 'TinyBlog';
-%    version: #week3solution;
-%    configuration: 'TinyBlog';
-%    load
-%]]]
-
-%Assurez vous que votre serveur Teapot est bien stoppé.
-%[[[%
-%	TBTeapotWebApp stop
-%]]]
-%Puis, testez le code en exécutant:
-%[[[
-%	TBTeapotWebApp start
-%]]]
-% Attention, vérifiez d'abord que votre propre serveur HTTP ne soit pas déjà lancé sur le port 8081.
