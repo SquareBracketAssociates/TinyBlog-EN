@@ -143,21 +143,9 @@ Metacello new
 
 
 
-!!! Chapitre 10: Deploying TinyBlog
-
-You can load the correction of the previous chapter as follow:
-
-[[[
-Metacello new
-   baseline:'TinyBlog';
-   repository: 'github://LucFabresse/TinyBlog:chapter9/src';
-   onConflict: [ :ex | ex useLoaded ];
-   load
-]]]
-
 !!! Latest Version of TinyBlog
 
-The most up to date version of TinyBlog can be loaded as follow:
+The most up-to-date version of TinyBlog can be loaded as follow:
 
 [[[
 Metacello new
