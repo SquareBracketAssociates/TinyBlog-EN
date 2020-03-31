@@ -145,7 +145,6 @@ Metacello new
 
 !!! Chapitre 10: Deploying TinyBlog
 
-
 You can load the correction of the previous chapter as follow:
 
 [[[
@@ -156,50 +155,14 @@ Metacello new
    load
 ]]]
 
-You should create an account on PharoCloud and use your IDs in the following code:
+!!! Latest Version of TinyBlog
+
+The most up to date version of TinyBlog can be loaded as follow:
 
 [[[
-
-ephUser :='<your PharoCloud Ephemeric login>'.
-ephToken :='<your PharoCloud Ephemeric passwod>'.
-
-"Seaside Deployment configuration"
-WAAdmin clearAll.
-WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance.
-WAFileHandler default: WAFileHandler new.
-WAFileHandler default
-    preferenceAt: #fileHandlerListingClass
-    put: WAHtmlFileHandlerListing.
-WAAdmin defaultDispatcher
-    register: WAFileHandler default
-    at: 'files'.
-
-"Load TinyBlog"
 Metacello new
    baseline:'TinyBlog';
    repository: 'github://LucFabresse/TinyBlog/src';
    onConflict: [ :ex | ex useLoaded ];
    load.
-
-"Create Demo posts if needed"
-#TBBlog asClass createDemoPosts.
-
-"Tell Seaside to use TinyBlog as default app"
-WADispatcher default defaultName: 'TinyBlog'.
-
-"Register TinyBlog on Seaside"
-TBApplicationRootComponent initialize.
-
-Metacello new
-	smalltalkhubUser: 'mikefilonov' project: 'EphemericCloudAPI';
-	configuration: 'EphemericCloudAPI';
-	load.
-
-"deployment on PharoCloud"
-client := #EphemericCloudClient asClass userID: ephUser authToken: ephToken.
-	(client publishSelfAs: 'TinyBlog')
-		ifTrue:[ ZnZincServerAdaptor startOn: 8080 ]
-		ifFalse: [ client lastPublishedInstance hostname ]
 ]]]
-
-When you execute the following code (it will take some time), your Pharo image will be automatically be deployed on PharoCloud.

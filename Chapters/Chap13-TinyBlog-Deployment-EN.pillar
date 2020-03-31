@@ -1,10 +1,10 @@
 !! Deploying TinyBlog
 
-In this chapter we will show you how to deploy your Pharo application. In particular we will show how to deploy on the cloud. 
+In this chapter we will show you how to deploy your Pharo application. In particular we will show how to deploy on the cloud.
 !!! Deploying in the cloud
 
 Now that TinyBlog is ready we will see how we can deploy your application on a server on the web.
-If you want to deploy your application on a server that you administrate, we suggest reading the last chapter of 
+If you want to deploy your application on a server that you administrate, we suggest reading the last chapter of
  "Enterprise Pharo: a Web Perspective" (*http://books.pharo.org*).
 In the following we present a simpler solution offered by PharoCloud.
 
@@ -17,7 +17,7 @@ Prepare your PharoCloud account:
 - Connect to this account
 - Activate "Ephemeric Cloud" to get an id (""API User ID"") and password (""API Auth Token"")
 - Click on "Open Cloud Client" and login with the previous ids
-- Once connected, you should get a web page that allows you to upload a zip archive containing a Pharo image and its companion Pharo changes file. 
+- Once connected, you should get a web page that allows you to upload a zip archive containing a Pharo image and its companion Pharo changes file.
 
 !!!Preparing your Pharo image Pharo for PharoCloud
 
@@ -26,8 +26,8 @@ You should
 - First downaload a fresh PharoWeb image from *http://files.pharo.org/mooc/image/PharoWeb-60.zip*.
 - Launch this image and now we will configure it.
 
-!!!! Seaside configuration 
-We remove the Seaside demo applications and the development tools 
+!!!! Seaside configuration
+We remove the Seaside demo applications and the development tools
 
 [[[
 "Seaside Deployment configuration"
@@ -59,7 +59,7 @@ Gofer new
 #TBBlog asClass createDemoPosts.
 ]]]
 
-You can also load ""your ""  TinyBlog code from your Smalltalkhub repository. 
+You can also load ""your ""  TinyBlog code from your Smalltalkhub repository.
 For example doing:
 
 [[[
@@ -92,7 +92,7 @@ Lancer Seaside :
 ]]]
 
 !!!! Save the Image
-Save your image  (Menu World > save) and locally test it in your web browser at: *http://localhost:8080*.
+Save your image  (Pharo Menu > save) and locally test it in your web browser at: *http://localhost:8080*.
 
 !!!Manually deploying on PharoCloud's Ephemeric Cloud
 
@@ -108,48 +108,32 @@ By clicking on the public URL given by PharoCloud you will be able to display yo
 
 !!!Automatic Deployment on PharoCloud's Ephemeric Cloud
 
-Instead of creating a zip archive and using your web browser, the documentation of 
+Instead of creating a zip archive and using your web browser, the documentation of
  PharoCloud (*http://docs.swarm.pharocloud.com/*) shows how to deploy automatically by executing the following code (it takes some time):
 
 [[[
-|client EPHUSER EPHTOKEN| 
+|client EPHUSER EPHTOKEN|
 
-Metacello new 	
+Metacello new
 	smalltalkhubUser: 'mikefilonov' project: 'EphemericCloudAPI';
 	configuration: 'EphemericCloudAPI';
 	load.
 
 ephUser :='<REST API UserID>'.
 ephToken :='<REST API Token>'.
-client := EphemericCloudClient userID: EPHUSER authToken: EPHTOKEN. 
-	(client publishSelfAs: 'glimpse') 
-		ifTrue:[ZnZincServerAdaptor startOn: 8080] 
+client := EphemericCloudClient userID: EPHUSER authToken: EPHTOKEN.
+	(client publishSelfAs: 'glimpse')
+		ifTrue:[ZnZincServerAdaptor startOn: 8080]
 		ifFalse: [ client lastPublishedInstance hostname ]
 ]]]
 
 
 !!! About Dependencies
 
-Good development practice in Pharo are to specific explicitly the dependencies on the used packages. 
+Good development practice in Pharo are to specific explicitly the dependencies on the used packages.
 This ensures the fact that we can reproduce a software artefact.
 Such reproducibility supports then the use of an integration server such as Travis or Jenkins.
-For this a configuration (a special class) defines the architecture of a project (dependencies to other projects as well as structure of your projects) and the associated version. 
-This is this way that we build automatically the PharoWeb image
-
+For this a baseline (a special class) defines the architecture of a project (dependencies to other projects as well as structure of your projects).
+This is this way that we automatically build the PharoWeb image.
 In this book we do not cover this point.
-A full chapter is dedicated to the expression of configurations in the book named 
- "Deep Into Pharo" (cf. *http://books.pharo.org*). 
- 
-%!!!!! Optionel. 
-%Si vous voulez essayer de créer une configuration, vous pouvez utiliser Versionner. 
-%Dans votre image Pharo, ouvrez l'outil Versionner depuis le menu 'Tools':
-%%- Créez un nouveau projet nommé "TinyBlog",
-%- Indiquez que votre projet dépend de PharoWeb (dépendance entre projets),
-%- Dans Packages, ajoutez le paquet TinyBlog,
-%- Définissez le dépôt de votre projet: 'http://smalltalkhub.com/mc/XXX/TinyBlog/main'
-%- Cliquez sur le bouton "Save to development" (pour générer la nouvelle structure %d'architecture et dépendances), "Release" (pour créer une nouvelle vetsion) et Commit (pour sauver le code sur le serveur).
 
-
-% Local Variables:
-% compile-command: "cd .. && ./compile.sh --to='latex' Exercises/Exo-W6-TinyBlog-Deployment-FR.pillar"
-% End:

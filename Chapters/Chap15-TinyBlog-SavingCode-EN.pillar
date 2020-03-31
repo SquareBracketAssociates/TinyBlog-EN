@@ -1,6 +1,6 @@
 !! Save your code
 
-When you save the Pharo image (left click on the Pharo background to access the World menu and select 'save' menuentry), it contains all objects of the system as well as all classes.
+When you save the Pharo image (Pharo Menu > Save menuentry), it contains all objects of the system as well as all classes.
 This solution is useful but fragile.
 We will show you how Pharoers save their code directly using Iceberg.
 Iceberg is the Pharo code versionning tools (introduced in Pharo 7.0) that directly send code to well-known Web sites such as: github, bitbucket, or gitlab.

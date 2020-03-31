@@ -2,7 +2,7 @@
 
 
 In this chapter, we will setup Seaside and build our first Seaside component.
-In the next chapters, we will develop the public part of TinyBlog, then the authentication system, followed by the administration part reserved to blog administrators. 
+In the next chapters, we will develop the public part of TinyBlog, then the authentication system, followed by the administration part reserved to blog administrators.
 
 All along, we will define Seaside components *http://www.seaside.st*.
 A reference book is available online *http://book.seaside.st* and the firsts chapters may help you and be a great companion of this tutorial book.
@@ -25,7 +25,7 @@ There are two ways to start Seaside. The first one consists in executing the fol
 ZnZincServerAdaptor startOn: 8080.
 ]]]
 
-The second one uses the graphical tool named "Seaside Control Panel" (World Menu>Tools>Seaside Control Panel).
+The second one uses the graphical tool named "Seaside Control Panel" (Tools Menu>Seaside Control Panel).
 In the contextual menu (right clic) of this tool, select "add adaptor..." and add a server of type ==ZnZincServerAdaptor==, then define the port number (e.g. 8080) it should run on (cf. Figure *@RunningSeaside*). By opening a web browser on the URL *http://localhost:8080*, you should see the Seaside home page as displayed on Figure *@SeasideWebStart*.
 
 +Running Seaside.>file://figures/SeasideWebStart.png|width=75|label=SeasideWebStart+
@@ -42,7 +42,7 @@ You should see Bootstrap examples as shown in Figure *@bootstrap*.
 
 +Browsing the Seaside Bootstrap Library.>file://figures/SeasideBootstrap.png|width=75|label=bootstrap+
 
-By clicking on the ""Examples"" link at the bottom of the page, you can see both Bootstrap graphical elements and the Seaside code needed to obtain them (cf. Figure *@examplebootstrap*). 
+By clicking on the ""Examples"" link at the bottom of the page, you can see both Bootstrap graphical elements and the Seaside code needed to obtain them (cf. Figure *@examplebootstrap*).
 
 +A Bootstrap element and its code.>file://figures/TBSAlert.png|width=75|label=examplebootstrap+
 
@@ -59,7 +59,7 @@ WAComponent subclass: #TBApplicationRootComponent
    package: 'TinyBlog-Components'
 ]]]
 
-We register the TinyBlog application into the Seaside application server by defining the ==initialize== class method into the =='initialization'== protocol. 
+We register the TinyBlog application into the Seaside application server by defining the ==initialize== class method into the =='initialization'== protocol.
 We also integrate dependencies to the Bootstrap framework (CSS and JS files will be embedded in the application).
 
 [[[
@@ -73,10 +73,10 @@ TBApplicationRootComponent class >> initialize
       addLibrary: TBSDeploymentLibrary
 ]]]
 
-Once declared, you should execute this method with ==TBApplicationRootComponent initialize==. 
+Once declared, you should execute this method with ==TBApplicationRootComponent initialize==.
 Indeed, class-side ==initialize== methods are executed at loading-time of a class but since the class already exists, we must execute it by hand.
 
-We also add a method named ==canBeRoot== to specify that ==TBApplicationRootComponent== is not a simple Seaside component but a complete application. 
+We also add a method named ==canBeRoot== to specify that ==TBApplicationRootComponent== is not a simple Seaside component but a complete application.
 This component will be automatically instantiated when a user connects to the application.
 
 [[[
@@ -112,8 +112,8 @@ TBApplicationRootComponent >> updateRoot: anHtmlRoot
 ]]]
 
 The ==title:== message is responsible for setting the page title, as can be seen in your web browser's title bar. The ==TBApplicationRootComponent== component is the root component of our application.  It will not display a lot of things.
-In the following, it will contain and display other components. 
-For example, a component to display posts to the blog readers, a component to administrate the blog and its posts, ... 
+In the following, it will contain and display other components.
+For example, a component to display posts to the blog readers, a component to administrate the blog and its posts, ...
 
 !!!Architecture
 
@@ -135,11 +135,11 @@ To ease your understanding of the incremental development of this application, F
 
 - ==ScreenComponent== is the root of the components used to build the public and administration view of the application. It is composed of a header.
 
-- ==PostsListComponent== is the main component that displays the posts. It is composed of instances of ==PostComponent==) and manages categories. 
+- ==PostsListComponent== is the main component that displays the posts. It is composed of instances of ==PostComponent==) and manages categories.
 
 - ==AdminComponent== is the main component of the administration view. It is composed of a report component (instance of ==PostsReport==) built using Magritte.
 
-!!! Conclusion 
+!!! Conclusion
 
 We are now ready to start the development of the described components.
 In the next chapters, we guide you linearly to develop those components.
