@@ -23,8 +23,8 @@ script:
 
 after_success:
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - mv _result/pdf/book.pdf TinyEN.pdf
-  - bash upload.sh TinyEN.pdf
+  - mv _result/pdf/book.pdf TinyBlog-EN.pdf
+  - bash upload.sh TinyBlog-EN.pdf
 
 branches:
   except:

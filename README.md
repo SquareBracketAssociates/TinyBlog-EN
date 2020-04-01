@@ -8,4 +8,4 @@ It explains how to create a simple blog engine with Pharo's web stack (Seaside, 
 [travis]: https://travis-ci.org/SquareBracketAssociates/TinyBlog-EN
 [badge]: https://travis-ci.org/SquareBracketAssociates/TinyBlog-EN.svg?branch=master
 
-The latest [PDF](https://github.com/SquareBracketAssociates/TinyBlog-EN/releases/download/continuous/TinyBlogEN-wip.pdf) of this book. 
+The latest [PDF](https://github.com/SquareBracketAssociates/TinyBlog-EN/releases/download/continuous/TinyBlog-EN.pdf) of this book.
