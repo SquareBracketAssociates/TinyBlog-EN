@@ -34,10 +34,10 @@ In the contextual menu (right clic) of this tool, select "add adaptor..." and ad
 
 The Bootstrap library is directly accessible from Pharo and Seaside.
 The repository and the documentation of Bootstrap for Pharo is available there:
-*http://smalltalkhub.com/#!/~TorstenBergmann/Bootstrap*.
+*https://github.com/astares/Seaside-Bootstrap4*.
 But it is already loaded into the PharoWeb image we are using with this book.
 
-You can also find a public demonstration here: *http://pharo.pharocloud.com/bootstrap* or directly browse the examples locally in your browser by clicking on the ""bootstrap"" link in the list of applications hosted by Seaside or directly enter this URL *http://localhost:8080/bootstrap*.
+You can browse the examples locally in your browser by clicking on the ""bootstrap"" link in the list of applications hosted by Seaside or directly enter this URL *http://localhost:8080/bootstrap*.
 You should see Bootstrap examples as shown in Figure *@bootstrap*.
 
 +Browsing the Seaside Bootstrap Library.>file://figures/SeasideBootstrap.png|width=75|label=bootstrap+
