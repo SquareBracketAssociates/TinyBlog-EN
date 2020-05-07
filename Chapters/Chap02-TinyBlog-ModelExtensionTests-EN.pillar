@@ -172,7 +172,7 @@ is failing. Then we define the method under test and finally verify that the tes
 
 !!!!All Posts 
 
-Let's a test that fails:
+Let's create a test that fails:
 
 [[[
 TBBlogTest >> testAllBlogPosts
