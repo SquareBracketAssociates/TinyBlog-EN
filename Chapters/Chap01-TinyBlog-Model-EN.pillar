@@ -157,7 +157,7 @@ When you inspect the code above (right click and "Inspect it"), you will obtain 
 Manually looking at objects is not a way to systematically verifying that such objects follow some expected invariant.
 Even though the model is quite simple we can define some tests.
 In Test Driven Developpement mode we write test first. 
-Here we prefered to let you define a little class to familiarize with the IDE. 
+Here we preferred to let you define a little class to familiarize with the IDE. 
 Let us fix this!
 
 We define the class ==TBPostTest== (as subclass of the class ==TestCase==).
