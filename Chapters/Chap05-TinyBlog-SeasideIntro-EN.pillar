@@ -5,7 +5,7 @@ In this chapter, we will setup Seaside and build our first Seaside component.
 In the next chapters, we will develop the public part of TinyBlog, then the authentication system, followed by the administration part reserved to blog administrators.
 
 All along, we will define Seaside components *http://www.seaside.st*.
-A reference book is available online *http://book.seaside.st* and the firsts chapters may help you and be a great companion of this tutorial book.
+A reference book is available online *http://book.seaside.st* and the first chapters may help you and be a great companion of this tutorial book.
 
 All the following work is independent of Voyage and the Mongo database.
 As usual, you can download the code of previous chapters as explained in the last chapter.
@@ -26,7 +26,7 @@ ZnZincServerAdaptor startOn: 8080.
 ]]]
 
 The second one uses the graphical tool named "Seaside Control Panel" (Tools Menu>Seaside Control Panel).
-In the contextual menu (right clic) of this tool, select "add adaptor..." and add a server of type ==ZnZincServerAdaptor==, then define the port number (e.g. 8080) it should run on (cf. Figure *@RunningSeaside*). By opening a web browser on the URL *http://localhost:8080*, you should see the Seaside home page as displayed on Figure *@SeasideWebStart*.
+In the contextual menu (right click) of this tool, select "add adaptor..." and add a server of type ==ZnZincServerAdaptor==, then define the port number (e.g. 8080) it should run on (cf. Figure *@RunningSeaside*). By opening a web browser on the URL *http://localhost:8080*, you should see the Seaside home page as displayed on Figure *@SeasideWebStart*.
 
 +Running Seaside.>file://figures/SeasideWebStart.png|width=75|label=SeasideWebStart+
 
