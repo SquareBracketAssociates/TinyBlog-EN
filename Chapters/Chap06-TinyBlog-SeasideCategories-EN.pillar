@@ -317,7 +317,7 @@ We defined an interface for our blog using a set of components each specifying i
 Many web applications are built the same way reusing components. You have the foundation to build more advanced
 web application. 
 
-In the next chapter, we show how to manage authentification to access the post admin part of our application. 
+In the next chapter, we show how to manage authentication to access the post admin part of our application. 
 
 !!!! Possible Enhancements
 
