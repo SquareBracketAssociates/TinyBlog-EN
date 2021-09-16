@@ -1,17 +1,15 @@
-!!  TinyBlog Application: Core model
+!! TinyBlog Application: Core model
 @cha:model
 % full code at: 9c87f4b8abb956469e145d2ba8afeba8b66159d2
 
-In this chapter, we start to develop a part of the domain model of TinyBlog.
-The model is particularly simple: it starts with a post. 
-In the next chapter we will add a blog containing a list of posts.
+In this chapter we will start to develop part of the domain model of TinyBlog. The model is extremely simple: it starts with just a post. In the next chapter we will add a blog containing a list of these posts.
 
 
 !!! TBPost Class
 
 +TBPost: a really basic class mostly handling data.>file://figures/postUML.pdf|width=20|label=postUml+
 
-We start with the post representation. It is super simple as shown by Figure *@postUml*. It is defined by the class ==TBPost==:
+We start with the post representation. It is very simple, as you can see in Figure *@postUml*. It is defined by the class ==TBPost==:
 
 [[[
 Object subclass: #TBPost
@@ -20,7 +18,7 @@ Object subclass: #TBPost
    package: 'TinyBlog'
 ]]]
 
-A blog post is described by 5 instance variables.
+A blog post is described by 5 instance variables:
 
 |!Variable         |!Signification                       |
 |==title==         |post title                           |
@@ -29,8 +27,7 @@ A blog post is described by 5 instance variables.
 |==category==      |name of the category of the post     |
 |==visible==       |is the post publicly visible or not? |
 
-All of these variables have corresponding accessor methods in the 'accessing' protocol.
-You can use a refactoring to automatically create all the following methods:
+All of these variables have corresponding accessor methods in the 'accessing' protocol. You can use a refactoring to automatically create all of the following methods:
 
 [[[
 TBPost >> title
@@ -74,8 +71,7 @@ TBPost >> category: anObject
 ]]]
 
 
-
-!!!Post Visibility
+!!! Post Visibility
 
 We should add methods to make a post visible or not and also test if it is visible. Those methods are defined in the 'action' protocol.
 
@@ -89,20 +85,16 @@ TBPost >> notVisible
 ]]]
 
 
-!!!Initialization
+!!! Initialization
 
-The ==initialize== method ('initialization' protocol) sets the date to the current day and the visibility to false: the user must explicitly make a post visible. 
-This allows him to write drafts and only publish a post when the post is finished.
-By default, a post belongs to the 'Unclassified' category that we define at the class level.
-This category name is defined on class-side by the ==unclassifiedTag== method.
+The ==initialize== method (in the 'initialization' protocol) sets the date to the current day and the visibility to false; the user must explicitly make a post visible. This allows them to write a draft post and only publish it when it is finished. By default, a post belongs to the 'Unclassified' category that we define at the class level. This category name is defined on the class-side by the ==unclassifiedTag== method.
 
 [[[
 TBPost class >> unclassifiedTag
    ^ 'Unclassified'
 ]]]
 
-Pay attention the method ==unclassifiedTag== should be defined on the class-side of the class ==TBPost== (click on the ==class== button to define it). 
-The other methods are defined on the instance-side: it means that they will be applied to ==TBBlog== instances. 
+Pay attention the method ==unclassifiedTag== should be defined on the ''class-side'' of the class ==TBPost== (click on the ==class== button to define it). The other methods are defined on the instance-side and will be applied to ==TBBlog== instances. 
 
 [[[
 TBPost >> initialize
@@ -112,16 +104,13 @@ TBPost >> initialize
 	self notVisible
 ]]]
 
-In the solution above, it would be better that the ==initialize== method does not hard code the reference to the ==TBPost== class. 
-Propose a solution.
-The sequence 3 of the week 6 of the Mooc can help you to understand why it is better to avoid hardcoding class references (See *http://mooc.pharo.org*).
+In the solution above, it would be better for the ==initialize== method not to hard code the reference to the ==TBPost== class. Try to think of a solution. The part 3 in week 6 of the Mooc will help you to understand why it is better to avoid hardcoding class references (See *http://mooc.pharo.org*).
 
+!!! Posts Creation Methods
 
-!!!Posts Creation Methods
+On the class-side, we add class methods (i.e. methods that execute on the class object) to make post creation more convenient - usually such methods are grouped under the protocol 'instance creation'.
 
-On class-side, we add class methods (i.e. methods execute on class) to ease posts creation for blogs - usually such kind of methods are grouped in the protocol 'instance creation'.
-
-We define two methods.
+We define two methods:
 [[[
 TBPost class >> title: aTitle text: aText
    ^ self new
@@ -137,9 +126,9 @@ TBPost class >> title: aTitle text: aText category: aCategory
             yourself
 ]]]
 
-!!!Creating a Post
+!!! Creating a Post
 
-Let us create posts to check a bit the created objects. Using the Playground tools execute the following expression:
+Let us create some posts to check the objects that are created. Using the Playground tool, execute the following expression:
 
 [[[
 TBPost 
@@ -148,19 +137,15 @@ TBPost
 	category: 'TinyBlog'
 ]]]
 
-When you inspect the code above (right click and "Inspect it"), you will obtain an inspector on the newly created object as shown in Figure *@inspectorOnTBPost*.
+When you inspect the code above (right click and "Inspect it"), you will open an inspector on the newly created object as shown in Figure *@inspectorOnTBPost*.
 
 +Inspector on a TBPost instance.>file://figures/inspectorOnTBPost.png|width=100|label=inspectorOnTBPost+
 
 !!! Adding Some Unit Tests
 
-Manually looking at objects is not a way to systematically verifying that such objects follow some expected invariant.
-Even though the model is quite simple we can define some tests.
-In Test Driven Developpement mode we write test first. 
-Here we preferred to let you define a little class to familiarize with the IDE. 
-Let us fix this!
+Manually looking at objects is not a good way to systematically verify that such objects behave as expected. Even though the model is quite simple we can still define some tests. When doing Test Driven Developement we write our tests first, but here we have preferred to define a little class to familiarize ourselves with the IDE first. Let us fix this!
 
-We define the class ==TBPostTest== (as subclass of the class ==TestCase==).
+We define the class ==TBPostTest== (as subclass of the class ==TestCase==):
 
 [[[
 TestCase subclass: #TBPostTest
@@ -169,7 +154,8 @@ TestCase subclass: #TBPostTest
 	package: 'TinyBlog-Tests'
 ]]]
 
-Let us define a two tests.
+Let us define two tests:
+
 [[[
 TBPostTest >> testWithoutCategoryIsUnclassified
 
@@ -177,41 +163,41 @@ TBPostTest >> testWithoutCategoryIsUnclassified
 	post := TBPost 
 		title: 'Welcome to TinyBlog' 
 		text: 'TinyBlog is a small blog engine made with Pharo.'.
-	self assert: post title equals: 'Welcome to TinyBlog' .
-	self assert: post category = TBPost unclassifiedTag.
+	self assert: post title equals: 'Welcome to TinyBlog'.
+	self assert: post category = TBPost unclassifiedTag
 ]]]
 
 [[[
 TBPostTest >> testPostIsCreatedCorrectly
 
-		| post |
-		post := TBPost 
-			title: 'Welcome to TinyBlog' 
-			text: 'TinyBlog is a small blog engine made with Pharo.' 
-			category: 'TinyBlog'.
-		self assert: post title equals: 'Welcome to TinyBlog' .
-		self assert: post text equals: 'TinyBlog is a small blog engine made with Pharo.' .
+    | post |
+    post := TBPost 
+        title: 'Welcome to TinyBlog' 
+	    text: 'TinyBlog is a small blog engine made with Pharo.' 
+	    category: 'TinyBlog'.
+    self assert: post title equals: 'Welcome to TinyBlog'.
+    self assert: post text equals: 'TinyBlog is a small blog engine made with Pharo.'
 ]]]
 
 Your tests should pass.
 
 !!! Post Queries
 
-In the protocol 'testing', define the following methods that checks whether a post is visible, and whether it is classified or not.
+In the protocol 'testing', define the following methods that checks whether a post is visible, and whether it is classified or not:
 
 [[[
 TBPost >> isVisible
    ^ self visible
 ]]]
+
 [[[
 TBPost >> isUnclassified
    ^ self category = TBPost unclassifiedTag
 ]]]
 
-It is not really good to hardcode a reference to the class ==TBPost== in a method body.
-Propose a solution.
+Again, it is not really good practice to hardcode a reference to the class ==TBPost== in a method body. Try to think of a solution.
 
-In addition, let us take the time to update our test to take advantage of the new behavior.
+In addition, let us take the time to update our tests to demonstrate this new behavior:
 
 [[[
 TBPostTest >> testWithoutCategoryIsUnclassified
@@ -225,10 +211,7 @@ TBPostTest >> testWithoutCategoryIsUnclassified
 	self deny: post isVisible
 ]]]
 
-
-
 !!! Conclusion
 
-We develop a first part of the model (the class ==TBPost==) and some tests. 
-We strongly suggest writing some other unit tests to make sure that your model fully work. 
+We have developed the first part of the model (the class ==TBPost==) and some tests. We strongly suggest writing some more unit tests to make sure that your model works as expected. 
 
