@@ -1,4 +1,4 @@
-!!Data persitence using Voyage and MongoDB
+!!Data persistence using Voyage and MongoDB
 
 So far we've used objects stored in memory for our model, which is fine because saving the Pharo image also saves the objects. Nevertheless, it would be better to save these objects (blog posts) into an external database. Pharo supports multiple object serializers such as Fuel (binary format) or STON (text format). These serializers are useful and powerful. Often with a single line of code we can save a full graph of objects, as explained in the Enterprise Pharo book (available at *http://books.pharo.org*).
 
