@@ -1,0 +1,97 @@
+## Managing CategoriesIn this chapter, we add the possibility to sort posts in a category.  Figure  *@AssociationArchitectureUser@* shows you on which components we will work in this chapter. ![L'architecture des composants de la partie publique with categories.](figures/ApplicationArchitectureUser.pdf width=75&label=AssociationArchitectureUser)You can find instructions to load the code of previous chapter in Chapter *@cha:loading@*.### Displaying Posts by CategoryPosts are sorted by a category. If no category is specified, posts are sorted in a special category called  "Unclassified".To manage a list of categories,  we will define a component named `TBCategoriesComponent`.#### Displaying CategoriesWe need a component to display a list of categories defined in the blog. This component should support the selection of one category.This component should be able to communicate with the component `TBPostsListComponent` to give it the currently selected category. Figure *@AssociationArchitectureUser@* described the situation.Remember that a category is simply expressed as a string in the model we defined in Chapter *@cha:model@* and how the following test illustrates it:```testAllBlogPostsFromCategory
+	self assert: (blog allBlogPostsFromCategory: 'First Category') size equals: 1```#### Component DefinitionLet us define a new component named `TBCategoriesComponent`. It keeps a sorted collection of string representing each category as well as a reference to the component managing the post list. ```WAComponent subclass: #TBCategoriesComponent
+   instanceVariableNames: 'categories postsList'
+   classVariableNames: ''
+   package: 'TinyBlog-Components'```We define the associated accessors.```TBCategoriesComponent >> categories
+   ^ categories``````TBCategoriesComponent >> categories: aCollection
+   categories := aCollection asSortedCollection``````TBCategoriesComponent >> postsList: aComponent
+      postsList := aComponent``````TBCategoriesComponent >> postsList
+   ^ postsList```We define a creation method as a class method. ```TBCategoriesComponent class >> categories: categories postsList: aTBScreen
+   ^ self new categories: categories; postsList: aTBScreen ```#### From the Post ListIn the class `TBPostsListComponent`, we need to add an instance variable to store the current category.```TBScreenComponent subclass: #TBPostsListComponent
+   instanceVariableNames: 'currentCategory'
+   classVariableNames: ''
+   package: 'TinyBlog-Components'```We define its associated accessors.```TBPostsListComponent >> currentCategory
+   ^ currentCategory``````TBPostsListComponent >> currentCategory: anObject
+   currentCategory := anObject```#### The method selectCategory:We define the method  `selectCategory:` \(protocol 'actions'\) to communicate the current category to the `TBPostsListComponent` component.```TBCategoriesComponent >> selectCategory: aCategory
+   postsList currentCategory: aCategory```%  Notez que si nous voulions avoir un effet visuel plus avancé le composant catégories devrait peut être lui aussi garder trace de la catégorie couramment sélectionnée.### Category RenderingWe can now define method for the rendering of the category component on the page. Let us call it `renderCategoryLinkOn:with:`, we define in particular that clicking on a category will select it as the current one. We use a callback \(message `callback:`\). The argument of this message is a block that can contains any Pharo expression. This illustrates how simple is to call function to react to event. ```TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
+   html tbsLinkifyListGroupItem
+      callback: [ self selectCategory: aCategory ];
+      with: aCategory```The method `renderContentOn:` of  `TBCategoriesComponent` is simple: we iterate on all categories and we display them using Bootstrap.```TBCategoriesComponent >> renderContentOn: html
+   html tbsListGroup: [
+      html tbsListGroupItem
+         with: [  html strong: 'Categories' ].
+      categories do: [ :cat | 
+         self renderCategoryLinkOn: html with: cat ] ]```We are nearly there. We need to display the list of categories and update the posts based on the current category.### Updating Post ListNow we should update the list of posts. We modify the rendering method of the component `TBPostsListComponent`.The method `readSelectedPosts` collects the posts to be displayed. It filters them based on the current category. When the current category is nil, it means that the user did not select yet a category. Therefore we display all the posts. When the current category is something else than nil, the user selected a category and the application display the corresponding posts. ```TBPostsListComponent >> readSelectedPosts
+   ^ self currentCategory
+      ifNil: [ self blog allVisibleBlogPosts ]
+      ifNotNil: [ self blog allVisibleBlogPostsFromCategory: self currentCategory ]```We modify now the method responsible of the post list rendering: ```TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   html render: (TBCategoriesComponent
+               categories: (self blog allCategories)
+               postsList: self).
+   html tbsContainer: [ 
+      self readSelectedPosts do: [ :p |
+         html render: (TBPostComponent new post: p) ] ]```An instance of the component `TBCategoriesComponent` is added to the page and allows one to select the current category \(see Figure *@ugly@*\). As previously explained, a new instance of `TBCategoriesComponent` is created each time the component  `TBPostsListComponent` is rendered, therefore it is not mandatory to add it to the `children` sublist of the component.![Categories and Posts.](figures/categoriesUgly.png width=75&label=ugly)#### Possible EnhancementsHardcodeing class name and the creation logic of categories and posts is not really optimal. Propose some solution.### Look and LayoutWe will not place better the component  `TBPostsListComponent` using a more 'responsive' design \(as shown in Figure  *@nicer5@*\). It means that the CSS style should adapt the component to the available space.Components are placed in a Bootstrap container then positioned on a line with two columns. Column dimension is determined based on the viewport and resolution of the device used. The 12 columsn of Bootstrap are distributed over the category and post lists.In the case of a low resolution, the list of categories is placed above the post list \(each element using 100% of the container width\).```TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   html tbsContainer: [
+      html tbsRow showGrid;
+         with: [
+            html tbsColumn
+               extraSmallSize: 12;
+               smallSize: 2;
+               mediumSize:  4;
+               with: [
+                  html render: (TBCategoriesComponent
+                    categories: (self blog allCategories)
+                    postsList: self) ].
+      html tbsColumn
+               extraSmallSize: 12;
+               smallSize: 10;
+               mediumSize: 8;
+               with: [
+         self readSelectedPosts do: [ :p |
+             html render: (TBPostComponent new post: p) ] ] ] ]```You should obtain a situation close to the one presented in Figure *@nicer5@*.![Post list with a better layout.](figures/NicerCategories.png width=75&label=nicer5)When one selects a category,  the post list is updated. However, the selected category is  not selected. We modify thefollowing method to address this point. ```TBCategoriesComponent >> renderCategoryLinkOn: html with: aCategory
+   html tbsLinkifyListGroupItem
+      class: 'active' if: aCategory = self postsList currentCategory;
+      callback: [ self selectCategory: aCategory ]; 
+      with: aCategory```Even if the code works, we cannot keep the method ` renderContentOn:` in such state. It is far too long and not reusable. Propose a solution.### Modular Code with Small MethodsHere is our solution to the previous problem. To ease reading and future reuse, we start to define component creation methods.```TBPostsListComponent >> categoriesComponent
+	^ TBCategoriesComponent 
+			categories: self blog allCategories 
+			postsList: self``````TBPostsListComponent >> postComponentFor: aPost
+	^ TBPostComponent new post: aPost``````TBPostsListComponent >> renderContentOn: html
+	super renderContentOn: html.
+	html
+		tbsContainer: [ html tbsRow
+				showGrid;
+				with: [ 
+					html tbsColumn
+						extraSmallSize: 12;
+						smallSize: 2;
+						mediumSize: 4;
+						with: [ html render: self categoriesComponent ].
+					html tbsColumn
+						extraSmallSize: 12;
+						smallSize: 10;
+						mediumSize: 8;
+						with: [ self readSelectedPosts
+								do: [ :p | html render: (self postComponentFor: p) ] ] ] ]```#### Another PassWe continue to cut this method in other smaller methods. We create one method for each of the elementary tasks. ```TBPostsListComponent >> basicRenderCategoriesOn: html
+	html render: self categoriesComponent ``````TBPostsListComponent >> basicRenderPostsOn: html
+	self readSelectedPosts do: [ :p | 
+		html render: (self postComponentFor: p) ]```Then we use such tasks to simplify the method `renderContentOn:`.```TBPostsListComponent >> renderContentOn: html
+   super renderContentOn: html.
+   html
+      tbsContainer: [ 
+         html tbsRow
+            showGrid;
+            with: [ self renderCategoryColumnOn: html.
+                  self renderPostColumnOn: html ] ]``````TBPostsListComponent >> renderCategoryColumnOn: html
+   html tbsColumn
+      extraSmallSize: 12;
+      smallSize: 2;
+      mediumSize: 4;
+      with: [ self basicRenderCategoriesOn: html ]``````TBPostsListComponent >> renderPostColumnOn: html
+   html tbsColumn
+         extraSmallSize: 12;
+         smallSize: 10;
+         mediumSize: 8;
+         with: [ self basicRenderPostsOn: html ] ```The final application is showing in Figure  *@final@*.![Final TinyBlog Public UI.](figures/finalPublicWebPage.png width=85&label=final)### ConclusionWe defined an interface for our blog using a set of components each specifying its own state and responsibility. Many web applications are built the same way reusing components. You have the foundation to build more advancedweb application. In the next chapter, we show how to manage authentication to access the post admin part of our application. #### Possible EnhancementsAs exercise you can:- sort category alphabetically, or- add a link named 'All' in the category list to display all the posts.
