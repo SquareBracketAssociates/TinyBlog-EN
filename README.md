@@ -13,7 +13,7 @@ Here are the different versions of the Bootstrap binding according to their auth
 We thank him for the support. 
 
 
-## 1.  Bootstrap v3.x framework
+## 1. Bootstrap v3.x framework
 
 This was the original wrapper that I wrote "ages ago", the full source code still is available in repo:
 
