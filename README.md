@@ -76,7 +76,7 @@ This can only be fixed when someone updates the tutorial code examples (or rolls
 Meanwhile there is already a new version 5.x of the Bootstrap CSS framework - and there is also a new repository for it
 
  ```
-            https://github.com/astares/Seaside-Bootstrap5
+     https://github.com/astares/Seaside-Bootstrap5
 ```
 
 This is the MOST RECENT VERSION OF THE WRAPPER - it continues to use the same class prefix "SBS" now and is compatible with the v4.x
