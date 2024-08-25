@@ -1,93 +1,361 @@
-## Administration Web Interface and Automatic Form GenerationWe will now develop the administration part of TinyBlog.In previous chapter, we define Seaside components that interact together and where each componentis responsible for its internal state, behavior and its graphical rendering. In this chapter, we want to show that we can go a step further and generate Seaside components from object descriptionsusing the Magritte framework.Figure *@RapportNewLookActions2@* shows a part of the result we will obtain,  the other part being post edition.![Post managment.](figures/RapportNewLookActions.png width=75&label=RapportNewLookActions2)Figure *@ApplicationAdmin@* shows a survey of the architecture that we will develop in this chapter.![Administration components.](figures/ApplicationArchitectureWithAdmin.pdf width=75&label=ApplicationAdmin)### Describing Domain DataMagritte is a library that allows one to generate various representations once the objects are described. Coupled with Seaside, Magritte generates forms and reports.The Quuve of the Debris Publishing companyis a brillant example of Magritte power: all tables and reports are automatically generated \(see [http://www.pharo.org/success](http://www.pharo.org/success)\).Data validation is also done at the Magritte level instead of being dispersed in the user interface code. This chapter will not cover such aspects. Resources on Magritte are a chapter in the Seaside book  \([http://book.seaside.st](http://book.seaside.st)\) as well as a tutorial under writing available at [https://github.com/SquareBracketAssociates/Magritte](https://github.com/SquareBracketAssociates/Magritte).A description is an object that specifies information on the datat of our model as well as its type, whether the information is mandatory, if it should be sorted and what is the default value. ### Post DescriptionLet us start to describe the five instance variable of `TBPost` with Magritte.Then we will show how we can get a form generated for us. We will define the five following methods in the protocol 'magritte-descriptions' of the class `TBPost`.Note that the method names are not important but we follow a convention. This is the pragma `<magritteDescription>` \(method annotation\) that allows Magritte to identify descriptions. The post title is a string of characters that is mandatory.```TBPost >> descriptionTitle
+## Administration Web Interface and Automatic Form Generation
+
+
+We will now develop the administration part of TinyBlog.
+In previous chapter, we define Seaside components that interact together and where each component
+is responsible for its internal state, behavior and its graphical rendering. 
+
+In this chapter, we want to show that we can go a step further and generate Seaside components from object descriptions
+using the Magritte framework.
+
+Figure *@RapportNewLookActions2@* shows a part of the result we will obtain,  the other part being post-edition.
+
+![Post managment. %width=75&label=RapportNewLookActions2](figures/RapportNewLookActions.png)
+
+Figure *@ApplicationAdmin@* shows a survey of the architecture that we will develop in this chapter.
+
+![Administration components. % width=75&label=ApplicationAdmin](figures/ApplicationArchitectureWithAdmin.pdf)
+
+### Describing Domain Data
+
+
+Magritte is a library that allows one to generate various representations once the objects are described. 
+Coupled with Seaside, Magritte generates forms and reports.
+The Quuve of the Debris Publishing company
+is a brillant example of Magritte power: all tables and reports are automatically generated (see [http://www.pharo.org/success](http://www.pharo.org/success)).
+
+Data validation is also done at the Magritte level instead of being dispersed in the user interface code. 
+This chapter will not cover such aspects. Resources on Magritte are a chapter in the Seaside book 
+([http://book.seaside.st](http://book.seaside.st)).
+
+A description is an object that specifies information on the data of our model as well as its type, whether the information 
+is mandatory, if it should be sorted and what is the default value. 
+
+### Post Description
+
+
+Let us start to describe the five instance variables of `TBPost` with Magritte.
+Then we will show how we can get a form generated for us. 
+
+We will define the five following methods in the protocol 'magritte-descriptions' of the class `TBPost`.
+Note that the method names are not important but we follow a convention. 
+This is the pragma `<magritteDescription>` (method annotation) that allows Magritte to identify 
+descriptions. 
+
+The post title is a string of characters that is mandatory.
+
+```
+TBPost >> descriptionTitle
    <magritteDescription>
    ^ MAStringDescription new
       accessor: #title;
       beRequired;
-      yourself```A post test is a multi-line that is mandatory.```TBPost >> descriptionText
+      yourself
+```
+
+
+A post test is a multi-line that is mandatory.
+
+
+```
+TBPost >> descriptionText
    <magritteDescription>
    ^ MAMemoDescription new
       accessor: #text;
       beRequired;
-      yourself```The category is represented as a string and it does not have to be given. In such case the post will be sorted in the 'Unclassified' category.```TBPost >> descriptionCategory
+      yourself
+```
+
+
+The category is represented as a string and it does not have to be given. In such case 
+the post will be sorted in the 'Unclassified' category.
+
+```
+TBPost >> descriptionCategory
    <magritteDescription>
    ^ MAStringDescription new
       accessor: #category;
-      yourself```The post creation time is important since it is used to sort posts. It is then required. ```TBPost >> descriptionDate
+      yourself
+```
+
+
+The post creation time is important since it is used to sort posts. 
+It is then required. 
+
+```
+TBPost >> descriptionDate
    <magritteDescription>
    ^ MADateDescription new
       accessor: #date;
       beRequired;
-      yourself```The visible instance variable should be a Boolean and it is required.```TBPost >> descriptionVisible
+      yourself
+```
+
+
+The visible instance variable should be a Boolean and it is required.
+
+```
+TBPost >> descriptionVisible
    <magritteDescription>
    ^ MABooleanDescription new
       accessor: #visible;
       beRequired;
-      yourself```We could enrich the descriptions so that it is not possible to publish a post with a date before the current day. We could change the description of a category to make sure that a category is part of a predefined list of categories. We do not do it to keep it to the main point. ### Automatic Component CreationOnce a post described we can  generate a Seaside component by sending a message `asComponent` to an post instance.```aTBPost asComponent```Let us see how we can use this in the following.### Building a post report We will develop a new component that will be used by the component  `TBAdminComponent`.The  `TBPostReport` component is a report that will contain all the posts.As we will see below the report Seaside component will be generated automatically from Magritte.We could have develop only one component but we prefer to distinguish it from the admin component for future evolution. #### The PostsReport ComponentPost list is displayed using a report dynamically generated by Magritte. We will use Magritte to implement the different behaviors of the admin activity \(post list, post creation, edition, delete of a post\).The component `TBPostsReport` is a subclass of `TBSMagritteReport` that manages reports with Bootstrap.```TBSMagritteReport subclass: #TBPostsReport
+      yourself
+```
+
+
+We could enrich the descriptions so that it is not possible to publish a post with a date before the current day. 
+We could change the description of a category to make sure that a category is part of a predefined list of categories. 
+We do not do it to keep it to the main point. 
+
+
+### Automatic Component Creation
+
+
+Once a post is described we can  generate a Seaside component by sending a message `asComponent` to an post instance.
+
+```
+aTBPost asComponent
+```
+
+
+Let us see how we can use this in the following.
+
+
+### Building a post report 
+
+
+We will develop a new component that will be used by the component  `TBAdminComponent`.
+The  `TBPostReport` component is a report that will contain all the posts.
+As we will see below the report Seaside component will be generated automatically from Magritte.
+We could have develop only one component but we prefer to distinguish it from the admin component for future evolution. 
+
+#### The PostsReport Component
+
+
+Post list is displayed using a report dynamically generated by Magritte. 
+We will use Magritte to implement the different behaviors of the admin activity (post list, post creation, edition, delete of a post).
+
+The component `TBPostsReport` is a subclass of 
+`TBSMagritteReport` that manages reports with Bootstrap.
+
+```
+TBSMagritteReport subclass: #TBPostsReport
    instanceVariableNames: ''
    classVariableNames: ''
-   package: 'TinyBlog-Components'```We add a creation method that takes a blog as argument.```TBPostsReport class >> from: aBlog
+   package: 'TinyBlog-Components'
+```
+
+
+We add a creation method that takes a blog as an argument.
+
+```
+TBPostsReport class >> from: aBlog
    | allBlogs |
    allBlogs := aBlog allBlogPosts.
-   ^ self rows: allBlogs description: allBlogs anyOne magritteDescription```### AdminComponent Integration with PostsReportLet us now revise our `TBAdminComponent` to display this report. We add an instance variable `report` and its accessors in the class `TBAdminComponent`.```TBScreenComponent subclass: #TBAdminComponent
+   ^ self rows: allBlogs description: allBlogs anyOne magritteDescription
+```
+
+
+### AdminComponent Integration with PostsReport
+
+
+Let us now revise our `TBAdminComponent` to display this report. 
+
+We add an instance variable `report` and its accessors in the class `TBAdminComponent`.
+
+```
+TBScreenComponent subclass: #TBAdminComponent
 	instanceVariableNames: 'report'
 	classVariableNames: ''
-	package: 'TinyBlog-Components'``````TBAdminComponent >> report
-   ^ report``````TBAdminComponent >> report: aReport
-   report := aReport```Since the report is a son component of  the admin component we should not forget to redefine the method `children`.Note that the collection contains the subcomponents defined in the superclass \(header component\) and thosein current class \(report component\).```TBAdminComponent >> children
-   ^ super children copyWith: self report```In `initialize` method we instantiate a report by giving it a blog instance.```TBAdminComponent >> initialize
+	package: 'TinyBlog-Components'
+```
+
+
+```
+TBAdminComponent >> report
+   ^ report
+```
+
+
+```
+TBAdminComponent >> report: aReport
+   report := aReport
+```
+
+
+Since the report is a son component of the admin component we should not forget to redefine the method `children`.
+Note that the collection contains the subcomponents defined in the superclass (header component) and those
+in the current class (report component).
+
+```
+TBAdminComponent >> children
+   ^ super children copyWith: self report
+```
+
+
+In the `initialize` method we instantiate a report by giving it a blog instance.
+
+```
+TBAdminComponent >> initialize
    super initialize.
-   self report: (TBPostsReport from: self blog)```Let us modify the admin part rendering to display the report. ```TBAdminComponent >> renderContentOn: html
+   self report: (TBPostsReport from: self blog)
+```
+
+
+Let us modify the admin part rendering to display the report. 
+
+```
+TBAdminComponent >> renderContentOn: html
    super renderContentOn: html.
    html tbsContainer: [
       html heading: 'Blog Admin'.
       html horizontalRule.
-      html render: self report ]```You can test this change by refreshing your web browser.### Filter ColumnsBy default, a report displays the full data of each post. However, some columns are not useful We should filter the columns. Here we only keep the title, category and publication date.We add a class method for the column selection and modifier the method `from:` to use this.```TBPostsReport class >> filteredDescriptionsFrom: aBlogPost
+      html render: self report ]
+```
+
+
+You can test this change by refreshing your web browser.
+
+
+### Filter Columns
+
+
+By default, a report displays the full data of each post. 
+However, some columns are not useful 
+We should filter the columns. 
+Here we only keep the title, category, and publication date.
+
+We add a class method for the column selection and modifier the method `from:` to use this.
+
+```
+TBPostsReport class >> filteredDescriptionsFrom: aBlogPost
 	"Filter only some descriptions for the report columns."
 
 	^ aBlogPost magritteDescription
-		select: [ :each | #(title category date) includes: each accessor selector ]``````TBPostsReport class >> from: aBlog
+		select: [ :each | #(title category date) includes: each accessor selector ]
+```
+
+
+```
+TBPostsReport class >> from: aBlog
    | allBlogs |
    allBlogs := aBlog allBlogPosts.
-   ^ self rows: allBlogs description: (self filteredDescriptionsFrom: allBlogs anyOne)```Figure *@RapportV1@* shows the situation that you should get.![Magritte report with posts.](figures/RapportMagritteV1.png width=100&label=RapportV1)### Report EnhancementsThe previous report is pretty raw. There is no title on columns and the display column order is not fixed. This can change from one instance to the other. To handle this, we modify the description for each instance variable. We specify a priority and a title  \(message `label:`\) as follows: ```TBPost >> descriptionTitle
+   ^ self rows: allBlogs description: (self filteredDescriptionsFrom: allBlogs anyOne)
+```
+
+
+
+Figure *@RapportV1@* shows the situation that you should get.
+
+![Magritte report with posts. %width=100&label=RapportV1](figures/RapportMagritteV1.png)
+
+
+### Report Enhancements
+
+
+The previous report is pretty raw. 
+There is no title on columns and the display column order is not fixed. 
+This can change from one instance to the other. 
+To handle this, we modify the description for each instance variable. 
+We specify a priority and a title  (message `label:`) as follows: 
+
+```
+TBPost >> descriptionTitle
    <magritteDescription>
    ^ MAStringDescription new
       label: 'Title';
       priority: 100;
       accessor: #title;
       beRequired;
-      yourself``````TBPost >> descriptionText
+      yourself
+```
+
+
+```
+TBPost >> descriptionText
    <magritteDescription>
    ^ MAMemoDescription new
       label: 'Text';
       priority: 200;
       accessor: #text;
       beRequired;
-      yourself``````TBPost >> descriptionCategory
+      yourself
+```
+
+
+```
+TBPost >> descriptionCategory
    <magritteDescription>
    ^ MAStringDescription new
       label: 'Category';
       priority: 300;
       accessor: #category;
-      yourself``````TBPost >> descriptionDate
+      yourself
+```
+
+
+```
+TBPost >> descriptionDate
    <magritteDescription>
    ^ MADateDescription new
       label: 'Date';
       priority: 400;
       accessor: #date;
       beRequired;
-      yourself``````TBPost >> descriptionVisible
+      yourself
+```
+
+
+```
+TBPost >> descriptionVisible
    <magritteDescription>
    ^ MABooleanDescription new
       label: 'Visible';
       priority: 500;
       accessor: #visible;
       beRequired;
-      yourself```You should obtain the situation such as represented by Figure *@adminReportDraft@*.![Administration Report.](figures/RapportMagritteV2.png width=85&label=adminReportDraft)### Post AdministrationWe can now put in place a CRUD \(Create Read Update Delete\) allowing to generate posts.For this, we will add a new column \(instance of `MACommandColumn`\) to the report.  This column will group the different operations using the `addCommandOn:` message. This method allows one to define a link that will execute a method of the current object. We give access to the blog the report is build for.```TBSMagritteReport subclass: #TBPostsReport
+      yourself
+```
+
+
+You should obtain the situation as represented by Figure *@adminReportDraft@*.
+![Administration Report. % width=85&label=adminReportDraft](figures/RapportMagritteV2.png)
+
+
+### Post Administration
+
+
+We can now put in place a CRUD (Create Read Update Delete) allowing to generate posts.
+For this, we will add a new column (instance of `MACommandColumn`) to the report.  
+This column will group the different operations using the `addCommandOn:` message. 
+This method allows one to define a link that will execute a method of the current object. 
+We give access to the blog the report is built for.
+
+```
+TBSMagritteReport subclass: #TBPostsReport
     instanceVariableNames: 'blog'
     classVariableNames: ''
-    package: 'TinyBlog-Components'``````TBPostsReport >> blog
-   ^ blog``````TBPostsReport >> blog: aTBBlog
-   blog := aTBBlog```The method  `from:` adds a new column to the report. It groups the different operations. ```TBPostsReport class >> from: aBlog
+    package: 'TinyBlog-Components'
+```
+
+
+```
+TBPostsReport >> blog
+   ^ blog
+```
+
+
+```
+TBPostsReport >> blog: aTBBlog
+   blog := aTBBlog
+```
+
+
+The method  `from:` adds a new column to the report. It groups the different operations. 
+
+```
+TBPostsReport class >> from: aBlog
     | report blogPosts |
     blogPosts := aBlog allBlogPosts.
     report := self rows: blogPosts description: (self filteredDescriptionsFrom: blogPosts anyOne).
@@ -96,52 +364,217 @@
         addCommandOn: report selector: #viewPost: text: 'View'; yourself;
         addCommandOn: report selector: #editPost: text: 'Edit'; yourself;
         addCommandOn: report selector: #deletePost: text: 'Delete'; yourself).
-     ^ report```We will have to define the methods linked to each operation in the following section. In addition this method is a bit lengthly and it does not separate the report definition from the operation definition.A possible solution is to create an instance method named  `addCommands` and to call it explicitly. Try to do it to practice.### Post AdditionAddition a post is not associated with a post and we place just before the main report. Since this behavior is then part of the component `TBPostsReport`, we should redefine the method`renderContentOn:` of the component `TBPostsReport` to insert a link `add`.```TBPostsReport >> renderContentOn: html
+     ^ report
+```
+
+
+
+We will have to define the methods linked to each operation in the following section. 
+
+In addition, this method is a bit lengthy and it does not separate the report definition from the operation definition.
+A possible solution is to create an instance method named  `addCommands` and to call it explicitly. 
+Try to do it to practice.
+
+
+
+### Post Addition
+
+Adding a post is not associated with a post and we place it just before the main report. 
+Since this behavior is then part of the component `TBPostsReport`, we should redefine the method
+`renderContentOn:` of the component `TBPostsReport` to insert a link `add`.
+
+```
+TBPostsReport >> renderContentOn: html
    html tbsGlyphIcon iconPencil.
    html anchor
       callback: [ self addPost ];
       with: 'Add post'.
-   super renderContentOn: html```Login another time and you should get the situation as it is represented in Figure *@RapportNewLookActions@*.![Post report with links.](figures/RapportNewLookActions.png width=75&label=RapportNewLookActions)### CRUD Action ImplementationEach action  \(Create/Read/Update/Delete\) should invoke methods of the instance of `TBPostsReport`. We implement them now. A personalized form is built based on the requested operation \(it is not necessary to have a save butten when the user is just viewing a post\).### Post AdditionLet us begin with post addition.The following method `renderAddPostForm:` iillustres the power of Magritte to generate forms:```TBPostsReport >> renderAddPostForm: aPost
+   super renderContentOn: html
+```
+
+
+Login another time and you should get the situation as it is represented in Figure *@RapportNewLookActions@*.
+![Post report with links. % width=75&label=RapportNewLookActions](figures/RapportNewLookActions.png)
+
+
+### CRUD Action Implementation
+
+Each action (Create/Read/Update/Delete) should invoke methods of the instance of `TBPostsReport`. 
+We implement them now. 
+A personalized form is built based on the requested operation (it is not necessary to have a save button when the user is just viewing a post).
+
+
+### Post Addition
+
+Let us begin with post-addition.
+The following method `renderAddPostForm:` illustrates the power of Magritte to generate forms:
+
+```
+TBPostsReport >> renderAddPostForm: aPost
     ^ aPost asComponent
         addDecoration: (TBSMagritteFormDecoration buttons: { #save -> 'Add post' .  #cancel -> 'Cancel'});
-        yourself```Here the message `asComponent`, sent to the object of class `TBPost`, creates directly a component.We add a decoration to this component to manage ok/cancel.The method `addPost` displays the component returned by the method `renderAddPostForm:` and when a new post is created, it is added for the blog. The method `writeBlogPost:` saves the changes the user may do. ```TBPostsReport >> addPost
+        yourself
+```
+
+
+Here the message `asComponent`, sent to the object of class `TBPost`, creates directly a component.
+We add a decoration to this component to manage ok/cancel.
+
+The method `addPost` displays the component returned by the method `renderAddPostForm:` and 
+when a new post is created, it is added to the blog. 
+The method `writeBlogPost:` saves the changes the user may make. 
+
+```
+TBPostsReport >> addPost
     | post |
     post := self call: (self renderAddPostForm: TBPost new).
-    post ifNotNil: [ blog writeBlogPost: post ]```In this method we see another use of the message `call:` to give the control to a component. The link to add a post allows one to display a creation form that we will make better looking later \(See Figure *@AffichePostRaw@*\).![Basic rendering of a post.](figures/AffichePostRaw.png width=75&label=AffichePostRaw)#### Post DisplayTo display a post in read-only mode, we define two methods similar to the previous. Note that we use the `readonly: true` to indicate that the form is not editable.```TBPostsReport >> renderViewPostForm: aPost
+    post ifNotNil: [ blog writeBlogPost: post ]
+```
+
+
+In this method we see another use of the message `call:` to give the control to a component. 
+The link to add a post allows one to display a creation form that we will make better looking later (See Figure *@AffichePostRaw@*).
+
+
+![Basic rendering of a post. % width=75&label=AffichePostRaw](figures/AffichePostRaw.png)
+
+
+
+#### Post Display
+
+To display a post in read-only mode, we define two methods similar to the previous. 
+Note that we use the `readonly: true` to indicate that the form is not editable.
+
+```
+TBPostsReport >> renderViewPostForm: aPost
    ^ aPost asComponent 
        addDecoration: (TBSMagritteFormDecoration buttons: { #cancel -> 'Back' });
        readonly: true;
-       yourself```Looking at a post does not require any extra action other than rendering it.```TBPostsReport >> viewPost: aPost
-   self call: (self renderViewPostForm: aPost)```#### Post EditionTo edit a post, we use the same approach.```TBPostsReport >> renderEditPostForm: aPost
+       yourself
+```
+
+
+Looking at a post does not require any extra action other than rendering it.
+
+```
+TBPostsReport >> viewPost: aPost
+   self call: (self renderViewPostForm: aPost)
+```
+
+
+#### Post Edition
+
+
+To edit a post, we use the same approach.
+
+```
+TBPostsReport >> renderEditPostForm: aPost
    ^ aPost asComponent addDecoration: (
       TBSMagritteFormDecoration buttons: {
          #save -> 'Save post'.
          #cancel -> 'Cancel'});
-      yourself```Now the method `editPost:` gets the value of the `call:` message and saves the changes made.```TBPostsReport >> editPost: aPost
+      yourself
+```
+
+
+Now the method `editPost:` gets the value of the `call:` message and saves the changes made.
+
+```
+TBPostsReport >> editPost: aPost
    | post |
    post := self call: (self renderEditPostForm: aPost).
-   post ifNotNil: [ blog save ]```#### Removing a postWe must now adding the method `removeBlogPost:` to the class `TBBlog`:```TBBlog >> removeBlogPost: aPost
+   post ifNotNil: [ blog save ]
+```
+
+
+#### Removing a post
+
+
+We must now add the method `removeBlogPost:` to the class `TBBlog`:
+
+```
+TBBlog >> removeBlogPost: aPost
     posts remove: aPost ifAbsent: [ ].
-    self save.```Let us add a unit test:```TBBlogTest >> testRemoveBlogPost
+    self save.
+```
+
+
+Let us add a unit test:
+
+```
+TBBlogTest >> testRemoveBlogPost
     self assert: blog size equals: 1.
     blog removeBlogPost: blog allBlogPosts anyOne.
-    self assert: blog size equals: 0```To avoid an unwanted operation, we use a modal dialog so that the user confirms the deletion of the post. One the post is displayed, the list of managed posts by `TBPostsReport` is changed and should be refresh.```TBPostsReport >> deletePost: aPost
+    self assert: blog size equals: 0
+```
+
+
+To avoid an unwanted operation, we use a modal dialog so that the user confirms the deletion of the post. 
+Once the post is displayed, the list of managed posts by `TBPostsReport` is changed and should be refreshed.
+
+```
+TBPostsReport >> deletePost: aPost
     (self confirm: 'Do you want remove this post ?')
-        ifTrue: [ blog removeBlogPost: aPost ]```### Refreshing PostsThe methods  `addPost:` and `deletePost:` are working well but the display is not refreshed. We need to refresh the post lists using the expression `self refresh`.```TBPostsReport >> refreshReport
+        ifTrue: [ blog removeBlogPost: aPost ]
+```
+
+
+
+
+### Refreshing Posts
+
+
+The methods  `addPost:` and `deletePost:` are working well but the display is not refreshed. 
+We need to refresh the post lists using the expression `self refresh`.
+
+```
+TBPostsReport >> refreshReport
     self rows: blog allBlogPosts.
-    self refresh.``````TBPostsReport >> addPost
+    self refresh.
+```
+
+
+```
+TBPostsReport >> addPost
 	| post |
 	post := self call: (self renderAddPostForm: TBPost new).
 	post
 		ifNotNil: [ blog writeBlogPost: post.
-			self refreshReport ]``````TBPostsReport >> deletePost: aPost
+			self refreshReport ]
+```
+
+
+```
+TBPostsReport >> deletePost: aPost
     (self confirm: 'Do you want remove this post ?')
         ifTrue: [ blog removeBlogPost: aPost.
-                 self refreshReport ]```The report is not working and it even manage input constraints: for example, mandatory fields should be filled up.### Better Form LookTo take advantage of Bootstrap, we will modify Magritte definitions.First we specify that the report rendering based on Bootstrap.A container in Magritte is the element that will contain the other components created from descriptions.```TBPost >> descriptionContainer
+                 self refreshReport ]
+```
+
+
+The report is not working and it even manages input constraints: for example, mandatory fields should be filled up.
+
+### Better Form Look
+
+
+To take advantage of Bootstrap, we will modify Magritte definitions.
+First we specify that the report rendering is based on Bootstrap.
+
+A container in Magritte is the element that will contain the other components created from descriptions.
+
+```
+TBPost >> descriptionContainer
     <magritteContainer>
     ^ super descriptionContainer
         componentRenderer: TBSMagritteFormRenderer;
-        yourself```We want can now pay attention of the different input fields and improve their appearance. ```TBPost >> descriptionTitle
+        yourself
+```
+
+
+We want can now pay attention of the different input fields and improve their appearance. 
+
+```
+TBPost >> descriptionTitle
     <magritteDescription>
     ^ MAStringDescription new
         label: 'Title';
@@ -151,7 +584,15 @@
         comment: 'Please enter a title';
         componentClass: TBSMagritteTextInputComponent;
         beRequired;
-        yourself```![Post form addition with Bootstrap.](figures/AddAPostBootstrap.png width=85&label=addAPostBootstrap)```TBPost >> descriptionText
+        yourself
+```
+
+
+![Post form addition with Bootstrap. % width=85&label=addAPostBootstrap](figures/AddAPostBootstrap.png)
+
+
+```
+TBPost >> descriptionText
     <magritteDescription>
     ^ MAMemoDescription new
         label: 'Text';
@@ -161,7 +602,12 @@
         requiredErrorMessage: 'A blog post must contain a text.';
         comment: 'Please enter a text';
         componentClass: TBSMagritteTextAreaComponent;
-        yourself``````TBPost >> descriptionCategory
+        yourself
+```
+
+
+```
+TBPost >> descriptionCategory
     <magritteDescription>
     ^ MAStringDescription new
         label: 'Category';
@@ -169,7 +615,12 @@
         accessor: #category;
         comment: 'Unclassified if empty';
         componentClass: TBSMagritteTextInputComponent;
-        yourself``````TBPost >> descriptionVisible
+        yourself
+```
+
+
+```
+TBPost >> descriptionVisible
     <magritteDescription>
     ^ MABooleanDescription new
         checkboxLabel: 'Visible';
@@ -177,4 +628,17 @@
         accessor: #visible;
         componentClass: TBSMagritteCheckboxComponent;
         beRequired;
-        yourself```Based on new Magritte descriptions, forms generated now use Bootstrap. For example, the post form edition should not looks like Figure *@addAPostBootstrap@*.### Conclusion In this chapter we defined the administration of TinyBlog based on report built out of the posts contained in the current blog.We added links to manage CRUD for each post.What we show is that adding descriptions on post let us generate Seaside components automatically. 
+        yourself
+```
+
+
+Based on new Magritte descriptions, forms generated now use Bootstrap. 
+For example, the post form edition should not looks like Figure *@addAPostBootstrap@*.
+
+
+### Conclusion 
+
+
+In this chapter, we defined the administration of TinyBlog based on a report built out of the posts contained in the current blog.
+We added links to manage CRUD for each post.
+What we show is that adding descriptions on post let us generate Seaside components automatically. 
